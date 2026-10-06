@@ -2,6 +2,7 @@
 # See https://redocly.com/docs/cli/ for more information.
 apis/api.scouting.org/openapi.yaml:
   operation-4xx-response:
+    - '#/paths/~1advancements~1awards~1{awardId}/get/responses'
     - '#/paths/~1lookups~1advancements~1activityCategories/get/responses'
     - '#/paths/~1lookups~1advancements~1activityTypes/get/responses'
     - '#/paths/~1lookups~1advancements~1calendarEventTypes/get/responses'
@@ -19,3 +20,8 @@ apis/api.scouting.org/openapi.yaml:
     - '#/paths/~1lookups~1person~1positions/get/responses'
     - '#/paths/~1lookups~1person~1titlePrefixes/get/responses'
     - '#/paths/~1lookups~1registrations~1renewalOptoutReasons/get/responses'
+  rule/object-schemas-closed:
+    - >-
+      #/paths/~1advancements~1awards~1{awardId}/get/responses/200/content/application~1json/schema/additionalProperties
+    - >-
+      #/paths/~1advancements~1awards~1{awardId}~1requirements/get/responses/200/content/application~1json/schema/additionalProperties

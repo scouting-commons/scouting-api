@@ -8,6 +8,60 @@ sourceDescriptions:
     url: ./openapi.yaml
 workflows:
   # Steps on cached list endpoints send no-cache. See the CacheControl parameter.
+  - workflowId: awards
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listAwards
+        parameters:
+          - name: Cache-Control
+            in: header
+            value: no-cache
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: list-invalid-status
+        operationId: $sourceDescriptions.api.listAwards
+        parameters:
+          - name: Cache-Control
+            in: header
+            value: no-cache
+          - name: status
+            in: query
+            value: bogus
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: get
+        operationId: $sourceDescriptions.api.getAward
+        parameters:
+          - name: awardId
+            in: path
+            value: 97
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: requirements
+        operationId: $sourceDescriptions.api.getAwardRequirements
+        parameters:
+          - name: awardId
+            in: path
+            value: 97
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: requirements-invalid
+        operationId: $sourceDescriptions.api.getAwardRequirements
+        parameters:
+          - name: awardId
+            in: path
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: requirements-not-found
+        operationId: $sourceDescriptions.api.getAwardRequirements
+        parameters:
+          - name: awardId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 404
+
   - workflowId: merit-badges
     steps:
       - stepId: list

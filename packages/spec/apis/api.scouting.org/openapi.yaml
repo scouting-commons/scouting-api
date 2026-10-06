@@ -33,6 +33,254 @@ tags:
       classifications
 
 paths:
+  /advancements/awards:
+    get:
+      tags: [Advancement]
+      operationId: listAwards
+      summary: List awards
+      description: >-
+        Returns awards, such as knots, palms, and outdoor awards. Pass an
+        award's `id` to the requirements endpoint to get its requirements.
+        Filters combine with AND. Unknown query parameters are ignored.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/CacheControl"
+        - name: status
+          in: query
+          description: >-
+            `active` (the default) returns awards without an `expiredDate`,
+            `expired` returns those with one, and `all` returns both.
+            Case-sensitive.
+          schema:
+            type: string
+            enum: [active, expired, all]
+        - name: programId
+          in: query
+          description: >-
+            Return only awards whose `unitTypeId` is this value. Awards for all
+            programs (empty `unitTypeId`) are left out.
+          schema:
+            type: string
+            enum: ["1", "2", "3", "4", "5"]
+      responses:
+        "200":
+          description: Matching awards
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [awards]
+                properties:
+                  awards:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Award"
+              example:
+                awards:
+                  - id: "97"
+                    name: 50-Miler Award
+                    short: 50 Miler
+                    category: ""
+                    itemNumber: ""
+                    rankId: ""
+                    rank: ""
+                    image: /images/awards/patches/50miler100.png
+                    imageSmall: ""
+                    sku: "191"
+                    skuName: 50 Miler Award Emblem
+                    price: "4.39"
+                    priceLastupdated: "2026-09-16"
+                    adultAward: "False"
+                    adminNotes: ""
+                    unitTypeId: "2"
+                    program: Scouts BSA
+                    unitType: Scouts BSA Troop
+                    scoutNet: "605"
+                    showOnEvents: "True"
+                    showOnQuickEntry: "True"
+                    activeDate: ""
+                    expiredDate: ""
+                    imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler100.png
+                    imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler200.png
+                    imageUrl300: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler300.png
+                    imageUrl400: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler400.png
+                    versions:
+                      - awardVersionId: 5
+                        version: "1911"
+                        rankId: null
+                        rank: null
+                        expiredDate: null
+                        versionEffectiveDt: "1911-01-01"
+                        versionExpiryDt: null
+                        image: /images/awards/patches/50miler100.png
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  /advancements/awards/{awardId}:
+    get:
+      tags: [Advancement]
+      operationId: getAward
+      summary: Get an award
+      description: >-
+        Returns one award from the award list, with a few fields that differ
+        from the list: `priceLastUpdated` replaces `priceLastupdated`,
+        `program` is absent, `image` is a bare file name, and empty values are
+        often `null`. An ID that isn't in the award list returns `200` with
+        `name` and most other fields `null`, not `404`.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/AwardId"
+      responses:
+        "200":
+          description: >-
+            The award, or a placeholder with `null` fields if no award in the
+            list has this ID
+          content:
+            application/json:
+              schema:
+                type: object
+                anyOf:
+                  - $ref: "#/components/schemas/AwardDetail"
+                  - $ref: "#/components/schemas/MissingAward"
+              example:
+                id: "97"
+                name: 50-Miler Award
+                short: 50 Miler
+                category: ""
+                itemNumber: ""
+                rankId: ""
+                rank: ""
+                image: 50miler100.png
+                imageSmall: ""
+                sku: "191"
+                skuName: 50 Miler Award Emblem
+                price: "4.39"
+                priceLastUpdated: "2026-09-16"
+                adultAward: "False"
+                adminNotes: ""
+                unitTypeId: "2"
+                unitType: Scouts BSA Troop
+                scoutNet: "605"
+                showOnEvents: "True"
+                showOnQuickEntry: "True"
+                activeDate: null
+                expiredDate: null
+                imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler100.png
+                imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler200.png
+                imageUrl300: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler300.png
+                imageUrl400: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler400.png
+                versions:
+                  - awardVersionId: 5
+                    version: "1911"
+                    rankId: null
+                    rank: null
+                    expiredDate: null
+                    versionEffectiveDt: "1911-01-01"
+                    versionExpiryDt: null
+                    image: /images/awards/patches/50miler100.png
+
+  /advancements/awards/{awardId}/requirements:
+    get:
+      tags: [Advancement]
+      operationId: getAwardRequirements
+      summary: Get an award's requirements
+      description: >-
+        Returns one requirements version of an award: the newest by default,
+        or the one given by `versionId`. Requirements are a flat list; nest
+        them using `parentRequirementId` and order them by `sortOrder`. Many
+        awards have no requirements. Some IDs that aren't in the award list
+        also return `200`, with an empty version and no requirements.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/AwardId"
+        - name: versionId
+          in: query
+          description: >-
+            An `awardVersionId` of this award from its `versions`. Defaults to
+            the newest version. When given, the response has numbers and
+            booleans in place of numeric and `True`/`False` strings (see
+            `AwardVersionRequirements`).
+          schema:
+            type: integer
+            minimum: 1
+            examples: [337]
+      responses:
+        "200":
+          description: >-
+            The requested requirements version. Its shape depends on whether
+            `versionId` was given.
+          content:
+            application/json:
+              schema:
+                type: object
+                anyOf:
+                  - $ref: "#/components/schemas/AwardRequirements"
+                  - $ref: "#/components/schemas/AwardVersionRequirements"
+              example:
+                awardId: "97"
+                awardName: 50-Miler Award
+                awardVersionId: 5
+                version: "1911"
+                versionExpiredDate: ""
+                versionEffectiveDt: "1911-01-01"
+                versionExpiryDt: ""
+                versionImage: /images/awards/patches/50miler100.png
+                image: /images/awards/patches/50miler100.png
+                imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler100.png
+                imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler200.png
+                imageUrl300: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler300.png
+                imageUrl400: https://d1kn0x9vzr5n76.cloudfront.net/images/awards/patches/50miler400.png
+                requirements:
+                  - id: "704"
+                    number: ""
+                    name: The 50-Miler Award is presented to each qualifying individual for ...
+                    listNumber: ""
+                    sortOrder: "0.5"
+                    footer: ""
+                    childrenRequired: ""
+                    required: "False"
+                    parentRequirementId: ""
+                    totalMBRequired: ""
+                    linkedAdventureRequirementId: ""
+                    linkedAdventureId: ""
+                    linkedMeritBadgeId: ""
+                  - id: "705"
+                    number: ""
+                    name: Make complete and satisfactory plans for the trip, ...
+                    listNumber: "1."
+                    sortOrder: "1"
+                    footer: ""
+                    childrenRequired: ""
+                    required: "True"
+                    parentRequirementId: ""
+                    totalMBRequired: ""
+                    linkedAdventureRequirementId: ""
+                    linkedAdventureId: ""
+                    linkedMeritBadgeId: ""
+        "400":
+          description: "`awardId` or `versionId` is invalid"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C400
+                message: Bad Request
+                errorDesc: Invalid request - "awardId" must be larger than or equal to 1
+        "404":
+          description: >-
+            No award exists with that ID, or `versionId` is not a version of
+            this award
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C404
+                message: Not Found
+                errorDesc: "Unable to find the award for the given awardId. - awardId: 999999"
+
   /advancements/meritBadges:
     get:
       tags: [Advancement]
@@ -1326,6 +1574,624 @@ paths:
 
 components:
   schemas:
+    Award:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - short
+        - category
+        - itemNumber
+        - rankId
+        - rank
+        - image
+        - imageSmall
+        - sku
+        - skuName
+        - price
+        - priceLastupdated
+        - adultAward
+        - adminNotes
+        - unitTypeId
+        - program
+        - unitType
+        - scoutNet
+        - showOnEvents
+        - showOnQuickEntry
+        - activeDate
+        - expiredDate
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - imageUrl400
+        - versions
+      properties:
+        id:
+          $ref: "#/components/schemas/AwardId"
+        name:
+          type: string
+          examples: [50-Miler Award]
+        short:
+          type: string
+          description: Shorter name
+          examples: [50 Miler]
+        category:
+          type: string
+          examples: [Knots, ""]
+        itemNumber:
+          type: string
+        rankId:
+          type: string
+          description: The rank this award belongs to, or empty
+          anyOf:
+            - $ref: "#/components/schemas/RankId"
+            - type: string
+              const: ""
+        rank:
+          type: string
+          description: Rank name for `rankId`, or empty
+          examples: [Tiger, ""]
+        image:
+          type: string
+          description: Image path, or empty
+          examples: [/images/awards/patches/50miler100.png]
+        imageSmall:
+          type: string
+          description: Image path, or empty
+        sku:
+          type: string
+          description: Scout Shop SKU, or empty
+          examples: ["191"]
+        skuName:
+          type: string
+          examples: [50 Miler Award Emblem]
+        price:
+          type: string
+          description: Price in USD as a decimal string. `"0"` when not sold.
+          examples: ["4.39", "0"]
+        priceLastupdated:
+          $ref: "#/components/schemas/StringDate"
+        adultAward:
+          $ref: "#/components/schemas/StringBoolean"
+        adminNotes:
+          type: string
+          description: Internal free-text notes
+        unitTypeId:
+          type: string
+          description: The unit type this award is for, or empty if it's for all programs
+          anyOf:
+            - $ref: "#/components/schemas/UnitTypeId"
+            - type: string
+              const: ""
+        program:
+          type: string
+          description: Program name for `unitTypeId`, or `All` when it's empty
+          examples: [Scouts BSA, All]
+        unitType:
+          type: string
+          description: Unit type name for `unitTypeId`, or empty
+          examples: [Scouts BSA Troop, ""]
+        scoutNet:
+          type: string
+          examples: ["605"]
+        showOnEvents:
+          $ref: "#/components/schemas/StringBoolean"
+        showOnQuickEntry:
+          $ref: "#/components/schemas/StringBoolean"
+        activeDate:
+          $ref: "#/components/schemas/StringDate"
+        expiredDate:
+          $ref: "#/components/schemas/StringDate"
+        imageUrl100:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl200:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl300:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl400:
+          $ref: "#/components/schemas/OptionalUri"
+        versions:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/AwardVersion"
+
+    AwardDetail:
+      type: object
+      additionalProperties: false
+      description: >-
+        An award from the award list, as returned on its own. Fields match
+        those of the same name in `Award`.
+      required:
+        - id
+        - name
+        - short
+        - category
+        - itemNumber
+        - rankId
+        - rank
+        - image
+        - imageSmall
+        - sku
+        - skuName
+        - price
+        - priceLastUpdated
+        - adultAward
+        - adminNotes
+        - unitTypeId
+        - unitType
+        - scoutNet
+        - showOnEvents
+        - showOnQuickEntry
+        - activeDate
+        - expiredDate
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - imageUrl400
+        - versions
+      properties:
+        id:
+          $ref: "#/components/schemas/AwardId"
+        name:
+          type: string
+        short:
+          type: string
+        category:
+          type: string
+        itemNumber:
+          type: string
+        rankId:
+          type: string
+          anyOf:
+            - $ref: "#/components/schemas/RankId"
+            - type: string
+              const: ""
+        rank:
+          type: string
+        image:
+          type: [string, "null"]
+          description: Image file name, or `null`
+          examples: [50miler100.png]
+        imageSmall:
+          type: string
+        sku:
+          type: string
+        skuName:
+          type: string
+        price:
+          type: string
+        priceLastUpdated:
+          type: [string, "null"]
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        adultAward:
+          $ref: "#/components/schemas/StringBoolean"
+        adminNotes:
+          type: string
+        unitTypeId:
+          type: string
+          anyOf:
+            - $ref: "#/components/schemas/UnitTypeId"
+            - type: string
+              const: ""
+        unitType:
+          type: [string, "null"]
+        scoutNet:
+          type: string
+        showOnEvents:
+          $ref: "#/components/schemas/StringBoolean"
+        showOnQuickEntry:
+          $ref: "#/components/schemas/StringBoolean"
+        activeDate:
+          type: [string, "null"]
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        expiredDate:
+          type: [string, "null"]
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        imageUrl100:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl200:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl300:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl400:
+          $ref: "#/components/schemas/OptionalUri"
+        versions:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/AwardVersion"
+
+    MissingAward:
+      type: object
+      additionalProperties: false
+      description: >-
+        Returned in place of an award for an ID that isn't in the award list
+      required:
+        - id
+        - name
+        - short
+        - category
+        - itemNumber
+        - rankId
+        - rank
+        - image
+        - imageSmall
+        - sku
+        - skuName
+        - price
+        - priceLastUpdated
+        - adultAward
+        - adminNotes
+        - unitTypeId
+        - unitType
+        - scoutNet
+        - showOnEvents
+        - showOnQuickEntry
+        - activeDate
+        - expiredDate
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - imageUrl400
+        - versions
+      properties:
+        id:
+          type: string
+          description: The requested ID
+          examples: ["999999"]
+        name:
+          type: "null"
+        short:
+          type: "null"
+        category:
+          type: "null"
+        itemNumber:
+          type: "null"
+        rankId:
+          type: "null"
+        rank:
+          type: string
+          const: ""
+        image:
+          type: "null"
+        imageSmall:
+          type: "null"
+        sku:
+          type: "null"
+        skuName:
+          type: "null"
+        price:
+          type: "null"
+        priceLastUpdated:
+          type: "null"
+        adultAward:
+          type: "null"
+        adminNotes:
+          type: "null"
+        unitTypeId:
+          type: "null"
+        unitType:
+          type: "null"
+        scoutNet:
+          type: "null"
+        showOnEvents:
+          type: "null"
+        showOnQuickEntry:
+          type: "null"
+        activeDate:
+          type: "null"
+        expiredDate:
+          type: "null"
+        imageUrl100:
+          type: string
+          const: ""
+        imageUrl200:
+          type: string
+          const: ""
+        imageUrl300:
+          type: string
+          const: ""
+        imageUrl400:
+          type: string
+          const: ""
+        versions:
+          type: "null"
+
+    AwardId:
+      type: string
+      description: An `id` from the award list
+      pattern: "^[0-9]+$"
+      examples: ["97"]
+
+    AwardVersion:
+      type: object
+      additionalProperties: false
+      required:
+        - awardVersionId
+        - version
+        - rankId
+        - rank
+        - expiredDate
+        - versionEffectiveDt
+        - versionExpiryDt
+        - image
+      properties:
+        awardVersionId:
+          type: integer
+          description: Unique per requirements version
+          examples: [5]
+        version:
+          type: string
+          description: Requirements version year
+          examples: ["1911"]
+        rankId:
+          type: [integer, "null"]
+          description: The `id` of this version's rank, as a number, or `null`
+          examples: [8]
+        rank:
+          type: [string, "null"]
+          description: Rank name for `rankId`, or `null`
+          examples: [Tiger]
+        expiredDate:
+          type: [string, "null"]
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        versionEffectiveDt:
+          $ref: "#/components/schemas/StringDate"
+        versionExpiryDt:
+          type: [string, "null"]
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        image:
+          type: [string, "null"]
+          description: Image path, or `null`
+          examples: [/images/awards/patches/50miler100.png]
+
+    AwardRequirements:
+      type: object
+      additionalProperties: false
+      description: >-
+        An award's requirements, as returned without `versionId`. For an award
+        with no version, `awardVersionId` and `image` are `null` and the other
+        version fields are empty.
+      required:
+        - awardId
+        - awardName
+        - awardVersionId
+        - version
+        - versionExpiredDate
+        - versionEffectiveDt
+        - versionExpiryDt
+        - versionImage
+        - image
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - imageUrl400
+        - requirements
+      properties:
+        awardId:
+          $ref: "#/components/schemas/AwardId"
+        awardName:
+          type: string
+          examples: [50-Miler Award]
+        awardVersionId:
+          type: [integer, "null"]
+          description: "`awardVersionId` of the returned version"
+          examples: [5]
+        version:
+          type: string
+          description: Requirements version year
+          examples: ["1911"]
+        versionExpiredDate:
+          $ref: "#/components/schemas/StringDate"
+        versionEffectiveDt:
+          $ref: "#/components/schemas/StringDate"
+        versionExpiryDt:
+          $ref: "#/components/schemas/StringDate"
+        versionImage:
+          type: string
+          description: Image path of the version, or empty
+        image:
+          type: [string, "null"]
+          description: Image path of the award, empty, or `null`
+        imageUrl100:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl200:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl300:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl400:
+          $ref: "#/components/schemas/OptionalUri"
+        requirements:
+          type: array
+          items:
+            $ref: "#/components/schemas/AwardRequirement"
+
+    AwardRequirement:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - number
+        - name
+        - listNumber
+        - sortOrder
+        - footer
+        - childrenRequired
+        - required
+        - parentRequirementId
+        - totalMBRequired
+        - linkedAdventureRequirementId
+        - linkedAdventureId
+        - linkedMeritBadgeId
+      properties:
+        id:
+          type: string
+          examples: ["705"]
+        number:
+          type: string
+        name:
+          type: string
+          description: Requirement text. Sometimes contains HTML.
+        listNumber:
+          type: string
+          description: Display label, e.g. `1.` or `(a)`, or empty
+          examples: ["1.", "(a)"]
+        sortOrder:
+          type: string
+          description: Dotted sort key, e.g. `1` for a parent and `1.1` for its first child, or empty
+          examples: ["1", "1.1"]
+        footer:
+          type: string
+          description: Notes, sometimes containing HTML, or empty
+        childrenRequired:
+          type: string
+          description: Number of child requirements that must be completed, or empty
+          examples: ["2"]
+        required:
+          $ref: "#/components/schemas/StringBoolean"
+        parentRequirementId:
+          type: string
+          description: "`id` of the parent requirement, or empty for top-level requirements"
+        totalMBRequired:
+          type: string
+          examples: ["26"]
+        linkedAdventureRequirementId:
+          type: string
+        linkedAdventureId:
+          type: string
+          description: An adventure `id` from `/advancements/adventures`, or empty
+        linkedMeritBadgeId:
+          type: string
+          description: A linked merit badge, or empty
+          anyOf:
+            - $ref: "#/components/schemas/MeritBadgeId"
+            - type: string
+              const: ""
+
+    AwardVersionRequirements:
+      type: object
+      additionalProperties: false
+      description: >-
+        An award's requirements, as returned with `versionId`. Fields match
+        those of the same name in `AwardRequirements`, but numeric values are
+        numbers and `True`/`False` values are booleans.
+      required:
+        - awardId
+        - awardName
+        - awardVersionId
+        - version
+        - versionExpiredDate
+        - versionEffectiveDt
+        - versionExpiryDt
+        - versionImage
+        - image
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - imageUrl400
+        - requirements
+      properties:
+        awardId:
+          type: integer
+          description: The award's `id`, as a number
+          examples: [110]
+        awardName:
+          type: string
+        awardVersionId:
+          type: integer
+          examples: [337]
+        version:
+          type: string
+          examples: ["2018"]
+        versionExpiredDate:
+          $ref: "#/components/schemas/StringDate"
+        versionEffectiveDt:
+          $ref: "#/components/schemas/StringDate"
+        versionExpiryDt:
+          $ref: "#/components/schemas/StringDate"
+        versionImage:
+          type: string
+        image:
+          type: string
+        imageUrl100:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl200:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl300:
+          $ref: "#/components/schemas/OptionalUri"
+        imageUrl400:
+          $ref: "#/components/schemas/OptionalUri"
+        requirements:
+          type: array
+          items:
+            $ref: "#/components/schemas/AwardVersionRequirement"
+
+    AwardVersionRequirement:
+      type: object
+      additionalProperties: false
+      description: >-
+        Fields match those of the same name in `AwardRequirement`. Empty
+        values stay empty strings.
+      required:
+        - id
+        - number
+        - name
+        - listNumber
+        - sortOrder
+        - footer
+        - childrenRequired
+        - required
+        - parentRequirementId
+        - totalMBRequired
+        - linkedAdventureRequirementId
+        - linkedAdventureId
+        - linkedMeritBadgeId
+      properties:
+        id:
+          type: integer
+          examples: [4158]
+        number:
+          type: string
+        name:
+          type: string
+        listNumber:
+          type: string
+        sortOrder:
+          type: [number, string]
+          anyOf:
+            - type: number
+            - type: string
+              const: ""
+          examples: [1, 1.1]
+        footer:
+          type: string
+        childrenRequired:
+          $ref: "#/components/schemas/IntegerOrEmpty"
+        required:
+          type: boolean
+        parentRequirementId:
+          $ref: "#/components/schemas/IntegerOrEmpty"
+        totalMBRequired:
+          $ref: "#/components/schemas/IntegerOrEmpty"
+        linkedAdventureRequirementId:
+          $ref: "#/components/schemas/IntegerOrEmpty"
+        linkedAdventureId:
+          $ref: "#/components/schemas/IntegerOrEmpty"
+        linkedMeritBadgeId:
+          type: string
+
     MeritBadge:
       type: object
       additionalProperties: false
@@ -1366,8 +2232,7 @@ components:
         - versions
       properties:
         id:
-          type: string
-          examples: ["3"]
+          $ref: "#/components/schemas/MeritBadgeId"
         categoryId:
           type: string
           examples: ["3"]
@@ -1470,8 +2335,7 @@ components:
         - requirements
       properties:
         meritBadgeId:
-          type: string
-          examples: ["3"]
+          $ref: "#/components/schemas/MeritBadgeId"
         meritBadgeName:
           type: string
           examples: [American Business]
@@ -1608,9 +2472,7 @@ components:
         - imageUrl400
       properties:
         id:
-          type: string
-          description: Rank ID, shared by all versions of the rank
-          examples: ["20"]
+          $ref: "#/components/schemas/RankId"
         name:
           type: string
           examples: [Discovery]
@@ -1734,9 +2596,7 @@ components:
         - disabledOnQuickEntry
       properties:
         rankId:
-          type: string
-          description: The rank's `id`
-          examples: ["19"]
+          $ref: "#/components/schemas/RankId"
         name:
           type: string
           examples: [Venturing]
@@ -1876,6 +2736,11 @@ components:
           type: string
         linkedAwardId:
           type: string
+          description: A linked award, or empty
+          anyOf:
+            - $ref: "#/components/schemas/AwardId"
+            - type: string
+              const: ""
 
     Country:
       type: object
@@ -2684,6 +3549,34 @@ components:
         lastModifiedDt:
           type: "null"
 
+    MeritBadgeId:
+      type: string
+      description: An `id` from the merit badge list (not `bsaNumber`)
+      pattern: "^[0-9]+$"
+      examples: ["3"]
+
+    RankId:
+      type: string
+      description: An `id` from the rank list, shared by all versions of the rank
+      pattern: "^[0-9]+$"
+      examples: ["20"]
+
+    IntegerOrEmpty:
+      type: [integer, string]
+      anyOf:
+        - type: integer
+        - type: string
+          const: ""
+
+    OptionalUri:
+      type: string
+      description: A URL, or empty
+      anyOf:
+        - type: string
+          format: uri
+        - type: string
+          const: ""
+
     StringBoolean:
       type: string
       enum: ["True", "False"]
@@ -2712,6 +3605,16 @@ components:
           examples: [Query parameter id is not repeatable]
 
   parameters:
+    AwardId:
+      name: awardId
+      in: path
+      required: true
+      description: Award `id` from the award list
+      schema:
+        type: integer
+        minimum: 1
+        examples: [97]
+
     CacheControl:
       name: Cache-Control
       in: header
