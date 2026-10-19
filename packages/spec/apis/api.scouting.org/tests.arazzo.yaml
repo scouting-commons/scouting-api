@@ -359,3 +359,131 @@ workflows:
         operationId: $sourceDescriptions.api.listTitlePrefixes
         successCriteria:
           - condition: $statusCode == 200
+
+  - workflowId: addressTypes
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listAddressTypes
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: meritBadgeCategories
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listMeritBadgeCategories
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: rankSummaries
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listRankSummaries
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: socialMediaTypes
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listSocialMediaTypes
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: organizationUnitTypes
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listOrganizationUnitTypes
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: employers
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listEmployers
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: ethnicities
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listEthnicities
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: genders
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listGenders
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: maritalStatuses
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listMaritalStatuses
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: occupations
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listOccupations
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: occupationTypes
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listOccupationTypes
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: relationshipTypes
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listRelationshipTypes
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: religions
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listReligions
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: paymentTypes
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listPaymentTypes
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: registrationStatuses
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listRegistrationStatuses
+        successCriteria:
+          - condition: $statusCode == 200
+
+  - workflowId: trainingCourses
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listTrainingCourses
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: list-invalid-program
+        operationId: $sourceDescriptions.api.listTrainingCourses
+        parameters:
+          - name: programId
+            in: query
+            value: abc
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: list-unknown-program
+        operationId: $sourceDescriptions.api.listTrainingCourses
+        parameters:
+          - name: programId
+            in: query
+            value: 99
+        successCriteria:
+          - condition: $statusCode == 404
