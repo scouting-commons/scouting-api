@@ -617,6 +617,35 @@ paths:
                 message: Not Found
                 errorDesc: "Ranks information not found - rankId: 999999"
 
+  /lookups/address/addressTypes:
+    get:
+      tags: [Lookups]
+      operationId: listAddressTypes
+      summary: List address types
+      description: >-
+        Returns all address types, such as home and mailing, as an array
+        sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every address type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AddressType"
+              example:
+                - id: "64"
+                  name: Business
+                  short: B
+                - id: "65"
+                  name: Home
+                  short: H
+                - id: "67"
+                  name: Mailing
+                  short: M
+
   /lookups/address/countries:
     get:
       tags: [Lookups]
@@ -831,6 +860,30 @@ paths:
                   effectiveDt: "2014-01-01"
                   expiryDt: "2022-11-30"
 
+  /lookups/advancements/meritBadgeCategories:
+    get:
+      tags: [Lookups]
+      operationId: listMeritBadgeCategories
+      summary: List merit badge categories
+      description: Returns all merit badge categories as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every merit badge category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MeritBadgeCategory"
+              example:
+                - id: "1"
+                  name: Agribusiness
+                - id: "2"
+                  name: Arts and Crafts
+                - id: "3"
+                  name: Business and Industry
+
   /lookups/advancements/positions:
     get:
       tags: [Lookups]
@@ -869,6 +922,45 @@ paths:
                   unitTypes:
                     - image: scoutmaster200.png
                       unitTypeId: "2"
+
+  /lookups/advancements/ranks:
+    get:
+      tags: [Lookups]
+      operationId: listRankSummaries
+      summary: List rank summaries
+      description: >-
+        Returns one short entry per rank, across all programs, as an array
+        sorted by `id`. Unlike the rank list, each rank appears once rather
+        than once per requirements version.
+      security: []
+      responses:
+        "200":
+          description: An array of every rank summary
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RankSummary"
+              example:
+                - id: "1"
+                  name: Scout
+                  level: "1"
+                  programId: "2"
+                  programName: Scouts BSA
+                  unitType: Troop
+                - id: "14"
+                  name: Lion
+                  level: "0"
+                  programId: "1"
+                  programName: Cub Scouting
+                  unitType: Pack
+                - id: "23"
+                  name: Venturing Quest
+                  level: ""
+                  programId: ""
+                  programName: ""
+                  unitType: ""
 
   /lookups/advancements/swimmingClassification:
     get:
@@ -1156,6 +1248,41 @@ paths:
                   short: "98 "
                   id: "854"
 
+  /lookups/communications/socialMedia:
+    get:
+      tags: [Lookups]
+      operationId: listSocialMediaTypes
+      summary: List social media types
+      description: >-
+        Returns the social media platforms a profile can link to, as an array
+        sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every social media type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SocialMediaType"
+              example:
+                - id: 14
+                  short: TWT
+                  name: Twitter
+                - id: 15
+                  short: FB
+                  name: Facebook
+                - id: 17
+                  short: LNKD
+                  name: Linkedin
+                - id: 18
+                  short: Oth
+                  name: Other
+                - id: 19
+                  short: IG
+                  name: Instagram
+
   /lookups/organizations/positions:
     get:
       tags: [Lookups]
@@ -1243,6 +1370,114 @@ paths:
                 - id: "6"
                   name: Unit
 
+  /lookups/organizations/unitTypes:
+    get:
+      tags: [Lookups]
+      operationId: listOrganizationUnitTypes
+      summary: List organization unit types
+      description: >-
+        Returns all organization unit types as an array sorted by `id`. IDs
+        `1` to `6` match the unit type list, but the rest differ: here `7` is
+        Group and `10` is Lab, while in the unit type list `7` is Club and `8`
+        is Lab.
+      security: []
+      responses:
+        "200":
+          description: An array of every organization unit type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrganizationUnitType"
+              example:
+                - id: "1"
+                  name: Pack
+                  short: Pack
+                - id: "2"
+                  name: Troop
+                  short: Troop
+                - id: "8"
+                  name: Non Unit
+                  short: NonUnit
+                - id: "10"
+                  name: Lab
+                  short: Lab
+
+  /lookups/person/employers:
+    get:
+      tags: [Lookups]
+      operationId: listEmployers
+      summary: List employers
+      description: >-
+        Returns all employers as an array sorted by `id`, with no filters or
+        paging.
+      security: []
+      responses:
+        "200":
+          description: An array of every employer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Employer"
+              example:
+                - id: "1"
+                  name: Town of Vestal
+                - id: "12"
+                  name: Boy Scouts of America
+                - id: "6431"
+                  name: REI (Recreational Equipment, Inc.)
+
+  /lookups/person/ethnicities:
+    get:
+      tags: [Lookups]
+      operationId: listEthnicities
+      summary: List ethnicities
+      description: Returns all ethnicities as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every ethnicity
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ethnicity"
+              example:
+                - id: "1740"
+                  name: Black/African American
+                  short: AA
+                - id: "1746"
+                  name: Not Provided
+                  short: NP
+
+  /lookups/person/genders:
+    get:
+      tags: [Lookups]
+      operationId: listGenders
+      summary: List genders
+      description: Returns all genders as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every gender
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Gender"
+              example:
+                - id: "873"
+                  name: Male
+                  short: M
+                - id: "874"
+                  name: Female
+                  short: F
+
   /lookups/person/grades:
     get:
       tags: [Lookups]
@@ -1278,6 +1513,33 @@ paths:
                   gradeName: Other
                   displayOrder: 15
 
+  /lookups/person/maritalStatuses:
+    get:
+      tags: [Lookups]
+      operationId: listMaritalStatuses
+      summary: List marital statuses
+      description: Returns all marital statuses as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every marital status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MaritalStatus"
+              example:
+                - id: "868"
+                  short: Married
+                  name: Married
+                - id: "870"
+                  short: Single
+                  name: Single
+                - id: "1754"
+                  short: Not Provided
+                  name: Not Provided
+
   /lookups/person/nameSuffixes:
     get:
       tags: [Lookups]
@@ -1307,6 +1569,56 @@ paths:
                 - id: "1909"
                   name: XII
                   short: XII
+
+  /lookups/person/occupations:
+    get:
+      tags: [Lookups]
+      operationId: listOccupations
+      summary: List occupations
+      description: Returns all occupations as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every occupation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Occupation"
+              example:
+                - id: "1"
+                  name: Aerospace Engineers
+                  typeId: "1"
+                - id: "3"
+                  name: Architects
+                  typeId: "1"
+
+  /lookups/person/occupationTypes:
+    get:
+      tags: [Lookups]
+      operationId: listOccupationTypes
+      summary: List occupation types
+      description: >-
+        Returns all occupation types, the groups occupations fall into, as an
+        array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every occupation type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OccupationType"
+              example:
+                - id: "1"
+                  name: Architecture and Engineering
+                  short: Engineering
+                - id: "4"
+                  name: Computer and Information Technology
+                  short: IT
 
   /lookups/person/positions:
     get:
@@ -1402,6 +1714,59 @@ paths:
                   effectiveDate: "2016-06-01"
                   expiryDate: "2025-05-31"
                   functionalPositionFlag: false
+
+  /lookups/person/relationshipTypes:
+    get:
+      tags: [Lookups]
+      operationId: listRelationshipTypes
+      summary: List relationship types
+      description: >-
+        Returns all relationship types between two people, such as family and
+        guardian relationships, as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every relationship type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RelationshipType"
+              example:
+                - id: "1"
+                  name: Father of
+                  gender: M
+                - id: "2"
+                  name: Mother of
+                  gender: F
+                - id: "43"
+                  name: Guardian of
+                  gender: ""
+
+  /lookups/person/religions:
+    get:
+      tags: [Lookups]
+      operationId: listReligions
+      summary: List religions
+      description: Returns all religions as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every religion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Religion"
+              example:
+                - id: "71"
+                  short: "1"
+                  name: African Methodist Episcopal
+                - id: "82"
+                  short: "21"
+                  name: Latter-day Saints (Mormon)
 
   /lookups/person/schools:
     get:
@@ -1534,6 +1899,38 @@ paths:
                   name: Rev
                   short: REV
 
+  /lookups/registrations/paymentTypes:
+    get:
+      tags: [Lookups]
+      operationId: listPaymentTypes
+      summary: List registration payment types
+      description: >-
+        Returns all ways a registration can be paid, as an array sorted by
+        `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every payment type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentType"
+              example:
+                - name: Credit Card
+                  short: CC
+                  id: "1765"
+                - name: Manual Pay
+                  short: M
+                  id: "1766"
+                - name: ACH Payment
+                  short: ACH
+                  id: "1863"
+                - name: Non Paid Registration Change
+                  short: NP
+                  id: "1864"
+
   /lookups/registrations/renewalOptoutReasons:
     get:
       tags: [Lookups]
@@ -1571,6 +1968,94 @@ paths:
                   createdDt: "2025-05-29T08:42:08"
                   lastModifiedBy: null
                   lastModifiedDt: null
+
+  /lookups/registrations/statuses:
+    get:
+      tags: [Lookups]
+      operationId: listRegistrationStatuses
+      summary: List registration statuses
+      description: Returns all registration statuses as an array sorted by `id`.
+      security: []
+      responses:
+        "200":
+          description: An array of every registration status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RegistrationStatus"
+              example:
+                - id: "1755"
+                  name: New
+                  short: N
+                - id: "1758"
+                  name: Transfer
+                  short: T
+                - id: "1772"
+                  name: Transfer
+                  short: X
+
+  /lookups/trainings/courses:
+    get:
+      tags: [Lookups]
+      operationId: listTrainingCourses
+      summary: List training courses
+      description: >-
+        Returns training courses as an array sorted by `programId`, then by
+        `courseDescription` ignoring case. A course offered in several
+        programs appears once per program. Unknown query parameters are
+        ignored.
+      security: []
+      parameters:
+        - name: programId
+          in: query
+          description: >-
+            Return only courses in this program. A program with no courses
+            returns an empty list.
+          schema:
+            type: integer
+            examples: [2]
+      responses:
+        "200":
+          description: Matching training courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TrainingCourse"
+              example:
+                - programId: 2
+                  programName: Scouts BSA
+                  courseId: 339
+                  courseName: SSD
+                  courseTypeId: 6
+                  courseType: Supplemental Training
+                  courseDescription: Safe Swim Defense Classroom (SSD)
+                  numMonths: 24
+                  effectiveDt: "1965-01-01T00:00:00"
+                  expiryDt: ""
+                  createdBy: DDROSS
+                  createdDt: "2001-10-05T15:50:43"
+                  lastModifiedBy: PASOWNER
+                  lastModifiedDt: "2017-10-04T10:20:12"
+                  isDelete: null
+                  isYrEndExpire: false
+                  numSeasons: null
+                  courseUri: http://olc.scouting.org/courses/ssd/course.cgi
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+        "404":
+          description: No program exists with that `programId`
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: M404
+                message: Not Found
+                errorDesc: Program not found, verify the programId
 
 components:
   schemas:
@@ -2234,8 +2719,7 @@ components:
         id:
           $ref: "#/components/schemas/MeritBadgeId"
         categoryId:
-          type: string
-          examples: ["3"]
+          $ref: "#/components/schemas/MeritBadgeCategoryId"
         category:
           type: string
           examples: [Business and Industry]
@@ -3548,6 +4032,384 @@ components:
           type: "null"
         lastModifiedDt:
           type: "null"
+
+    AddressType:
+      type: object
+      additionalProperties: false
+      required: [id, name, short]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["65"]
+        name:
+          type: string
+          examples: [Home]
+        short:
+          type: string
+          description: Single-letter code
+          examples: [H]
+
+    MeritBadgeCategory:
+      type: object
+      additionalProperties: false
+      required: [id, name]
+      properties:
+        id:
+          $ref: "#/components/schemas/MeritBadgeCategoryId"
+        name:
+          type: string
+          examples: [Business and Industry]
+
+    MeritBadgeCategoryId:
+      type: string
+      description: An `id` from the merit badge category list
+      pattern: "^[0-9]+$"
+      examples: ["3"]
+
+    RankSummary:
+      type: object
+      additionalProperties: false
+      required: [id, name, level, programId, programName, unitType]
+      properties:
+        id:
+          type: string
+          description: >-
+            Same as the rank's `id` in the rank list. Venturing Quest (`23`)
+            appears only here.
+          pattern: "^[0-9]+$"
+          examples: ["1"]
+        name:
+          type: string
+          examples: [Scout]
+        level:
+          type: string
+          description: >-
+            Position of the rank within its program, as in the rank list, or an
+            empty string if not set
+          pattern: "^([0-9]+)?$"
+          examples: ["1", ""]
+        programId:
+          type: string
+          description: >-
+            Same as the rank list's `programId`, or an empty string if not set
+          pattern: "^([0-9]+)?$"
+          examples: ["2", ""]
+        programName:
+          type: string
+          description: Program name for `programId`, or an empty string
+          examples: [Scouts BSA, ""]
+        unitType:
+          type: string
+          description: >-
+            The program's unit, as a unit type's `short`, or an empty string
+          examples: [Troop, ""]
+
+    SocialMediaType:
+      type: object
+      additionalProperties: false
+      required: [id, short, name]
+      properties:
+        id:
+          type: integer
+          description: >-
+            Same as the communication type's `id` in the communication type
+            list, as a number instead of a string. These are the communication
+            types in the Social Media classification.
+          examples: [15]
+        short:
+          type: string
+          examples: [FB]
+        name:
+          type: string
+          examples: [Facebook]
+
+    OrganizationUnitType:
+      type: object
+      additionalProperties: false
+      required: [id, name, short]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["2"]
+        name:
+          type: string
+          examples: [Troop, Non Unit]
+        short:
+          type: string
+          examples: [Troop, NonUnit]
+
+    Employer:
+      type: object
+      additionalProperties: false
+      required: [id, name]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["12"]
+        name:
+          type: string
+          description: Can have leading or trailing whitespace
+          examples: [Boy Scouts of America]
+
+    Ethnicity:
+      type: object
+      additionalProperties: false
+      required: [id, name, short]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["1743"]
+        name:
+          type: string
+          examples: [Caucasian/White]
+        short:
+          type: string
+          description: Two-letter code
+          examples: [CA]
+
+    Gender:
+      type: object
+      additionalProperties: false
+      required: [id, name, short]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["873"]
+        name:
+          type: string
+          examples: [Male]
+        short:
+          type: string
+          description: Single-letter code
+          examples: [M]
+
+    MaritalStatus:
+      type: object
+      additionalProperties: false
+      required: [id, short, name]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["868"]
+        short:
+          type: string
+          examples: [Married]
+        name:
+          type: string
+          examples: [Married]
+
+    Occupation:
+      type: object
+      additionalProperties: false
+      required: [id, name, typeId]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["3"]
+        name:
+          type: string
+          description: Not unique across occupation types
+          examples: [Architects]
+        typeId:
+          $ref: "#/components/schemas/OccupationTypeId"
+
+    OccupationType:
+      type: object
+      additionalProperties: false
+      required: [id, name, short]
+      properties:
+        id:
+          $ref: "#/components/schemas/OccupationTypeId"
+        name:
+          type: string
+          examples: [Architecture and Engineering]
+        short:
+          type: string
+          description: Shorter name
+          examples: [Engineering]
+
+    OccupationTypeId:
+      type: string
+      description: An `id` from the occupation type list
+      pattern: "^[0-9]+$"
+      examples: ["1"]
+
+    RelationshipType:
+      type: object
+      additionalProperties: false
+      required: [id, name, gender]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["1"]
+        name:
+          type: string
+          examples: [Father of, Guardian of]
+        gender:
+          type: string
+          description: >-
+            Gender the relationship implies for the person it describes, or an
+            empty string if it implies none
+          enum: [M, F, ""]
+
+    Religion:
+      type: object
+      additionalProperties: false
+      required: [id, short, name]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["82"]
+        short:
+          type: string
+          description: Numeric code
+          pattern: "^[0-9]+$"
+          examples: ["21"]
+        name:
+          type: string
+          examples: [Latter-day Saints (Mormon)]
+
+    PaymentType:
+      type: object
+      additionalProperties: false
+      required: [name, short, id]
+      properties:
+        name:
+          type: string
+          examples: [Credit Card]
+        short:
+          type: string
+          examples: [CC]
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["1765"]
+
+    RegistrationStatus:
+      type: object
+      additionalProperties: false
+      required: [id, name, short]
+      properties:
+        id:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["1755"]
+        name:
+          type: string
+          description: Not unique
+          examples: [New, Transfer]
+        short:
+          type: string
+          description: Single-letter code
+          examples: [N, T]
+
+    TrainingCourse:
+      type: object
+      additionalProperties: false
+      required:
+        - programId
+        - programName
+        - courseId
+        - courseName
+        - courseTypeId
+        - courseType
+        - courseDescription
+        - numMonths
+        - effectiveDt
+        - expiryDt
+        - createdBy
+        - createdDt
+        - lastModifiedBy
+        - lastModifiedDt
+        - isDelete
+        - isYrEndExpire
+        - numSeasons
+        - courseUri
+      properties:
+        programId:
+          type: integer
+          description: >-
+            Training program. These IDs differ from the rank list's
+            `programId`.
+          examples: [2]
+        programName:
+          type: string
+          description: Program name for `programId`
+          examples: [Scouts BSA, Sea Scouts]
+        courseId:
+          type: integer
+          examples: [339]
+        courseName:
+          type: string
+          description: Short course code
+          examples: [SSD, C32]
+        courseTypeId:
+          type: integer
+          examples: [6]
+        courseType:
+          type: string
+          description: Course type name for `courseTypeId`
+          examples: [Supplemental Training, Youth Protection Training]
+        courseDescription:
+          type: string
+          description: >-
+            Display name, ending in `courseName` in parentheses. Can have
+            leading whitespace.
+          examples: [Safe Swim Defense Classroom (SSD)]
+        numMonths:
+          type: [integer, "null"]
+          examples: [24, null]
+        effectiveDt:
+          type: string
+          description: Date and time as `YYYY-MM-DDThh:mm:ss`, with no time zone
+          pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$"
+          examples: ["1965-01-01T00:00:00"]
+        expiryDt:
+          type: string
+          const: ""
+        createdBy:
+          type: string
+          description: Username of the account that created the record
+          examples: [DDROSS]
+        createdDt:
+          type: string
+          description: Creation time as `YYYY-MM-DDThh:mm:ss`, with no time zone
+          pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$"
+          examples: ["2001-10-05T15:50:43"]
+        lastModifiedBy:
+          type: string
+          description: >-
+            Username of the account that last changed the record, or an empty
+            string if it was never changed
+          examples: [PASOWNER, ""]
+        lastModifiedDt:
+          type: string
+          description: >-
+            Time of the last change as `YYYY-MM-DDThh:mm:ss`, with no time
+            zone, or an empty string if it was never changed
+          pattern: "^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})?$"
+          examples: ["2017-10-04T10:20:12", ""]
+        isDelete:
+          type: "null"
+        isYrEndExpire:
+          type: boolean
+        numSeasons:
+          type: [integer, "null"]
+          examples: [5, null]
+        courseUri:
+          type: [string, "null"]
+          format: uri
+          description: Link to the course, or `null`
+          examples: [https://training.scouting.org/courses/H114, null]
 
     MeritBadgeId:
       type: string

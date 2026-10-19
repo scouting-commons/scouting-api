@@ -3,10 +3,13 @@
 apis/api.scouting.org/openapi.yaml:
   operation-4xx-response:
     - '#/paths/~1advancements~1awards~1{awardId}/get/responses'
+    - '#/paths/~1lookups~1address~1addressTypes/get/responses'
     - '#/paths/~1lookups~1advancements~1activityCategories/get/responses'
     - '#/paths/~1lookups~1advancements~1activityTypes/get/responses'
     - '#/paths/~1lookups~1advancements~1calendarEventTypes/get/responses'
+    - '#/paths/~1lookups~1advancements~1meritBadgeCategories/get/responses'
     - '#/paths/~1lookups~1advancements~1positions/get/responses'
+    - '#/paths/~1lookups~1advancements~1ranks/get/responses'
     - '#/paths/~1lookups~1advancements~1swimmingClassification/get/responses'
     - '#/paths/~1lookups~1advancements~1unitTimezone/get/responses'
     - '#/paths/~1lookups~1advancements~1unitTypes/get/responses'
@@ -14,12 +17,24 @@ apis/api.scouting.org/openapi.yaml:
     - '#/paths/~1lookups~1communications~1communicationTypes/get/responses'
     - '#/paths/~1lookups~1communications~1mobilePhoneCarrier/get/responses'
     - '#/paths/~1lookups~1communications~1phoneCountryCodes/get/responses'
+    - '#/paths/~1lookups~1communications~1socialMedia/get/responses'
     - '#/paths/~1lookups~1organizations~1types/get/responses'
+    - '#/paths/~1lookups~1organizations~1unitTypes/get/responses'
+    - '#/paths/~1lookups~1person~1employers/get/responses'
+    - '#/paths/~1lookups~1person~1ethnicities/get/responses'
+    - '#/paths/~1lookups~1person~1genders/get/responses'
     - '#/paths/~1lookups~1person~1grades/get/responses'
+    - '#/paths/~1lookups~1person~1maritalStatuses/get/responses'
     - '#/paths/~1lookups~1person~1nameSuffixes/get/responses'
+    - '#/paths/~1lookups~1person~1occupations/get/responses'
+    - '#/paths/~1lookups~1person~1occupationTypes/get/responses'
     - '#/paths/~1lookups~1person~1positions/get/responses'
+    - '#/paths/~1lookups~1person~1relationshipTypes/get/responses'
+    - '#/paths/~1lookups~1person~1religions/get/responses'
     - '#/paths/~1lookups~1person~1titlePrefixes/get/responses'
+    - '#/paths/~1lookups~1registrations~1paymentTypes/get/responses'
     - '#/paths/~1lookups~1registrations~1renewalOptoutReasons/get/responses'
+    - '#/paths/~1lookups~1registrations~1statuses/get/responses'
   rule/object-schemas-closed:
     - >-
       #/paths/~1advancements~1awards~1{awardId}/get/responses/200/content/application~1json/schema/additionalProperties
