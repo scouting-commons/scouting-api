@@ -8,6 +8,52 @@ sourceDescriptions:
     url: ./openapi.yaml
 workflows:
   # Steps on cached list endpoints send no-cache. See the CacheControl parameter.
+  - workflowId: adventures
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listAdventures
+        parameters:
+          - name: Cache-Control
+            in: header
+            value: no-cache
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: list-invalid-status
+        operationId: $sourceDescriptions.api.listAdventures
+        parameters:
+          - name: Cache-Control
+            in: header
+            value: no-cache
+          - name: status
+            in: query
+            value: bogus
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: requirements
+        operationId: $sourceDescriptions.api.getAdventureRequirements
+        parameters:
+          - name: adventureId
+            in: path
+            value: 1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: requirements-invalid
+        operationId: $sourceDescriptions.api.getAdventureRequirements
+        parameters:
+          - name: adventureId
+            in: path
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: requirements-not-found
+        operationId: $sourceDescriptions.api.getAdventureRequirements
+        parameters:
+          - name: adventureId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 404
+
   - workflowId: awards
     steps:
       - stepId: list
@@ -121,6 +167,22 @@ workflows:
             value: bogus
         successCriteria:
           - condition: $statusCode == 400
+      - stepId: get
+        operationId: $sourceDescriptions.api.getRank
+        parameters:
+          - name: rankId
+            in: path
+            value: 1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: get-not-found
+        operationId: $sourceDescriptions.api.getRank
+        parameters:
+          - name: rankId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 400
       - stepId: requirements
         operationId: $sourceDescriptions.api.getRankRequirements
         parameters:
@@ -141,6 +203,40 @@ workflows:
         operationId: $sourceDescriptions.api.getRankRequirements
         parameters:
           - name: rankId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 404
+
+  - workflowId: sea-scout-electives
+    steps:
+      - stepId: list
+        operationId: $sourceDescriptions.api.listSeaScoutElectives
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: requirements
+        operationId: $sourceDescriptions.api.getSeaScoutElectiveRequirements
+        parameters:
+          - name: ssElectiveId
+            in: path
+            value: 1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: requirements-invalid-version
+        operationId: $sourceDescriptions.api.getSeaScoutElectiveRequirements
+        parameters:
+          - name: ssElectiveId
+            in: path
+            value: 1
+          - name: ssVersionId
+            in: query
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: requirements-not-found
+        operationId: $sourceDescriptions.api.getSeaScoutElectiveRequirements
+        parameters:
+          - name: ssElectiveId
             in: path
             value: 999999
         successCriteria:

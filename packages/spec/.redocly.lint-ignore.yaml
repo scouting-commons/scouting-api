@@ -3,6 +3,7 @@
 apis/api.scouting.org/openapi.yaml:
   operation-4xx-response:
     - '#/paths/~1advancements~1awards~1{awardId}/get/responses'
+    - '#/paths/~1advancements~1ssElectives/get/responses'
     - '#/paths/~1lookups~1address~1addressTypes/get/responses'
     - '#/paths/~1lookups~1advancements~1activityCategories/get/responses'
     - '#/paths/~1lookups~1advancements~1activityTypes/get/responses'

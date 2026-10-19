@@ -33,6 +33,221 @@ tags:
       classifications
 
 paths:
+  /advancements/adventures:
+    get:
+      tags: [Advancement]
+      operationId: listAdventures
+      summary: List Cub Scout adventures
+      description: >-
+        Returns Cub Scout adventures, one item per requirements version. An
+        adventure with several versions appears once per version, sharing `id`
+        but with different `versionId`. Pass an adventure's `id` to the
+        requirements endpoint to get its requirements. Filters combine with
+        AND. A filter value that matches nothing returns an empty list.
+        Unknown query parameters are ignored.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/CacheControl"
+        - name: status
+          in: query
+          description: >-
+            `active` (the default) leaves out retired adventures, those with an
+            `expiryDt`, and `all` includes them. Case-sensitive.
+          schema:
+            type: string
+            enum: [active, all]
+        - name: id
+          in: query
+          description: Return only versions of the adventure with this `id`
+          schema:
+            type: integer
+            examples: [1]
+        - name: rankId
+          in: query
+          description: Return only adventures for this rank
+          schema:
+            type: integer
+            examples: [8]
+        - name: version
+          in: query
+          description: Return only requirements versions from this year
+          schema:
+            type: integer
+            examples: [2024]
+        - name: versionId
+          in: query
+          description: Return only the requirements version with this `versionId`
+          schema:
+            type: integer
+            examples: [285]
+        - name: required
+          in: query
+          description: >-
+            `true` returns only required adventures, and `false` only elective
+            ones
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Matching adventure versions
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [adventures]
+                properties:
+                  adventures:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Adventure"
+              example:
+                adventures:
+                  - id: 1
+                    rankId: 8
+                    rank: Tiger
+                    name: My Tiger Jungle
+                    nameShort: My Tiger Jungle
+                    skuName: Cub Scout Tiger Core Adventure Loop - My Tiger Jungle
+                    required: true
+                    expiryDt: null
+                    sortOrder: 1
+                    image: null
+                    sku: "619913"
+                    price: 1.99
+                    priceLastUpdated: "2026-09-16"
+                    scoutNet: "1200"
+                    bsaExternalUrlId: null
+                    pageUrl: tiger-adventure-backyard-jungle.asp
+                    searchKeywords: null
+                    versionId: 98
+                    version: 2016
+                    header: null
+                    footer: null
+                    adminNotes: null
+                    imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/adventures/1_100.png
+                    imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/adventures/1_200.png
+                    imageUrl300: https://d1kn0x9vzr5n76.cloudfront.net/images/adventures/1_300.png
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  /advancements/adventures/{adventureId}/requirements:
+    get:
+      tags: [Advancement]
+      operationId: getAdventureRequirements
+      summary: Get an adventure's requirements
+      description: >-
+        Returns one requirements version of an adventure: the newest by
+        default, or the one given by `versionId`. Retired adventures work too.
+        Requirements are a flat list; nest them using `parentRequirementId`
+        and order them by `sortOrder`.
+      security: []
+      parameters:
+        - name: adventureId
+          in: path
+          required: true
+          description: Adventure `id` from the adventure list
+          schema:
+            type: integer
+            minimum: 1
+            examples: [1]
+        - name: versionId
+          in: query
+          description: >-
+            A `versionId` of this adventure from the adventure list. Defaults to
+            the newest version.
+          schema:
+            type: integer
+            minimum: 1
+            examples: [1]
+      responses:
+        "200":
+          description: The requested requirements version
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdventureRequirements"
+              example:
+                adventureId: 1
+                rankId: 8
+                rank: Tiger
+                name: My Tiger Jungle
+                nameShort: My Tiger Jungle
+                skuName: Cub Scout Tiger Core Adventure Loop - My Tiger Jungle
+                required: true
+                sortOrder: 1
+                sku: "619913"
+                price: 1.99
+                priceLastUpdated: "2026-09-16"
+                scoutNet: "1200"
+                bsaExternalUrlId: null
+                pageUrl: tiger-adventure-backyard-jungle.asp
+                searchKeywords: null
+                versionId: 98
+                version: 2016
+                versionEffectiveDt: "2016-12-01"
+                versionExpiryDt: "2024-08-31"
+                header: null
+                footer: null
+                adminNotes: null
+                image: null
+                imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/adventures/1_100.png
+                imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/adventures/1_200.png
+                imageUrl300: https://d1kn0x9vzr5n76.cloudfront.net/images/adventures/1_300.png
+                requirements:
+                  - id: 848
+                    versionId: 98
+                    listNumber: null
+                    number: null
+                    name: Complete Requirement 1 plus at least two others.
+                    nameShort: null
+                    sortOrder: 1
+                    footer: null
+                    childrenRequired: 3
+                    required: true
+                    parentRequirementId: null
+                    mappingId: null
+                    newRequirementId: null
+                    oldRequirementId1: null
+                    oldRequirementId2: null
+                  - id: 849
+                    versionId: 98
+                    listNumber: "1."
+                    number: "1"
+                    name: With your parent/guardian or other caring adult ..., go for a walk outside, ...
+                    nameShort: Go for nature walk
+                    sortOrder: 1.1
+                    footer: null
+                    childrenRequired: null
+                    required: true
+                    parentRequirementId: 848
+                    mappingId: null
+                    newRequirementId: null
+                    oldRequirementId1: null
+                    oldRequirementId2: null
+        "400":
+          description: "`adventureId` or `versionId` is invalid"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C400
+                message: Bad Request
+                errorDesc: Invalid request - "adventureId" must be larger than or equal to 1
+        "404":
+          description: >-
+            No adventure exists with that ID, or `versionId` is not a version of
+            this adventure
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C404
+                message: Not Found
+                errorDesc: "Adventure not found for the given adventureId - adventureId: 999999"
+
   /advancements/awards:
     get:
       tags: [Advancement]
@@ -523,6 +738,67 @@ paths:
         "400":
           $ref: "#/components/responses/InvalidQuery"
 
+  /advancements/ranks/{rankId}:
+    get:
+      tags: [Advancement]
+      operationId: getRank
+      summary: Get a rank
+      description: >-
+        Returns every requirements version of one rank, active and inactive,
+        as the same items the rank list returns. Query parameters are ignored.
+        An ID that isn't in the rank list returns `400`, not `404`.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/RankId"
+      responses:
+        "200":
+          description: The rank's versions
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  $ref: "#/components/schemas/Rank"
+              example:
+                - id: "1"
+                  name: Scout
+                  short: Scout
+                  reallyShort: Scout
+                  level: "1"
+                  image: scout.png
+                  programId: "2"
+                  program: Scouts BSA
+                  searchKeywords: Boy Scout Scouting Scout Rank Award Requirements
+                  lds: "True"
+                  sku: "657432"
+                  price: "3.29"
+                  priceLastUpdated: "2026-09-16"
+                  scoutNet: RN
+                  versionId: "84"
+                  version: "2022"
+                  header: All requirements for the Scout rank must be completed as a member of a troop or as a Lone Scout. ...
+                  footer: "<strong>NOTES:</strong> ..."
+                  adminNotes: ""
+                  proofReadDate: ""
+                  active: "True"
+                  expiredDate: ""
+                  disabledOnQuickEntry: "False"
+                  imageUrl50: https://d1kn0x9vzr5n76.cloudfront.net/images/ranks/scout50.png
+                  imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/ranks/scout100.png
+                  imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/ranks/scout200.png
+                  imageUrl400: https://d1kn0x9vzr5n76.cloudfront.net/images/ranks/scout400.png
+        "400":
+          description: No rank in the rank list has that ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: M400
+                message: Invalid Request
+                errorDesc: Rank information is not found. rankId=999999
+
   /advancements/ranks/{rankId}/requirements:
     get:
       tags: [Advancement]
@@ -616,6 +892,164 @@ paths:
                 errorCode: C404
                 message: Not Found
                 errorDesc: "Ranks information not found - rankId: 999999"
+
+  /advancements/ssElectives:
+    get:
+      tags: [Advancement]
+      operationId: listSeaScoutElectives
+      summary: List Sea Scout electives
+      description: >-
+        Returns Sea Scout electives, each with its requirements versions. Pass
+        an elective's `ssElectiveId` to the requirements endpoint to get its
+        requirements. Query parameters are ignored.
+      security: []
+      responses:
+        "200":
+          description: All Sea Scout electives
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SeaScoutElective"
+              example:
+                - ssElectiveId: 1
+                  ssName: Leadership
+                  imageUrl050: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_50.png
+                  imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_100.png
+                  imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_200.png
+                  imageUrl300: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_300.png
+                  imageUrl400: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_400.png
+                  expireDate: ""
+                  unitTypeId: 5
+                  rankId: null
+                  createdOn: "2018-09-28T14:27:27"
+                  createdBy: scoutbook
+                  modifiedOn: "2023-09-20T00:00:00"
+                  modifiedBy: NARR-5271
+                  versions:
+                    - ssVersionId: 22
+                      ssElectiveId: 1
+                      version: 2022
+                      expireDate: "2024-09-30T00:00:00"
+                      header: ""
+                      footer: ""
+                      adminNotes: ""
+                      createdOn: "2022-03-14T00:17:05"
+                      createdBy: scoutbook
+                      modifiedOn: "2024-10-17T09:05:47"
+                      modifiedBy: SBL-5548
+                      versionEffectiveDt: "2022-02-21"
+                      versionExpiryDt: "2024-09-30"
+                    - ssVersionId: 23
+                      ssElectiveId: 1
+                      version: 2024
+                      expireDate: ""
+                      header: ""
+                      footer: ""
+                      adminNotes: ""
+                      createdOn: "2024-10-17T09:05:47"
+                      createdBy: SBL-5548
+                      modifiedOn: ""
+                      modifiedBy: ""
+                      versionEffectiveDt: "2024-10-01"
+                      versionExpiryDt: ""
+
+  /advancements/ssElectives/{ssElectiveId}/requirements:
+    get:
+      tags: [Advancement]
+      operationId: getSeaScoutElectiveRequirements
+      summary: Get a Sea Scout elective's requirements
+      description: >-
+        Returns one requirements version of a Sea Scout elective: the newest by
+        default, or the one given by `ssVersionId`. Requirements are a flat
+        list in no particular order; nest them using `parentRequirementId` and
+        order them by `sortOrder`.
+      security: []
+      parameters:
+        - name: ssElectiveId
+          in: path
+          required: true
+          description: "`ssElectiveId` from the Sea Scout elective list"
+          schema:
+            type: integer
+            minimum: 1
+            examples: [1]
+        - name: ssVersionId
+          in: query
+          description: >-
+            An `ssVersionId` of this elective from its `versions`. Defaults to
+            the newest version.
+          schema:
+            type: integer
+            minimum: 1
+            examples: [22]
+      responses:
+        "200":
+          description: The requested requirements version
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SeaScoutElectiveRequirements"
+              example:
+                ssElectiveId: 1
+                ssVersionId: 23
+                ssVersion: 2024
+                versionEffectiveDt: "2024-10-01"
+                versionExpiryDt: null
+                ssName: Leadership
+                imageUrl050: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_50.png
+                imageUrl100: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_100.png
+                imageUrl200: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_200.png
+                imageUrl300: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_300.png
+                imageUrl400: https://d1kn0x9vzr5n76.cloudfront.net/images/seascoutelectives/leadership_400.png
+                expireDate: ""
+                unitTypeId: 5
+                rankId: null
+                createdOn: "2018-09-28T14:27:27"
+                createdBy: scoutbook
+                modifiedOn: "2023-09-20T00:00:00"
+                modifiedBy: NARR-5271
+                requirements:
+                  - ssElectiveRequirementId: 127
+                    ssVersionId: 23
+                    listNumber: "9"
+                    requirementNumber: "9"
+                    name: Attend Seabadge (youth 18 and over).
+                    sortOrder: 127
+                    footer: ""
+                    childrenRequired: null
+                    required: false
+                    parentRequirementId: null
+                    ssLevel: 3
+                    expireDate: ""
+                    createdOn: "2024-10-17T09:05:47"
+                    createdBy: SBL-5548
+                    modifiedOn: ""
+                    modifiedBy: ""
+                    shortName: ""
+        "400":
+          description: >-
+            `ssElectiveId` or `ssVersionId` is invalid, or `ssVersionId` is not
+            a version of this elective
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C400
+                message: Bad Request
+                errorDesc: "Sea Scout Elective not found for the given ssElectiveId and versionId - versionId: 999999"
+        "404":
+          description: No Sea Scout elective exists with that ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C404
+                message: Not Found
+                errorDesc: "Sea Scout Elective not found for the given ssElectiveId - ssElectiveId: 999999"
 
   /lookups/address/addressTypes:
     get:
@@ -2059,6 +2493,300 @@ paths:
 
 components:
   schemas:
+    Adventure:
+      type: object
+      additionalProperties: false
+      description: One requirements version of a Cub Scout adventure
+      required:
+        - id
+        - rankId
+        - rank
+        - name
+        - nameShort
+        - skuName
+        - required
+        - expiryDt
+        - sortOrder
+        - image
+        - sku
+        - price
+        - priceLastUpdated
+        - scoutNet
+        - bsaExternalUrlId
+        - pageUrl
+        - searchKeywords
+        - versionId
+        - version
+        - header
+        - footer
+        - adminNotes
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+      properties:
+        id:
+          $ref: "#/components/schemas/AdventureId"
+        rankId:
+          type: integer
+          description: The adventure's rank, as a rank `id` from the rank list in number form
+          examples: [8]
+        rank:
+          type: string
+          description: Rank name for `rankId`
+          examples: [Tiger]
+        name:
+          type: string
+          description: Can differ between versions of the same adventure
+          examples: [My Tiger Jungle]
+        nameShort:
+          type: string
+          examples: [My Tiger Jungle]
+        skuName:
+          type: [string, "null"]
+          examples: [Cub Scout Tiger Core Adventure Loop - My Tiger Jungle]
+        required:
+          type: boolean
+          description: "`true` for a required adventure, `false` for an elective"
+        expiryDt:
+          type: [string, "null"]
+          description: Date the adventure was retired, or `null`
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+          examples: ["2022-05-31"]
+        sortOrder:
+          type: integer
+          description: Position among the rank's adventures
+          examples: [1]
+        image:
+          type: [string, "null"]
+          description: Image file name, or `null`
+          examples: [4_305_adventure_TeamTiger.png]
+        sku:
+          type: [string, "null"]
+          description: Scout Shop SKU, or `null`
+          examples: ["619913"]
+        price:
+          type: number
+          description: Price in USD. `0` when not sold.
+          examples: [1.99]
+        priceLastUpdated:
+          type: [string, "null"]
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        scoutNet:
+          type: [string, "null"]
+          examples: ["1200"]
+        bsaExternalUrlId:
+          type: "null"
+        pageUrl:
+          type: [string, "null"]
+          examples: [tiger-adventure-backyard-jungle.asp]
+        searchKeywords:
+          type: "null"
+        versionId:
+          type: integer
+          description: Unique per requirements version
+          examples: [98]
+        version:
+          type: integer
+          description: Requirements version year
+          examples: [2016]
+        header:
+          type: "null"
+        footer:
+          type: "null"
+        adminNotes:
+          type: "null"
+        imageUrl100:
+          type: string
+          format: uri
+        imageUrl200:
+          type: string
+          format: uri
+        imageUrl300:
+          type: string
+          format: uri
+
+    AdventureRequirements:
+      type: object
+      additionalProperties: false
+      description: >-
+        An adventure, as of the returned requirements version, with its
+        requirements. Fields match those of the same name in `Adventure`.
+      required:
+        - adventureId
+        - rankId
+        - rank
+        - name
+        - nameShort
+        - skuName
+        - required
+        - sortOrder
+        - sku
+        - price
+        - priceLastUpdated
+        - scoutNet
+        - bsaExternalUrlId
+        - pageUrl
+        - searchKeywords
+        - versionId
+        - version
+        - versionEffectiveDt
+        - versionExpiryDt
+        - header
+        - footer
+        - adminNotes
+        - image
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - requirements
+      properties:
+        adventureId:
+          $ref: "#/components/schemas/AdventureId"
+        rankId:
+          type: integer
+          examples: [8]
+        rank:
+          type: string
+        name:
+          type: string
+        nameShort:
+          type: string
+        skuName:
+          type: [string, "null"]
+        required:
+          type: boolean
+        sortOrder:
+          type: integer
+        sku:
+          type: [string, "null"]
+        price:
+          type: number
+        priceLastUpdated:
+          type: [string, "null"]
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        scoutNet:
+          type: [string, "null"]
+        bsaExternalUrlId:
+          type: "null"
+        pageUrl:
+          type: [string, "null"]
+        searchKeywords:
+          type: "null"
+        versionId:
+          type: integer
+          examples: [98]
+        version:
+          type: integer
+          examples: [2016]
+        versionEffectiveDt:
+          $ref: "#/components/schemas/StringDate"
+        versionExpiryDt:
+          type: [string, "null"]
+          description: Date the version stopped being current, or `null`
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        header:
+          type: "null"
+        footer:
+          type: "null"
+        adminNotes:
+          type: "null"
+        image:
+          type: [string, "null"]
+        imageUrl100:
+          type: string
+          format: uri
+        imageUrl200:
+          type: string
+          format: uri
+        imageUrl300:
+          type: string
+          format: uri
+        requirements:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdventureRequirement"
+
+    AdventureRequirement:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - versionId
+        - listNumber
+        - number
+        - name
+        - nameShort
+        - sortOrder
+        - footer
+        - childrenRequired
+        - required
+        - parentRequirementId
+        - mappingId
+        - newRequirementId
+        - oldRequirementId1
+        - oldRequirementId2
+      properties:
+        id:
+          type: integer
+          examples: [849]
+        versionId:
+          type: integer
+          description: "`versionId` of the requirements version"
+          examples: [98]
+        listNumber:
+          type: [string, "null"]
+          description: Display label, e.g. `1.` or `1a`, or `null`
+          examples: ["1."]
+        number:
+          type: [string, "null"]
+          description: Short identifier, e.g. `1a`, or `null`
+          examples: [1a]
+        name:
+          type: string
+          description: Requirement text. Sometimes contains HTML.
+        nameShort:
+          type: [string, "null"]
+          description: Short label, or `null`
+          examples: [Go for nature walk]
+        sortOrder:
+          type: [number, "null"]
+          description: Sort key, e.g. `1` for a parent and `1.1` for its first child, or `null`
+          examples: [1, 1.1]
+        footer:
+          type: [string, "null"]
+          description: Notes, or `null`
+        childrenRequired:
+          type: [integer, "null"]
+          description: Number of child requirements that must be completed, or `null`
+          examples: [3]
+        required:
+          type: boolean
+        parentRequirementId:
+          type: [integer, "null"]
+          description: "`id` of the parent requirement, or `null` for top-level requirements"
+          examples: [848]
+        mappingId:
+          type: "null"
+        newRequirementId:
+          type: "null"
+        oldRequirementId1:
+          type: "null"
+        oldRequirementId2:
+          type: "null"
+
+    AdventureId:
+      type: integer
+      description: An `id` from the adventure list, shared by all versions of the adventure
+      examples: [1]
+
     Award:
       type: object
       additionalProperties: false
@@ -2554,9 +3282,10 @@ components:
           examples: ["26"]
         linkedAdventureRequirementId:
           type: string
+          description: An adventure requirement's `id`, or empty
         linkedAdventureId:
           type: string
-          description: An adventure `id` from `/advancements/adventures`, or empty
+          description: An adventure `id` from the adventure list, or empty
         linkedMeritBadgeId:
           type: string
           description: A linked merit badge, or empty
@@ -2673,7 +3402,11 @@ components:
         linkedAdventureRequirementId:
           $ref: "#/components/schemas/IntegerOrEmpty"
         linkedAdventureId:
-          $ref: "#/components/schemas/IntegerOrEmpty"
+          type: [integer, string]
+          anyOf:
+            - $ref: "#/components/schemas/AdventureId"
+            - type: string
+              const: ""
         linkedMeritBadgeId:
           type: string
 
@@ -3218,6 +3951,7 @@ components:
           $ref: "#/components/schemas/StringBoolean"
         linkedAdventureId:
           type: string
+          description: An adventure `id` from the adventure list, or empty
         linkedAwardId:
           type: string
           description: A linked award, or empty
@@ -3225,6 +3959,294 @@ components:
             - $ref: "#/components/schemas/AwardId"
             - type: string
               const: ""
+
+    SeaScoutElective:
+      type: object
+      additionalProperties: false
+      required:
+        - ssElectiveId
+        - ssName
+        - imageUrl050
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - imageUrl400
+        - expireDate
+        - unitTypeId
+        - rankId
+        - createdOn
+        - createdBy
+        - modifiedOn
+        - modifiedBy
+        - versions
+      properties:
+        ssElectiveId:
+          $ref: "#/components/schemas/SeaScoutElectiveId"
+        ssName:
+          type: string
+          examples: [Leadership]
+        imageUrl050:
+          type: string
+          format: uri
+        imageUrl100:
+          type: string
+          format: uri
+        imageUrl200:
+          type: string
+          format: uri
+        imageUrl300:
+          type: string
+          format: uri
+        imageUrl400:
+          type: string
+          format: uri
+        expireDate:
+          type: string
+          const: ""
+        unitTypeId:
+          type: integer
+          description: A unit type `id` from the unit type list, in number form
+          examples: [5]
+        rankId:
+          type: "null"
+        createdOn:
+          $ref: "#/components/schemas/StringDateTime"
+        createdBy:
+          type: string
+          description: Username of the account that created the record
+          examples: [scoutbook]
+        modifiedOn:
+          $ref: "#/components/schemas/StringDateTime"
+        modifiedBy:
+          type: string
+          description: >-
+            Username of the account that last changed the record, or an empty
+            string
+          examples: [NARR-5271]
+        versions:
+          type: array
+          description: In no particular order
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/SeaScoutElectiveVersion"
+
+    SeaScoutElectiveVersion:
+      type: object
+      additionalProperties: false
+      required:
+        - ssVersionId
+        - ssElectiveId
+        - version
+        - expireDate
+        - header
+        - footer
+        - adminNotes
+        - createdOn
+        - createdBy
+        - modifiedOn
+        - modifiedBy
+        - versionEffectiveDt
+        - versionExpiryDt
+      properties:
+        ssVersionId:
+          type: integer
+          description: Unique per requirements version
+          examples: [23]
+        ssElectiveId:
+          $ref: "#/components/schemas/SeaScoutElectiveId"
+        version:
+          type: integer
+          description: Requirements version year
+          examples: [2024]
+        expireDate:
+          $ref: "#/components/schemas/StringDateTime"
+        header:
+          type: string
+          const: ""
+        footer:
+          type: string
+          const: ""
+        adminNotes:
+          type: string
+          const: ""
+        createdOn:
+          $ref: "#/components/schemas/StringDateTime"
+        createdBy:
+          type: string
+          examples: [scoutbook]
+        modifiedOn:
+          $ref: "#/components/schemas/StringDateTime"
+        modifiedBy:
+          type: string
+          examples: [SBL-5548, ""]
+        versionEffectiveDt:
+          $ref: "#/components/schemas/StringDate"
+        versionExpiryDt:
+          $ref: "#/components/schemas/StringDate"
+
+    SeaScoutElectiveRequirements:
+      type: object
+      additionalProperties: false
+      description: >-
+        An elective, as of the returned requirements version, with its
+        requirements. Fields match those of the same name in
+        `SeaScoutElective` and `SeaScoutElectiveVersion`.
+      required:
+        - ssElectiveId
+        - ssVersionId
+        - ssVersion
+        - versionEffectiveDt
+        - versionExpiryDt
+        - ssName
+        - imageUrl050
+        - imageUrl100
+        - imageUrl200
+        - imageUrl300
+        - imageUrl400
+        - expireDate
+        - unitTypeId
+        - rankId
+        - createdOn
+        - createdBy
+        - modifiedOn
+        - modifiedBy
+        - requirements
+      properties:
+        ssElectiveId:
+          $ref: "#/components/schemas/SeaScoutElectiveId"
+        ssVersionId:
+          type: integer
+          examples: [23]
+        ssVersion:
+          type: integer
+          description: Requirements version year
+          examples: [2024]
+        versionEffectiveDt:
+          $ref: "#/components/schemas/StringDate"
+        versionExpiryDt:
+          type: [string, "null"]
+          description: >-
+            `null` for the current version, where the elective list has an
+            empty string
+          anyOf:
+            - $ref: "#/components/schemas/StringDate"
+            - type: "null"
+        ssName:
+          type: string
+        imageUrl050:
+          type: string
+          format: uri
+        imageUrl100:
+          type: string
+          format: uri
+        imageUrl200:
+          type: string
+          format: uri
+        imageUrl300:
+          type: string
+          format: uri
+        imageUrl400:
+          type: string
+          format: uri
+        expireDate:
+          type: string
+          const: ""
+        unitTypeId:
+          type: integer
+          examples: [5]
+        rankId:
+          type: "null"
+        createdOn:
+          $ref: "#/components/schemas/StringDateTime"
+        createdBy:
+          type: string
+        modifiedOn:
+          $ref: "#/components/schemas/StringDateTime"
+        modifiedBy:
+          type: string
+        requirements:
+          type: array
+          items:
+            $ref: "#/components/schemas/SeaScoutElectiveRequirement"
+
+    SeaScoutElectiveRequirement:
+      type: object
+      additionalProperties: false
+      required:
+        - ssElectiveRequirementId
+        - ssVersionId
+        - listNumber
+        - requirementNumber
+        - name
+        - sortOrder
+        - footer
+        - childrenRequired
+        - required
+        - parentRequirementId
+        - ssLevel
+        - expireDate
+        - createdOn
+        - createdBy
+        - modifiedOn
+        - modifiedBy
+        - shortName
+      properties:
+        ssElectiveRequirementId:
+          type: integer
+          examples: [127]
+        ssVersionId:
+          type: integer
+          description: "`ssVersionId` of the requirements version"
+          examples: [23]
+        listNumber:
+          type: string
+          description: Display label
+          examples: ["9", "8."]
+        requirementNumber:
+          type: string
+          examples: ["9"]
+        name:
+          type: string
+          description: Requirement text. Sometimes contains HTML.
+        sortOrder:
+          type: [integer, "null"]
+          examples: [127]
+        footer:
+          type: string
+          const: ""
+        childrenRequired:
+          type: [integer, "null"]
+          description: Number of child requirements that must be completed, or `null`
+          examples: [3]
+        required:
+          type: boolean
+        parentRequirementId:
+          type: [integer, "null"]
+          description: >-
+            `ssElectiveRequirementId` of the parent requirement, or `null` for
+            top-level requirements
+          examples: [131]
+        ssLevel:
+          type: integer
+          examples: [3]
+        expireDate:
+          $ref: "#/components/schemas/StringDateTime"
+        createdOn:
+          $ref: "#/components/schemas/StringDateTime"
+        createdBy:
+          type: string
+        modifiedOn:
+          $ref: "#/components/schemas/StringDateTime"
+        modifiedBy:
+          type: string
+        shortName:
+          type: string
+          const: ""
+
+    SeaScoutElectiveId:
+      type: integer
+      description: An `ssElectiveId` from the Sea Scout elective list
+      examples: [1]
 
     Country:
       type: object
@@ -4447,6 +5469,14 @@ components:
       type: string
       description: Date as `YYYY-MM-DD`, or an empty string if not set
       pattern: "^([0-9]{4}-[0-9]{2}-[0-9]{2})?$"
+
+    StringDateTime:
+      type: string
+      description: >-
+        Date and time as `YYYY-MM-DDThh:mm:ss`, with no time zone, or an empty
+        string if not set
+      pattern: "^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})?$"
+      examples: ["2018-09-28T14:27:27"]
 
     Error:
       type: object
