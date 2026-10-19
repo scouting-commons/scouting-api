@@ -31,6 +31,8 @@ tags:
     description: >-
       Reference lists, such as countries, states, positions, and swimming
       classifications
+  - name: Organizations
+    description: Units, districts, councils, and service territories
 
 paths:
   /advancements/adventures:
@@ -3234,6 +3236,286 @@ paths:
                 errorCode: M404
                 message: Not Found
                 errorDesc: Program not found, verify the programId
+
+  /organizations/v2/{organizationGuid}/profile:
+    get:
+      tags: [Organizations]
+      operationId: getOrganizationProfile
+      summary: Get an organization profile
+      description: >-
+        Returns a unit, district, council, or service territory. Units have a
+        `program` and a `charter`, and most unit-only fields are `null` or
+        empty on other organizations. Names, contacts, and officers in `key3`
+        and `executiveOfficer` are masked as `***`. Query parameters are
+        ignored.
+      security: []
+      parameters:
+        - name: organizationGuid
+          in: path
+          required: true
+          description: >-
+            Organization GUID, matched case-insensitively. Takes the `id` of
+            a unit or council from scoutconnect-api.scouting.org, and the
+            `councilGuid`, `districtGuid`, and `territoryGuid` of a profile.
+            A chartered organization's `charter.organizationGUID` returns
+            404.
+          schema:
+            $ref: "#/components/schemas/OrganizationGuid"
+      responses:
+        "200":
+          description: The organization's profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationProfile"
+              examples:
+                unit:
+                  summary: A unit
+                  value:
+                    organizationGuid: 2cb46226-b47b-4ef1-ab3e-51806fe91dfd
+                    id: 278147
+                    nodeId: 209798
+                    name: Troop 3346
+                    number: "3346"
+                    organizationFullName: Troop 3346 All Saints Lutheran Church
+                    program: Boy Scouting
+                    sbOrganizationId: 44384
+                    specialInterestTypeId: 59
+                    specialInterestTypeCode: "0413"
+                    specialInterestType: TRADITIONAL PROGRAM
+                    type: Troop
+                    typeId: 2
+                    organizationTypeId: 6
+                    organizationType: unit
+                    councilStructureType: ""
+                    tinyUrl: https://my.scouting.org/VES/OnlineReg/1.0.0/?tu=UF-MB-250taa3346
+                    isLDS: false
+                    isCouncilPaid: false
+                    tenure: 682
+                    unitedWayName: MINNEAPOLIS
+                    affiliateOrganizationGuid: null
+                    affiliateName: null
+                    isComingSoon: false
+                    districtGuid: 04A326FB-5CB7-49C3-9563-D2C9977E0598
+                    districtNumber: "114"
+                    districtName: M
+                    councilGuid: 6CE6AB14-283B-4EF2-809A-0A1B5503AA5D
+                    councilName: Northern Star Council
+                    territoryGuid: 3BF00C63-EE53-4784-B54C-8E5EA4937510
+                    territoryName: Service Territory 04
+                    territoryNumber: "04"
+                    acceptGender: BT
+                    unitTimeZoneCode: America/Chicago
+                    unitTimeZoneLastUpdated: "2020-11-17T15:34:35"
+                    lat: 44.903204
+                    long: -93.482351
+                    isUnitGrowthExecutivesFlag: false
+                    charter:
+                      id: 2994379
+                      term: 12
+                      originalEffectiveDt: null
+                      effectiveDate: "2026-03-01"
+                      expiryDate: "2027-02-28"
+                      communityOrganizationName: All Saints Lutheran Church
+                      organizationGUID: 26CEF5AA-EB0E-488C-8CA0-BAD330A5B94E
+                      skCommOrgTypeCD: 25
+                      fkCommOrgTypeId: 25
+                      programId: 3
+                      programName: Scouts BSA
+                      isActive: true
+                      isCurrentCharter: true
+                    nonUnitOrgMembersExpireMonth: null
+                    effectiveDt: null
+                    expiryDt: null
+                    webContact:
+                      - id: 40635889
+                        contact: http://www.troop346.org
+                        typeId: 6
+                        type: URL
+                        classificationId: 2
+                      - id: 40635890
+                        contact: troop346@troop346.org
+                        typeId: 6
+                        type: EMAL
+                        classificationId: 3
+                    key3:
+                      - positionId: "***"
+                        position: "***"
+                        personFullName: "***"
+                        firstName: "***"
+                        lastName: "***"
+                        suffix: "***"
+                    executiveOfficer:
+                      personFulllName: "***"
+                      firstName: "***"
+                      middleName: "***"
+                      lastName: "***"
+                      suffix: "***"
+                    primaryAddress:
+                      addressLine1: 15915 Excelsior Blvd
+                      addressLine2: ""
+                      addressLine3: ""
+                      city: Minnetonka
+                      state: MN
+                      zip5: "55345"
+                      zip4: "5628"
+                      country: US
+                      county: Hennepin
+                    primaryPhone:
+                      countryCode: null
+                      areaCode: "612"
+                      prefix: "269"
+                      lineNumber: "3382"
+                      extension: null
+                    unitMeetingInformation:
+                      addressLine1: 15915 Excelsior Blvd
+                      addressLine2: ""
+                      city: Minnetonka
+                      zip5: "55345"
+                      stateShort: MN
+                      meetingLocation: ""
+                      meetingTime: "19:00:00"
+                    advancementEligibility:
+                      adventures: false
+                      meritBadges: true
+                      ranks: true
+                      awards: true
+                    unitForums:
+                      - discourseCategoryId: 4080
+                        discourseCategorySlug: council-250-troop-3346-278147
+                council:
+                  summary: A council
+                  value:
+                    organizationGuid: 6ce6ab14-283b-4ef2-809a-0a1b5503aa5d
+                    id: 225
+                    nodeId: 307
+                    name: Northern Star Council 250
+                    number: "250"
+                    organizationFullName: Northern Star Council 250
+                    sbOrganizationId: ""
+                    specialInterestTypeId: null
+                    specialInterestTypeCode: ""
+                    specialInterestType: ""
+                    type: ""
+                    typeId: null
+                    organizationTypeId: 4
+                    organizationType: council
+                    councilStructureType: ""
+                    tinyUrl: https://my.scouting.org/VES/OnlineReg/1.0.0/?tu=UF-MB-250
+                    isLDS: false
+                    isCouncilPaid: false
+                    tenure: null
+                    unitedWayName: null
+                    affiliateOrganizationGuid: null
+                    affiliateName: null
+                    isComingSoon: false
+                    districtGuid: ""
+                    districtNumber: ""
+                    districtName: ""
+                    councilGuid: 6CE6AB14-283B-4EF2-809A-0A1B5503AA5D
+                    councilName: Northern Star Council 250
+                    territoryGuid: 3BF00C63-EE53-4784-B54C-8E5EA4937510
+                    territoryName: Service Territory 04
+                    territoryNumber: "04"
+                    acceptGender: null
+                    unitTimeZoneCode: null
+                    unitTimeZoneLastUpdated: null
+                    lat: 44.89072
+                    long: -93.194496
+                    isUnitGrowthExecutivesFlag: null
+                    charter: null
+                    nonUnitOrgMembersExpireMonth: 5
+                    effectiveDt: "2005-07-01"
+                    expiryDt: null
+                    webContact:
+                      - id: 2123172
+                        contact: http://www.northernstarbsa.org
+                        typeId: 4
+                        type: WEBS
+                        classificationId: 2
+                      - id: 44118080
+                        contact: null
+                        typeId: 4
+                        type: F
+                        classificationId: 1
+                    key3:
+                      - positionId: "***"
+                        position: "***"
+                        personFullName: "***"
+                        firstName: "***"
+                        lastName: "***"
+                        suffix: "***"
+                    executiveOfficer:
+                      personFulllName: "***"
+                      firstName: "***"
+                      middleName: "***"
+                      lastName: "***"
+                      suffix: "***"
+                    primaryAddress:
+                      addressLine1: 6202 Bloomington Rd
+                      addressLine2: ""
+                      addressLine3: ""
+                      city: Ft. Snelling
+                      state: MN
+                      zip5: "55111"
+                      zip4: ""
+                      country: US
+                      county: RAMSEY
+                    primaryPhone:
+                      countryCode: null
+                      areaCode: "612"
+                      prefix: "261"
+                      lineNumber: "2300"
+                      extension: null
+                    unitMeetingInformation:
+                      addressLine1: ""
+                      addressLine2: ""
+                      city: ""
+                      zip5: ""
+                      stateShort: ""
+                      meetingLocation: ""
+                      meetingTime: ""
+                    advancementEligibility:
+                      adventures: null
+                      meritBadges: null
+                      ranks: null
+                      awards: null
+                    unitForums: []
+        "400":
+          description: >-
+            `organizationGuid` isn't a version 4 GUID. A well-formed GUID of
+            another version, such as all zeros, returns `C400`. Most other values
+            return `M400`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                otherVersion:
+                  summary: A GUID that isn't version 4
+                  value:
+                    errorCode: C400
+                    message: Bad Request
+                    errorDesc: Invalid request - "organizationGuid" must be a valid GUID
+                notGuid:
+                  summary: Not a GUID
+                  value:
+                    errorCode: M400
+                    message: Invalid Request
+                    errorDesc: micro url \'notaguid\' is not valid
+        "404":
+          description: No organization has that GUID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C404
+                message: Not Found
+                errorDesc: >-
+                  Organization not found, verify that the organizationGUID
+                  belongs to an existent organization - organizationGuid:
+                  F45624D7-0998-41F5-86F6-26061D93324E
 
 components:
   schemas:
@@ -7333,6 +7615,525 @@ components:
           format: uri
           description: Link to the course, or `null`
           examples: [https://training.scouting.org/courses/H114, null]
+
+    OrganizationGuid:
+      type: string
+      description: A version 4 GUID identifying an organization
+      pattern: "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$"
+      examples: [2cb46226-b47b-4ef1-ab3e-51806fe91dfd]
+
+    OrganizationGuidOrEmpty:
+      type: string
+      description: An organization GUID in upper case, or empty
+      anyOf:
+        - $ref: "#/components/schemas/OrganizationGuid"
+        - type: string
+          const: ""
+
+    OrganizationProfile:
+      type: object
+      additionalProperties: false
+      description: >-
+        An organization's profile. `organizationType` says which kind it is,
+        and most unit-only fields are `null` or empty on other kinds.
+      required:
+        - organizationGuid
+        - id
+        - nodeId
+        - name
+        - number
+        - organizationFullName
+        - sbOrganizationId
+        - specialInterestTypeId
+        - specialInterestTypeCode
+        - specialInterestType
+        - type
+        - typeId
+        - organizationTypeId
+        - organizationType
+        - councilStructureType
+        - tinyUrl
+        - isLDS
+        - isCouncilPaid
+        - tenure
+        - unitedWayName
+        - affiliateOrganizationGuid
+        - affiliateName
+        - isComingSoon
+        - districtGuid
+        - districtNumber
+        - districtName
+        - councilGuid
+        - councilName
+        - territoryGuid
+        - territoryName
+        - territoryNumber
+        - acceptGender
+        - unitTimeZoneCode
+        - unitTimeZoneLastUpdated
+        - lat
+        - long
+        - isUnitGrowthExecutivesFlag
+        - charter
+        - nonUnitOrgMembersExpireMonth
+        - effectiveDt
+        - expiryDt
+        - webContact
+        - key3
+        - executiveOfficer
+        - primaryAddress
+        - primaryPhone
+        - unitMeetingInformation
+        - advancementEligibility
+        - unitForums
+      properties:
+        organizationGuid:
+          $ref: "#/components/schemas/OrganizationGuid"
+          description: The requested GUID, in the case it was sent
+        id:
+          type: integer
+          description: >-
+            For units, the `legacyUnitId` in scoutconnect-api.scouting.org
+          examples: [278147]
+        nodeId:
+          type: integer
+          examples: [209798]
+        name:
+          type: string
+          examples: [Troop 3346, Northern Star Council 250]
+        number:
+          type: string
+          description: Unit, district, council, or territory number
+          examples: ["3346", "04"]
+        organizationFullName:
+          type: string
+          description: For units, `name` followed by the chartered organization's name
+          examples: [Troop 3346 All Saints Lutheran Church]
+        program:
+          type: string
+          description: The unit's program. Only units have it.
+          examples: [Boy Scouting, Cub Scouting, Exploring, Sea Scouting, Venturing]
+        sbOrganizationId:
+          $ref: "#/components/schemas/IntegerOrEmpty"
+          description: An integer for units, and empty for other organizations
+          examples: [44384, ""]
+        specialInterestTypeId:
+          type: [integer, "null"]
+          examples: [59, null]
+        specialInterestTypeCode:
+          type: string
+          description: Empty when `specialInterestTypeId` is `null`
+          examples: ["0413", ""]
+        specialInterestType:
+          type: string
+          description: Empty when `specialInterestTypeId` is `null`
+          examples: [TRADITIONAL PROGRAM, ""]
+        type:
+          type: string
+          description: >-
+            The unit type's `short` name in the organization unit type list.
+            Empty for other organizations.
+          examples: [Troop, ""]
+        typeId:
+          type: [integer, "null"]
+          description: >-
+            For units, an `id` from the organization unit type list, as an
+            integer. `null` for other organizations.
+          examples: [2, null]
+        organizationTypeId:
+          type: integer
+          description: An `id` from the organization type list, as an integer
+          examples: [6]
+        organizationType:
+          type: string
+          description: >-
+            `unit`, `council-entity` (a district), `council`, or
+            `service-territory`
+          examples: [unit, council-entity, council, service-territory]
+        councilStructureType:
+          type: string
+          description: "`District` for districts, empty for other organizations"
+          examples: [District, ""]
+        tinyUrl:
+          type: string
+          format: uri
+          description: Link to the organization's online registration page
+          examples: [https://my.scouting.org/VES/OnlineReg/1.0.0/?tu=UF-MB-250taa3346]
+        isLDS:
+          type: boolean
+        isCouncilPaid:
+          type: boolean
+        tenure:
+          type: [integer, "null"]
+          description: >-
+            The unit's age in months, the same as `unitTenureMonths` in
+            scoutconnect-api.scouting.org. `null` for other organizations.
+          examples: [682, null]
+        unitedWayName:
+          type: [string, "null"]
+          examples: [MINNEAPOLIS, null]
+        affiliateOrganizationGuid:
+          type: [string, "null"]
+          description: >-
+            Upper-case GUID, or `null`. Profiles return 404 for it.
+          examples: [4CF806BA-B96F-4C45-838A-E73813091F35, null]
+        affiliateName:
+          type: [string, "null"]
+          examples: [American Legion and Auxiliaries, null]
+        isComingSoon:
+          type: boolean
+        districtGuid:
+          $ref: "#/components/schemas/OrganizationGuidOrEmpty"
+          description: >-
+            The unit's district. Empty for districts, councils, and service
+            territories.
+        districtNumber:
+          type: string
+          examples: ["114", ""]
+        districtName:
+          type: string
+          examples: [M, ""]
+        councilGuid:
+          $ref: "#/components/schemas/OrganizationGuidOrEmpty"
+          description: >-
+            The organization's council, or the council itself. Empty for
+            service territories.
+        councilName:
+          type: string
+          examples: [Northern Star Council, ""]
+        territoryGuid:
+          $ref: "#/components/schemas/OrganizationGuid"
+          description: >-
+            The organization's service territory, or the territory itself, in
+            upper case
+        territoryName:
+          type: string
+          examples: [Service Territory 04]
+        territoryNumber:
+          type: string
+          examples: ["04"]
+        acceptGender:
+          type: [string, "null"]
+          description: A code, `null` for many units and every other organization
+          examples: [BT, FP, NA, null]
+        unitTimeZoneCode:
+          type: [string, "null"]
+          description: >-
+            IANA time zone name. Some aren't in the unit time zone list.
+            `null` for other organizations.
+          examples: [America/Chicago, null]
+        unitTimeZoneLastUpdated:
+          type: [string, "null"]
+          description: Date and time as `YYYY-MM-DDThh:mm:ss`, with no time zone
+          pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$"
+          examples: ["2020-11-17T15:34:35", null]
+        lat:
+          type: [number, "null"]
+          description: Latitude. `null` for districts.
+          examples: [44.903204, null]
+        long:
+          type: [number, "null"]
+          description: Longitude. `null` for districts.
+          examples: [-93.482351, null]
+        isUnitGrowthExecutivesFlag:
+          type: [boolean, "null"]
+          description: "`null` for other organizations"
+        charter:
+          description: The unit's current charter. `null` for other organizations.
+          anyOf:
+            - $ref: "#/components/schemas/OrganizationCharter"
+            - type: "null"
+          type: [object, "null"]
+        nonUnitOrgMembersExpireMonth:
+          type: [integer, "null"]
+          description: >-
+            A month number. `null` for units and service territories.
+          minimum: 1
+          maximum: 12
+          examples: [12, null]
+        effectiveDt:
+          $ref: "#/components/schemas/NullableDate"
+          description: "`null` for units and service territories"
+        expiryDt:
+          $ref: "#/components/schemas/NullableDate"
+        webContact:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrganizationWebContact"
+        key3:
+          type: array
+          description: Always one entry, with every value masked
+          items:
+            $ref: "#/components/schemas/OrganizationKey3"
+        executiveOfficer:
+          type: object
+          additionalProperties: false
+          description: Every value is masked
+          required: [personFulllName, firstName, middleName, lastName, suffix]
+          properties:
+            personFulllName:
+              $ref: "#/components/schemas/Masked"
+            firstName:
+              $ref: "#/components/schemas/Masked"
+            middleName:
+              $ref: "#/components/schemas/Masked"
+            lastName:
+              $ref: "#/components/schemas/Masked"
+            suffix:
+              $ref: "#/components/schemas/Masked"
+        primaryAddress:
+          type: object
+          additionalProperties: false
+          description: Every value is empty for districts
+          required:
+            - addressLine1
+            - addressLine2
+            - addressLine3
+            - city
+            - state
+            - zip5
+            - zip4
+            - country
+            - county
+          properties:
+            addressLine1:
+              type: string
+              examples: [15915 Excelsior Blvd]
+            addressLine2:
+              type: string
+              description: Can be empty or a single space
+              examples: ["", " ", 2nd Flr]
+            addressLine3:
+              type: string
+              examples: [""]
+            city:
+              type: string
+              examples: [Minnetonka]
+            state:
+              type: string
+              description: State abbreviation, or empty
+              examples: [MN, ""]
+            zip5:
+              type: string
+              pattern: "^([0-9]{5})?$"
+              examples: ["55345", ""]
+            zip4:
+              type: string
+              pattern: "^([0-9]{4})?$"
+              examples: ["5628", ""]
+            country:
+              type: string
+              examples: [US, ""]
+            county:
+              type: string
+              examples: [Hennepin, ""]
+        primaryPhone:
+          type: object
+          additionalProperties: false
+          description: Every value is `null` for districts and service territories
+          required: [countryCode, areaCode, prefix, lineNumber, extension]
+          properties:
+            countryCode:
+              type: [string, "null"]
+              examples: [US, null]
+            areaCode:
+              type: [string, "null"]
+              examples: ["612", null]
+            prefix:
+              type: [string, "null"]
+              examples: ["269", null]
+            lineNumber:
+              type: [string, "null"]
+              examples: ["3382", null]
+            extension:
+              type: [string, "null"]
+              examples: [null]
+        unitMeetingInformation:
+          type: object
+          additionalProperties: false
+          description: Where and when the unit meets. Every value is empty for other organizations.
+          required:
+            - addressLine1
+            - addressLine2
+            - city
+            - zip5
+            - stateShort
+            - meetingLocation
+            - meetingTime
+          properties:
+            addressLine1:
+              type: string
+              examples: [15915 Excelsior Blvd]
+            addressLine2:
+              type: string
+              description: Can be empty or a single space
+              examples: ["", Glen Lake Activity Center]
+            city:
+              type: string
+              examples: [Minnetonka]
+            zip5:
+              type: string
+              pattern: "^([0-9]{5})?$"
+              examples: ["55345", ""]
+            stateShort:
+              type: string
+              description: State abbreviation, or empty
+              examples: [MN, ""]
+            meetingLocation:
+              type: string
+              examples: [""]
+            meetingTime:
+              type: string
+              description: Time as `hh:mm:ss`, or empty
+              pattern: "^([0-9]{2}:[0-9]{2}:[0-9]{2})?$"
+              examples: ["19:00:00", ""]
+        advancementEligibility:
+          type: object
+          additionalProperties: false
+          description: >-
+            Which kinds of advancement the unit can record. Every value is
+            `null` for Exploring units and other organizations.
+          required: [adventures, meritBadges, ranks, awards]
+          properties:
+            adventures:
+              type: [boolean, "null"]
+            meritBadges:
+              type: [boolean, "null"]
+            ranks:
+              type: [boolean, "null"]
+            awards:
+              type: [boolean, "null"]
+        unitForums:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [discourseCategoryId, discourseCategorySlug]
+            properties:
+              discourseCategoryId:
+                type: integer
+                examples: [4080]
+              discourseCategorySlug:
+                type: string
+                examples: [council-250-troop-3346-278147]
+
+    OrganizationCharter:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - term
+        - originalEffectiveDt
+        - effectiveDate
+        - expiryDate
+        - communityOrganizationName
+        - organizationGUID
+        - skCommOrgTypeCD
+        - fkCommOrgTypeId
+        - programId
+        - programName
+        - isActive
+        - isCurrentCharter
+      properties:
+        id:
+          type: integer
+          examples: [2994379]
+        term:
+          type: integer
+          description: Length of the charter in months
+          examples: [12]
+        originalEffectiveDt:
+          $ref: "#/components/schemas/NullableDate"
+        effectiveDate:
+          type: string
+          format: date
+          examples: ["2026-03-01"]
+        expiryDate:
+          type: string
+          format: date
+          examples: ["2027-02-28"]
+        communityOrganizationName:
+          type: string
+          description: The chartered organization's name
+          examples: [All Saints Lutheran Church]
+        organizationGUID:
+          type: string
+          description: >-
+            The chartered organization's GUID, in upper case. Profiles return
+            404 for it.
+          examples: [26CEF5AA-EB0E-488C-8CA0-BAD330A5B94E]
+        skCommOrgTypeCD:
+          type: integer
+          description: The same as `fkCommOrgTypeId`
+          examples: [25]
+        fkCommOrgTypeId:
+          type: integer
+          examples: [25]
+        programId:
+          type: integer
+          examples: [3]
+        programName:
+          type: string
+          examples: [Scouts BSA, Cub Scouting]
+        isActive:
+          type: boolean
+        isCurrentCharter:
+          type: boolean
+
+    OrganizationWebContact:
+      type: object
+      additionalProperties: false
+      required: [id, contact, typeId, type, classificationId]
+      properties:
+        id:
+          type: integer
+          examples: [40635889]
+        contact:
+          type: [string, "null"]
+          description: Can be `null`, and always is for phone entries
+          examples: [http://www.troop346.org, null]
+        typeId:
+          type: integer
+          description: The same as the profile's `organizationTypeId`
+          examples: [6]
+        type:
+          type: string
+          description: A `short` code from the communication type list
+          examples: [URL, EMAL, FB]
+        classificationId:
+          type: integer
+          description: >-
+            An `id` from the communication classification list, as an
+            integer, matching the communication type's `classificationId`
+          examples: [2]
+
+    OrganizationKey3:
+      type: object
+      additionalProperties: false
+      required: [positionId, position, personFullName, firstName, lastName, suffix]
+      properties:
+        positionId:
+          $ref: "#/components/schemas/Masked"
+        position:
+          $ref: "#/components/schemas/Masked"
+        personFullName:
+          $ref: "#/components/schemas/Masked"
+        firstName:
+          $ref: "#/components/schemas/Masked"
+        lastName:
+          $ref: "#/components/schemas/Masked"
+        suffix:
+          $ref: "#/components/schemas/Masked"
+
+    Masked:
+      type: string
+      description: A value hidden as `***`
+      const: "***"
+
+    NullableDate:
+      type: [string, "null"]
+      format: date
+      examples: ["2005-07-01", null]
 
     MeritBadgeId:
       type: string

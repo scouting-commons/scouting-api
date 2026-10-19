@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: API docs
+    url: https://scouting-commons.github.io/scouting-api/
+    about: Browse the documented endpoints and each API's quirks.
+  - name: Report a security vulnerability
+    url: https://github.com/scouting-commons/.github/security/policy
+    about: For this project only. Report vulnerabilities in Scouting America's own systems, including the APIs themselves, to Scouting America, not here.

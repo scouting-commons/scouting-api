@@ -1,0 +1,64 @@
+name: Document an endpoint
+description: Report an endpoint or API that isn't in the specs yet.
+title: "Document <METHOD> <path>"
+labels: ["new endpoint"]
+body:
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host
+      options:
+        - api.scouting.org
+        - auth.scouting.org
+        - scoutconnect-api.scouting.org
+        - Other (new API)
+    validations:
+      required: true
+  - type: input
+    id: other-host
+    attributes:
+      label: Other host
+      description: Only if you picked "Other (new API)".
+      placeholder: directory.scouting.org
+  - type: input
+    id: endpoint
+    attributes:
+      label: Method and path
+      description: Write `unknown` for the method if you only know the path.
+      placeholder: GET /organizations/v2/{organizationGuid}/districts
+    validations:
+      required: true
+  - type: dropdown
+    id: auth
+    attributes:
+      label: Does it need a login?
+      options:
+        - "Yes"
+        - "No"
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Where did you see it called?
+      description: The site or app that calls it, if any.
+      placeholder: beascout.scouting.org
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed requests and responses
+      description: |
+        Include query parameters, request bodies, and any error responses you saw.
+
+        **Replace tokens, cookies, GUIDs, member IDs, names, emails, and other personal info with placeholders** such as `{token}` or `{personGuid}`. Issues are public.
+      placeholder: |
+        | Request | Status | Body |
+        | --- | --- | --- |
+        | `/path?param=value` | 200 | `{"id":"{organizationGuid}"}` |
+        | `/path?param=bad` | 400 | `param: must be numeric` |
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Anything else you know, such as what the endpoint is for or which fields link to other records.

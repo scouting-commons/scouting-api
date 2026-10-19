@@ -1,0 +1,25 @@
+name: TypeScript client issue
+description: Report a bug in, or request a change to, @scouting-commons/scouting-api.
+body:
+  - type: markdown
+    attributes:
+      value: If the client returns data the spec doesn't describe correctly, use "Spec doesn't match the API" instead.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 0.1.3
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened, or what do you need?
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Code
+      description: A minimal snippet that shows the issue. Leave out tokens and cookies.
+      render: ts

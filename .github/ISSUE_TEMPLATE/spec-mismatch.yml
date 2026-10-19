@@ -1,0 +1,51 @@
+name: Spec doesn't match the API
+description: Report a spec that disagrees with what the live API returns.
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host
+      options:
+        - api.scouting.org
+        - auth.scouting.org
+        - scoutconnect-api.scouting.org
+    validations:
+      required: true
+  - type: input
+    id: endpoint
+    attributes:
+      label: Method and path
+      placeholder: GET /advancements/meritBadges
+    validations:
+      required: true
+  - type: textarea
+    id: request
+    attributes:
+      label: Request
+      description: The exact request you sent, such as a `curl` command. Leave out tokens and cookies.
+      render: sh
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the spec says
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What the API returned
+      description: Status code and body. **Replace tokens, GUIDs, names, emails, and other personal info with placeholders.** Issues are public.
+    validations:
+      required: true
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does it happen?
+      options:
+        - Every time
+        - Only sometimes
+    validations:
+      required: true
