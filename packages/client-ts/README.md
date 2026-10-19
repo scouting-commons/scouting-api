@@ -22,10 +22,16 @@ Each API has its own import path, named by its host. Every operation is a functi
 ```ts
 import { listMeritBadges } from "@scouting-commons/scouting-api/api.scouting.org";
 
-const { data, error } = await listMeritBadges({ query: { id: "3" } });
+const { data, error } = await listMeritBadges({ id: "3" });
 if (error) throw new Error(error.message);
 
 console.log(data.meritBadges[0]?.name);
+```
+
+An operation's parameters all go in its first argument, whether the API takes them in the path, query, headers, or body. Per-call settings go in the second:
+
+```ts
+const { data } = await getRankV2({ rankId: 1 }, { throwOnError: true });
 ```
 
 Each import path also exports that API's `client`, for changing settings such as headers or the base URL:

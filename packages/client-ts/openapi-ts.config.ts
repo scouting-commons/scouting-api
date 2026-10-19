@@ -15,6 +15,10 @@ export default defineConfig(
 	Object.entries(specs).map(([host, input]) => ({
 		input,
 		output: `src/generated/${host}`,
-		plugins: ["@hey-api/client-fetch", "@hey-api/sdk"],
+		plugins: [
+			"@hey-api/client-fetch",
+			// One object holds every path, query, header, and body parameter
+			{ name: "@hey-api/sdk", paramsStructure: "flat" },
+		],
 	})),
 );

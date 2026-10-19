@@ -53,7 +53,7 @@ npm install @scouting-commons/scouting-api
 ```ts
 import { listMeritBadges } from "@scouting-commons/scouting-api/api.scouting.org";
 
-const { data, error } = await listMeritBadges({ query: { id: "3" } });
+const { data, error } = await listMeritBadges({ id: "3" });
 ```
 
 See its [README](packages/client-ts/README.md) for more.
