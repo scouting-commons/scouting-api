@@ -7,7 +7,6 @@ export { client };
 // spec's info.description.
 client.setConfig({
 	headers: {
-		"User-Agent":
-			"scouting-api",
+		"User-Agent": "scouting-api",
 	},
 });
