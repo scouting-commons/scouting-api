@@ -10,6 +10,8 @@ Each API lives in `apis/<host>/`, named by its full host (such as `apis/api.scou
 
 ## Adding or changing an endpoint
 
+You may be given some info to start with in the issue/prompt. Treat this info as a hint, but verify everything yourself.
+
 1. Read `info.description` in the API's `openapi.yaml`. It lists API-wide quirks that change how you must call the API, both when sampling and in contract tests.
 2. Call the live endpoint and save real responses, including every error case (bad input, unknown ID). Sample until each field's presence and type is settled: many records, and every variant a parameter can select, such as filters and old versions.
 3. Probe for undocumented query parameters. Try likely names, and read the error messages, which can name the valid parameters.
