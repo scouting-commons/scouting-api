@@ -41,3 +41,7 @@ apis/api.scouting.org/openapi.yaml:
       #/paths/~1advancements~1awards~1{awardId}/get/responses/200/content/application~1json/schema/additionalProperties
     - >-
       #/paths/~1advancements~1awards~1{awardId}~1requirements/get/responses/200/content/application~1json/schema/additionalProperties
+    - >-
+      #/paths/~1advancements~1v2~1ranks~1{rankId}/get/responses/200/content/application~1json/schema/additionalProperties
+    - >-
+      #/components/schemas/RankV2Requirement/properties/linkedAdventure/additionalProperties

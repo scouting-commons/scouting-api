@@ -53,6 +53,42 @@ workflows:
             value: 999999
         successCriteria:
           - condition: $statusCode == 404
+      - stepId: v2-list
+        operationId: $sourceDescriptions.api.listAdventuresV2
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-list-invalid-status
+        operationId: $sourceDescriptions.api.listAdventuresV2
+        parameters:
+          - name: status
+            in: query
+            value: bogus
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: v2-get
+        operationId: $sourceDescriptions.api.getAdventureV2
+        parameters:
+          - name: adventureId
+            in: path
+            value: 1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-get-invalid
+        operationId: $sourceDescriptions.api.getAdventureV2
+        parameters:
+          - name: adventureId
+            in: path
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: v2-get-not-found
+        operationId: $sourceDescriptions.api.getAdventureV2
+        parameters:
+          - name: adventureId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 404
 
   - workflowId: awards
     steps:
@@ -145,6 +181,34 @@ workflows:
             value: 999999
         successCriteria:
           - condition: $statusCode == 404
+      - stepId: v2-list
+        operationId: $sourceDescriptions.api.listMeritBadgesV2
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-list-invalid-status
+        operationId: $sourceDescriptions.api.listMeritBadgesV2
+        parameters:
+          - name: status
+            in: query
+            value: bogus
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: v2-get
+        operationId: $sourceDescriptions.api.getMeritBadgeV2
+        parameters:
+          - name: meritBadgeId
+            in: path
+            value: 3
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-get-not-found
+        operationId: $sourceDescriptions.api.getMeritBadgeV2
+        parameters:
+          - name: meritBadgeId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 400
 
   - workflowId: ranks
     steps:
@@ -207,6 +271,69 @@ workflows:
             value: 999999
         successCriteria:
           - condition: $statusCode == 404
+      - stepId: v2-list
+        operationId: $sourceDescriptions.api.listRanksV2
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-list-invalid-status
+        operationId: $sourceDescriptions.api.listRanksV2
+        parameters:
+          - name: status
+            in: query
+            value: bogus
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: v2-get
+        operationId: $sourceDescriptions.api.getRankV2
+        parameters:
+          - name: rankId
+            in: path
+            value: 1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-get-invalid
+        operationId: $sourceDescriptions.api.getRankV2
+        parameters:
+          - name: rankId
+            in: path
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: v2-get-not-found
+        operationId: $sourceDescriptions.api.getRankV2
+        parameters:
+          - name: rankId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 404
+      - stepId: v2-requirements
+        operationId: $sourceDescriptions.api.getRankRequirementsV2
+        parameters:
+          - name: rankId
+            in: path
+            value: 1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-requirements-invalid
+        operationId: $sourceDescriptions.api.getRankRequirementsV2
+        parameters:
+          - name: rankId
+            in: path
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: v2-requirements-not-found
+        operationId: $sourceDescriptions.api.getRankRequirementsV2
+        parameters:
+          - name: rankId
+            in: path
+            value: 1
+          - name: versionId
+            in: query
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 404
 
   - workflowId: sea-scout-electives
     steps:
@@ -235,6 +362,30 @@ workflows:
           - condition: $statusCode == 400
       - stepId: requirements-not-found
         operationId: $sourceDescriptions.api.getSeaScoutElectiveRequirements
+        parameters:
+          - name: ssElectiveId
+            in: path
+            value: 999999
+        successCriteria:
+          - condition: $statusCode == 404
+      - stepId: v2-get
+        operationId: $sourceDescriptions.api.getSeaScoutElectiveV2
+        parameters:
+          - name: ssElectiveId
+            in: path
+            value: 1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: v2-get-invalid
+        operationId: $sourceDescriptions.api.getSeaScoutElectiveV2
+        parameters:
+          - name: ssElectiveId
+            in: path
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: v2-get-not-found
+        operationId: $sourceDescriptions.api.getSeaScoutElectiveV2
         parameters:
           - name: ssElectiveId
             in: path
