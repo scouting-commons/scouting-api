@@ -7712,7 +7712,8 @@ components:
         program:
           type: string
           description: The unit's program. Only units have it.
-          examples: [Boy Scouting, Cub Scouting, Exploring, Sea Scouting, Venturing]
+          examples:
+            [Boy Scouting, Cub Scouting, Exploring, Sea Scouting, Venturing]
         sbOrganizationId:
           $ref: "#/components/schemas/IntegerOrEmpty"
           description: An integer for units, and empty for other organizations
@@ -7758,7 +7759,8 @@ components:
           type: string
           format: uri
           description: Link to the organization's online registration page
-          examples: [https://my.scouting.org/VES/OnlineReg/1.0.0/?tu=UF-MB-250taa3346]
+          examples:
+            [https://my.scouting.org/VES/OnlineReg/1.0.0/?tu=UF-MB-250taa3346]
         isLDS:
           type: boolean
         isCouncilPaid:
@@ -8110,7 +8112,8 @@ components:
     OrganizationKey3:
       type: object
       additionalProperties: false
-      required: [positionId, position, personFullName, firstName, lastName, suffix]
+      required:
+        [positionId, position, personFullName, firstName, lastName, suffix]
       properties:
         positionId:
           $ref: "#/components/schemas/Masked"

@@ -734,3 +734,30 @@ workflows:
             value: 99
         successCriteria:
           - condition: $statusCode == 404
+
+  - workflowId: organizationProfile
+    steps:
+      - stepId: get-unit
+        operationId: $sourceDescriptions.api.getOrganizationProfile
+        parameters:
+          - name: organizationGuid
+            in: path
+            value: 2cb46226-b47b-4ef1-ab3e-51806fe91dfd
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: get-invalid
+        operationId: $sourceDescriptions.api.getOrganizationProfile
+        parameters:
+          - name: organizationGuid
+            in: path
+            value: notaguid
+        successCriteria:
+          - condition: $statusCode == 400
+      - stepId: get-not-found
+        operationId: $sourceDescriptions.api.getOrganizationProfile
+        parameters:
+          - name: organizationGuid
+            in: path
+            value: F45624D7-0998-41F5-86F6-26061D93324E
+        successCriteria:
+          - condition: $statusCode == 404
