@@ -4,13 +4,7 @@ body:
   - type: markdown
     attributes:
       value: If the client returns data the spec doesn't describe correctly, use "Spec doesn't match the API" instead.
-  - type: input
-    id: version
-    attributes:
-      label: Package version
-      placeholder: 0.1.3
-    validations:
-      required: true
+
   - type: textarea
     id: description
     attributes:
