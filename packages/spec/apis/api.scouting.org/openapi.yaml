@@ -3245,10 +3245,12 @@ paths:
       description: >-
         Returns a unit, district, council, or service territory. Units have a
         `program` and a `charter`, and most unit-only fields are `null` or
-        empty on other organizations. Names, contacts, and officers in `key3`
-        and `executiveOfficer` are masked as `***`. Query parameters are
-        ignored.
-      security: []
+        empty on other organizations. Without a valid token, `key3` and
+        `executiveOfficer` are masked as `***`. An invalid token is treated
+        as none. Query parameters are ignored.
+      security:
+        - {}
+        - bearer: []
       parameters:
         - name: organizationGuid
           in: path
@@ -7864,25 +7866,13 @@ components:
             $ref: "#/components/schemas/OrganizationWebContact"
         key3:
           type: array
-          description: Always one entry, with every value masked
+          description: >-
+            The organization's key leaders. Without a valid token, always one
+            entry with every value masked.
           items:
             $ref: "#/components/schemas/OrganizationKey3"
         executiveOfficer:
-          type: object
-          additionalProperties: false
-          description: Every value is masked
-          required: [personFulllName, firstName, middleName, lastName, suffix]
-          properties:
-            personFulllName:
-              $ref: "#/components/schemas/Masked"
-            firstName:
-              $ref: "#/components/schemas/Masked"
-            middleName:
-              $ref: "#/components/schemas/Masked"
-            lastName:
-              $ref: "#/components/schemas/Masked"
-            suffix:
-              $ref: "#/components/schemas/Masked"
+          $ref: "#/components/schemas/OrganizationExecutiveOfficer"
         primaryAddress:
           type: object
           additionalProperties: false
@@ -8112,21 +8102,49 @@ components:
     OrganizationKey3:
       type: object
       additionalProperties: false
+      description: A key leader. Every value is `***` without a valid token.
       required:
         [positionId, position, personFullName, firstName, lastName, suffix]
       properties:
         positionId:
-          $ref: "#/components/schemas/Masked"
+          type: [integer, string]
+          anyOf:
+            - type: integer
+            - $ref: "#/components/schemas/Masked"
+          examples: [170248086, "***"]
         position:
-          $ref: "#/components/schemas/Masked"
+          type: string
+          examples: [Committee Chair, Scout Executive, "***"]
         personFullName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        suffix:
+          type: string
+
+    OrganizationExecutiveOfficer:
+      type: object
+      additionalProperties: false
+      description: >-
+        The unit's executive officer. Without a valid token, every value is
+        `***` and the full name is under the misspelled key
+        `personFulllName`. With one, the full name is under `personFullName`,
+        and other organizations and some units return an empty object.
+      properties:
+        personFullName:
+          type: string
+        personFulllName:
           $ref: "#/components/schemas/Masked"
         firstName:
-          $ref: "#/components/schemas/Masked"
+          type: string
+        middleName:
+          type: string
         lastName:
-          $ref: "#/components/schemas/Masked"
+          type: string
         suffix:
-          $ref: "#/components/schemas/Masked"
+          type: string
 
     Masked:
       type: string
@@ -8262,6 +8280,14 @@ components:
         type: integer
         minimum: 1
         examples: [1]
+
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      description: >-
+        The `token` from signing in at auth.scouting.org. Endpoints that
+        accept it also work without it.
 
   responses:
     InvalidQuery:
