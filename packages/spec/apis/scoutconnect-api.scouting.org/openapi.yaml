@@ -8,6 +8,11 @@ info:
     at scoutconnect-api.scouting.org. Not affiliated with or endorsed by
     Scouting America. The MIT license applies to this description and
     repository only, not to the API or its data.
+
+
+    The API rejects requests whose `User-Agent` names a common HTTP library,
+    such as `curl/8.0`, `node`, `undici`, or `python-requests/2.32`, with a
+    404 HTML page on every path. Send a custom `User-Agent`.
   contact:
     name: scouting-api on GitHub
     url: https://github.com/scouting-commons/scouting-api/issues
@@ -112,7 +117,6 @@ paths:
                   . Troop 3346 meets at All Saints Lutheran Church every Monday
                   night.
                 gender: BOYS
-                hasManualRegistration: false
                 id: 2cb46226-b47b-4ef1-ab3e-51806fe91dfd
                 isComingSoon: false
                 isFundRaiser: true
@@ -192,7 +196,6 @@ paths:
                   contactPhone: null
                   councilNumber: null
                   gender: FAMILY
-                  hasManualRegistration: false
                   id: cea157e8-f780-4808-bc39-7e6e45fa4287
                   isComingSoon: false
                   lat: 44.9231353
@@ -209,7 +212,6 @@ paths:
                   contactPhone: (612) 269-3382
                   councilNumber: null
                   gender: BOYS
-                  hasManualRegistration: false
                   id: 2cb46226-b47b-4ef1-ab3e-51806fe91dfd
                   isComingSoon: false
                   lat: 44.903204
@@ -336,7 +338,6 @@ components:
         - councilInfo
         - description
         - gender
-        - hasManualRegistration
         - id
         - isComingSoon
         - isFundRaiser
@@ -387,8 +388,6 @@ components:
           description: Free text that may contain HTML, such as links
         gender:
           $ref: "#/components/schemas/OrganizationGender"
-        hasManualRegistration:
-          type: boolean
         id:
           $ref: "#/components/schemas/OrganizationId"
         isComingSoon:
@@ -586,7 +585,6 @@ components:
         - contactPhone
         - councilNumber
         - gender
-        - hasManualRegistration
         - id
         - isComingSoon
         - lat
@@ -615,9 +613,6 @@ components:
           type: "null"
         gender:
           $ref: "#/components/schemas/OrganizationGender"
-        hasManualRegistration:
-          type: boolean
-          description: Always the opposite of `onlineRegistrationSupported`
         id:
           $ref: "#/components/schemas/OrganizationId"
         isComingSoon:

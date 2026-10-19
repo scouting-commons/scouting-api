@@ -12,6 +12,9 @@ workflows:
       - stepId: list
         operationId: $sourceDescriptions.api.listCouncils
         parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
           - name: zipCode
             in: query
             value: "55345"
@@ -20,6 +23,9 @@ workflows:
       - stepId: list-invalid-zip-code
         operationId: $sourceDescriptions.api.listCouncils
         parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
           - name: zipCode
             in: query
             value: abcde
@@ -31,6 +37,9 @@ workflows:
       - stepId: get
         operationId: $sourceDescriptions.api.getOrganization
         parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
           - name: organizationId
             in: path
             value: 2cb46226-b47b-4ef1-ab3e-51806fe91dfd
@@ -39,6 +48,9 @@ workflows:
       - stepId: get-not-found
         operationId: $sourceDescriptions.api.getOrganization
         parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
           - name: organizationId
             in: path
             value: 2cb46226-b47b-4ef1-ab3e-51806fe91dfe
@@ -49,6 +61,10 @@ workflows:
     steps:
       - stepId: search
         operationId: $sourceDescriptions.api.searchOrganizations
+        parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
         requestBody:
           contentType: application/json
           payload:
@@ -58,6 +74,10 @@ workflows:
           - condition: $statusCode == 200
       - stepId: search-invalid-zip
         operationId: $sourceDescriptions.api.searchOrganizations
+        parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
         requestBody:
           contentType: application/json
           payload:
@@ -70,6 +90,9 @@ workflows:
       - stepId: coordinates
         operationId: $sourceDescriptions.api.getZipCodeCoordinates
         parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
           - name: zipCode
             in: path
             value: "55345"
@@ -78,6 +101,9 @@ workflows:
       - stepId: coordinates-invalid
         operationId: $sourceDescriptions.api.getZipCodeCoordinates
         parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
           - name: zipCode
             in: path
             value: abcde
@@ -86,6 +112,9 @@ workflows:
       - stepId: coordinates-not-found
         operationId: $sourceDescriptions.api.getZipCodeCoordinates
         parameters:
+          - name: User-Agent
+            in: header
+            value: scouting-api
           - name: zipCode
             in: path
             value: "99999"
