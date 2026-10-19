@@ -1,5 +1,5 @@
 name: TypeScript client issue
-description: Report a bug in, or request a change to, @scouting-commons/scouting-api.
+description: Report a bug in, or request a change to, the typescript client package.
 body:
   - type: markdown
     attributes:

@@ -44,14 +44,14 @@ Before you call an API, read the `info.description` at the top of its spec. It l
 
 ### Use the TypeScript client
 
-[`@scouting-commons/scouting-api`](packages/client-ts/) is generated from the specs and already handles each API's quirks:
+The [`scouting-api`](packages/client-ts/) NPM package is generated from the specs and already handles each API's quirks:
 
 ```sh
-npm install @scouting-commons/scouting-api
+npm install scouting-api
 ```
 
 ```ts
-import { listMeritBadges } from "@scouting-commons/scouting-api/api.scouting.org";
+import { listMeritBadges } from "scouting-api/api.scouting.org";
 
 const { data, error } = await listMeritBadges({ id: "3" });
 ```

@@ -1,4 +1,4 @@
-# @scouting-commons/scouting-api
+# scouting-api
 
 **Unofficial TypeScript client for Scouting America APIs, generated from the [scouting-api](https://github.com/scouting-commons/scouting-api) specs.**
 
@@ -12,7 +12,7 @@
 ## Install
 
 ```sh
-npm install @scouting-commons/scouting-api
+npm install scouting-api
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ npm install @scouting-commons/scouting-api
 Each API has its own import path, named by its host. Every operation is a function that returns the parsed response as `data`, or the API's error response as `error`:
 
 ```ts
-import { listMeritBadges } from "@scouting-commons/scouting-api/api.scouting.org";
+import { listMeritBadges } from "scouting-api/api.scouting.org";
 
 const { data, error } = await listMeritBadges({ id: "3" });
 if (error) throw new Error(error.message);
@@ -37,7 +37,7 @@ const { data } = await getRankV2({ rankId: 1 }, { throwOnError: true });
 Each import path also exports that API's `client`, for changing settings such as headers or the base URL:
 
 ```ts
-import { client } from "@scouting-commons/scouting-api/api.scouting.org";
+import { client } from "scouting-api/api.scouting.org";
 
 client.setConfig({ baseUrl: "https://example.com" });
 ```

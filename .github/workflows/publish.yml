@@ -40,6 +40,6 @@ jobs:
         run: test "$TAG" = "v$(jq -r .version packages/client-ts/package.json)"
 
       # Packing builds the client and replaces its workspace:* versions
-      - run: pnpm --filter @scouting-commons/scouting-api pack --pack-destination "$RUNNER_TEMP"
+      - run: pnpm --filter scouting-api pack --pack-destination "$RUNNER_TEMP"
 
       - run: npm stage publish "$RUNNER_TEMP"/*.tgz --access public
