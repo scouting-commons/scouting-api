@@ -15,6 +15,7 @@
 | api.scouting.org | PUT | `/advancements/activities/{activityId}/nonRegisteredOrganizationParticipants/{activityDetailsId}` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/advancements/activities/{activityId}/registeredParticipants` |  | ✓ | new | updateRegisteredParticipants |
 | api.scouting.org | DELETE | `/advancements/activities/{activityId}/registeredParticipants/{activityRecordId}` |  | ✓ | new |  |
+| api.scouting.org | GET | `/advancements/adult/{personGuid}/ranks` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/advancements/advancementHistory` | ✓ | ✓ | new | getMeritBadgesHistory, getBulkAdvancementHistory, getBulkAdvancementHistoryToPurchase, getAdvancementHistory |
 | api.scouting.org | GET | `/advancements/adventures` | ✓ | ✓ | in spec, closed #5 |  |
 | api.scouting.org | GET | `/advancements/adventures/{adventureId}/requirements?versionId` | ✓ | ✓ | in spec, closed #6 | getAdventureRequirements |
@@ -203,11 +204,18 @@
 | api.scouting.org | GET | `/lookups/advancements/unitTimezone` | ✓ | ✓ | in spec |  |
 | api.scouting.org | GET | `/lookups/advancements/unitTypes` | ✓ |  | in spec |  |
 | api.scouting.org | GET | `/lookups/advancements/youthLeadershipPositions` | ✓ | ✓ | in spec |  |
+| api.scouting.org | GET | `/lookups/alumni/affinityGroups` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/lookups/alumni/alumniMembershipLevels` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/lookups/alumni/councilAffiliations` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/lookups/alumni/localAwards` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/lookups/alumni/nesaMembershipLevels` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/lookups/alumni/scoutingAssociations` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/lookups/communications/classifications` | ✓ |  | in spec |  |
 | api.scouting.org | GET | `/lookups/communications/communicationTypes` | ✓ | ✓ | in spec |  |
 | api.scouting.org | GET | `/lookups/communications/mobilePhoneCarrier` | ✓ | ✓ | in spec |  |
 | api.scouting.org | GET | `/lookups/communications/phoneCountryCodes` | ✓ | ✓ | in spec |  |
 | api.scouting.org | GET | `/lookups/communications/socialMedia` | ✓ |  | in spec, closed #55 |  |
+| api.scouting.org | GET | `/lookups/organizations/communityOrganizations/types` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/lookups/organizations/positions` | ✓ |  | in spec |  |
 | api.scouting.org | GET | `/lookups/organizations/programs` | ✓ |  | new |  |
 | api.scouting.org | GET | `/lookups/organizations/types` | ✓ |  | in spec |  |
@@ -225,13 +233,18 @@
 | api.scouting.org | GET | `/lookups/person/religions` | ✓ |  | in spec, closed #19 |  |
 | api.scouting.org | GET | `/lookups/person/schools?name&city&state&zip` | ✓ | ✓ | in spec |  |
 | api.scouting.org | GET | `/lookups/person/titlePrefixes` | ✓ | ✓ | in spec |  |
+| api.scouting.org | GET | `/lookups/productPricing` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/lookups/registrations/bsaOrderType` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/lookups/registrations/orderSource` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/lookups/registrations/paymentTypes` | ✓ |  | in spec, closed #25 |  |
 | api.scouting.org | GET | `/lookups/registrations/renewalOptoutReasons` | ✓ | ✓ | in spec | getLookupOptoutReasons |
 | api.scouting.org | GET | `/lookups/registrations/statuses` | ✓ |  | in spec, closed #24 |  |
 | api.scouting.org | GET | `/lookups/trainings/courses` | ✓ |  | in spec, closed #26 |  |
 | api.scouting.org | POST | `/organizations/{organizationGuid}/advancementsReadyToBeAwarded` | ✓ | ✓ | new | getAdvancementsReadyAward |
+| api.scouting.org | GET | `/organizations/{organizationGuid}/childOrganizations` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/organizations/{organizationGuid}/districtAndSubDistricts` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/organizations/{organizationGuid}/orgTrainingSummary` | ✓ |  | open #97 |  |
+| api.scouting.org | POST | `/organizations/alumniMembershipSummary` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/organizations/camps/search` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/organizations/councils` | ✓ |  | new |  |
 | api.scouting.org | POST | `/organizations/organizationsWithinRadius` | ✓ | ✓ | new |  |
@@ -248,12 +261,19 @@
 | api.scouting.org | POST | `/organizations/v2/{organizationGuid}/orgAdults` | ✓ | ✓ | new | getOrgAdults, getMultipleOrgAdults |
 | api.scouting.org | POST | `/organizations/v2/{organizationGuid}/orgYouths` | ✓ | ✓ | open #85 (says GET) | getOrgYouths, getMultipleOrgYouths |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/profile` | ✓ | ✓ | in spec, closed #36 | getOrganizationProfile |
+| api.scouting.org | POST | `/organizations/v2/{organizationGuid}/promoCodes` |  | ✓ | new |  |
+| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/promoCodes?promoCode` | ✓ | ✓ | new |  |
+| api.scouting.org | DELETE | `/organizations/v2/{organizationGuid}/promoCodes/{promoCodeId}` |  | ✓ | new |  |
+| api.scouting.org | PUT | `/organizations/v2/{organizationGuid}/promoCodes/{promoCodeId}` |  | ✓ | new |  |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/recipients` | ✓ | ✓ | new | getRecipients |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/registrations` | ✓ |  | new |  |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/unitActivitiesDashboard` | ✓ | ✓ | open #87 | getOrgActivityDashboard |
 | api.scouting.org | ? | `/organizations/v2/{organizationGuid}/youths` | ? |  | new |  |
 | api.scouting.org | POST | `/organizations/v2/{orgGuid}/denChief/add` |  | ✓ | new | addDenChief |
 | api.scouting.org | POST | `/organizations/v2/{orgGuid}/denChief/remove` |  | ✓ | new | removeDenChief |
+| api.scouting.org | POST | `/organizations/v2/NESAMembershipDownload?page&perPage&currentStatusId&startDate&finishDate` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/organizations/v2/NESAregistrations?currentStatusId&page&perPage&sortOrder&startDate&finishDate` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/organizations/v2/organizations/{organizationId}` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/organizations/v2/payment/{orgGuid}/stripe/onboardURL` | ✓ | ✓ | new | getOrganizationOnboardUrl |
 | api.scouting.org | GET | `/organizations/v2/payment/{orgGuid}/stripe/profile` | ✓ | ✓ | new | getOrganizationPaymentProfile |
 | api.scouting.org | POST | `/organizations/v2/payment/{orgGuid}/stripe/profile` |  | ✓ | new | postOrganizationPaymentProfile |
@@ -275,13 +295,31 @@
 | api.scouting.org | GET | `/organizations/v2/units/{orgGuid}/subUnits` | ✓ | ✓ | new | getSubUnits, getMultipleSubUnits |
 | api.scouting.org | GET | `/organizations/v2/units/{orgGuid}/subUnitYouths` | ✓ | ✓ | new | getSubUnitYouths |
 | api.scouting.org | GET | `/organizations/v2/units/{unitId}/paymentLogCategories` | ✓ | ✓ | new | getPaymentLogCategories |
+| api.scouting.org | GET | `/organizations/v2/zip/{zipCode}/council` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/alumniAwards` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/alumniProfile` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/alumniRegistrations` | ✓ | ✓ | new |  |
+| api.scouting.org | POST | `/persons/{personGuid}/alumniSettings` |  | ✓ | new |  |
+| api.scouting.org | DELETE | `/persons/{personGuid}/alumniSettings/{extendedProfileId}` |  | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/alumniSettings/options` | ✓ | ✓ | new |  |
+| api.scouting.org | POST | `/persons/{personGuid}/alumniSettings/options` |  | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/eagleInformation` | ✓ | ✓ | new |  |
 | api.scouting.org | PUT | `/persons/{personGuid}/membershipRegistrations/{registrationId}` |  | ✓ | new | updateMembershipRegistration |
+| api.scouting.org | DELETE | `/persons/{personGuid}/memberships` |  | ✓ | new |  |
 | api.scouting.org | GET | `/persons/{personGuid}/memberships` | ✓ |  | new |  |
+| api.scouting.org | POST | `/persons/{personGuid}/memberships` |  | ✓ | new |  |
+| api.scouting.org | PUT | `/persons/{personGuid}/memberships` |  | ✓ | new |  |
+| api.scouting.org | DELETE | `/persons/{personGuid}/memberships/add` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/{personGuid}/memberships/add` |  | ✓ | new |  |
 | api.scouting.org | GET | `/persons/{personGuid}/myScout` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/nesaRegistrations` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/persons/{personGuid}/positions` | ✓ |  | new |  |
 | api.scouting.org | GET | `/persons/{personGuid}/profile` | ✓ | ✓ | new | getUserMystProfile |
+| api.scouting.org | PUT | `/persons/{personGuid}/profile/{extendedProfileId}/extendedProfile` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/{personGuid}/profile/extendedProfile` |  | ✓ | new |  |
 | api.scouting.org | POST | `/persons/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/persons/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/profilePicture` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/persons/{personGuid}/profilePicture` |  | ✓ | new | createProfilePicture |
 | api.scouting.org | PUT | `/persons/{personGuid}/profilePicture` |  | ✓ | new | updateProfilePicture |
 | api.scouting.org | GET | `/persons/{personGuid}/renewalRelationships` | ✓ | ✓ | new | getPersonRenewalRelationships |
@@ -295,9 +333,13 @@
 | api.scouting.org | DELETE | `/persons/advancementImports/{id}` |  | ✓ | new | cancelAdvancementImport |
 | api.scouting.org | POST | `/persons/positions/{personGuid}/assignFunctional` |  | ✓ | new | postAssignFunctionalPositions |
 | api.scouting.org | POST | `/persons/positions/{personGuid}/expireFunctional` |  | ✓ | new | postExpireFunctionalPositions |
+| api.scouting.org | POST | `/persons/sendNesaReceiptEmail` |  | ✓ | new |  |
 | api.scouting.org | GET | `/persons/v2/{memberId}/orders` | ✓ |  | new |  |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/deleteProfileInfo` |  | ✓ | new | deleteProfileInfo |
+| api.scouting.org | PUT | `/persons/v2/{personGuid}/eagleInformation/{eagleInformationId}` |  | ✓ | new |  |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/membershipRegistrations` | ✓ | ✓ | open #53 | getMembershipRegistrations |
+| api.scouting.org | POST | `/persons/v2/{personGuid}/NESAPersonPosition/assign` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/{personGuid}/NESAPersonPosition/expire` |  | ✓ | new |  |
 | api.scouting.org | GET | `/persons/v2/{personGuid}/parentGuardianInvitation` | ✓ | ✓ | new | getParentGuardianInvitation |
 | api.scouting.org | GET | `/persons/v2/{personGuid}/parentGuardianInvitation/{invitationId}` | ✓ | ✓ | new | getParentGuardianInvitationDetails |
 | api.scouting.org | DELETE | `/persons/v2/{personGuid}/parentGuardianInvitation/{parentRequestId}` |  | ✓ | new | deleteParentGuardianInvitation |
@@ -306,15 +348,46 @@
 | api.scouting.org | PUT | `/persons/v2/{personGuid}/profile` |  | ✓ | new | updateAkelaProfile |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/persons/v2/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
+| api.scouting.org | PUT | `/persons/v2/{personGuid}/rank` |  | ✓ | new |  |
+| api.scouting.org | DELETE | `/persons/v2/{personGuid}/rank/{rankId}` |  | ✓ | new |  |
 | api.scouting.org | GET | `/persons/v2/{personGuid}/relationships?includeIneligibles` | ✓ | ✓ | open #47 | getRelationships |
 | api.scouting.org | DELETE | `/persons/v2/{personGuid}/relationships/{relationshipId}` |  | ✓ | new | deleteRelationship |
 | api.scouting.org | GET | `/persons/v2/{personGuid}/trainings/positionTrainingRequirements` | ✓ |  | new |  |
 | api.scouting.org | GET | `/persons/v2/{personGuid}/trainings/ypt` | ✓ | ✓ | new | getPersonTrainingsYPT |
 | api.scouting.org | GET | `/persons/v2/{userId}/personprofile` | ✓ | ✓ | open #46 | getPersonProfile, getCompletePersonProfile |
+| api.scouting.org | POST | `/persons/v2/addPerson` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/alumniAffinityGroups` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/alumniAwards` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/alumniCouncilAffiliations` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/alumniNeedHelpDocument` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/alumniRanks` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/alumniScoutingAssociations` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/eaglePublicSearch` | ✓ | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/eagleRequest/{eagleRequestId}/submit` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/eagleRequest/add` |  | ✓ | new |  |
+| api.scouting.org | POST | `/persons/v2/globalSearch` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/persons/v2/masterMemberId` | ✓ |  | new |  |
+| api.scouting.org | GET | `/persons/v2/NESAPositionsDictionary?memberId&positionContext` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/persons/v2/nesaRegistrations?userName` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/persons/v2/relationshipSearch` | ✓ | ✓ | new | postPersonSearchByMemberId |
 | api.scouting.org | GET | `/registrations/{registrationId}` | ✓ |  | new |  |
+| api.scouting.org | GET | `/registrations/{registrationId}/notes` | ✓ | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/{registrationId}/notes` |  | ✓ | new |  |
+| api.scouting.org | GET | `/registrations/{registrationId}/payments` | ✓ | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/{registrationId}/payments` |  | ✓ | new |  |
+| api.scouting.org | PUT | `/registrations/{registrationId}/payments/{paymentId}` |  | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/{registrationId}/status` |  | ✓ | new |  |
+| api.scouting.org | GET | `/registrations/{registrationId}/status/public` | ✓ | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/registrations/alumni` |  | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/registrations/processPendingRegistrations` |  | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/v2/{registrationId}/applyPromoCode` |  | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/v2/{registrationId}/expireRegistration` |  | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/v2/{registrationId}/removePromoCode` |  | ✓ | new |  |
+| api.scouting.org | GET | `/registrations/v2/{registrationId}/shoppingCartNESA` | ✓ | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/v2/addReg/bulkNESA` |  | ✓ | new |  |
+| api.scouting.org | POST | `/registrations/v2/NESA/nonRevenue` |  | ✓ | new |  |
 | api.scouting.org | GET | `/registrations/v2/precisely/token` | ✓ | ✓ | new | authenticatePrecisely |
+| api.scouting.org | GET | `/registrations/v2/registrations/{registrationId}` | ✓ | ✓ | new |  |
 | auth.scouting.org | GET | `/api/users/{memberId}/sessions/masquerade` | ✓ | ✓ | new | masquerade |
 | auth.scouting.org | POST | `/api/users/{username}/authenticate` |  | ✓ | in spec | authenticate |
 | auth.scouting.org | GET | `/api/users/auth/refresh` | ✓ | ✓ | in spec, closed #101 | sessionRefresh |
@@ -322,6 +395,13 @@
 | auth.scouting.org | GET | `/api/users/logout` | ✓ | ✓ | new | logout |
 | auth.scouting.org | GET | `/api/users/self_{guid}/sessions/current` | ✓ | ✓ | new | oldSessionRefresh |
 | my.scouting.org | POST | `/api/users/{username}/authenticate` |  |  | new |  |
+| my.scouting.org | GET | `/mystrpt/WebReport/Output/proxy.aspx?Method=CreateReportFileOutputFromContext` | ✓ | ✓ | new |  |
+| my.scouting.org | POST | `/mystrpt/WebReport/Output/proxy.aspx?Method=CreateReportInstance&ReportCode=NESAAlumniSearch&ResponseType=@json` | ✓ | ✓ | new |  |
+| my.scouting.org | GET | `/mystrpt/WebReport/Output/proxy.aspx?Method=RefreshReport` | ✓ | ✓ | new |  |
+| my.scouting.org | POST | `/mystrpt/webscript/output11/proxy.aspx?Method=ExecuteContainerAPI&Container=NESAAlumniReport&API=CreateReportInstance` | ✓ | ✓ | new |  |
+| my.scouting.org | POST | `/mystrpt/webscript/output11/proxy.aspx?Method=ExecuteContainerAPI&Container=NESAAlumniReport&API=GenerateReport` | ✓ | ✓ | new |  |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=NESAAlumniReport&API=GetColumnNames` | ✓ | ✓ | new |  |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=NESAAlumniReport&API=GetCommunityOrgTypes` | ✓ | ✓ | new |  |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBL_MB_Scout_Matrix&API=SavePersonSelection` |  | ✓ | new | generateClassWorksheet |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLReportMenu&API=GetReportListByOrg` | ✓ | ✓ | new | GetReportListByOrg |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLReportMenu&API=GetReportListByPG` | ✓ | ✓ | new | GetReportListByPG |
@@ -337,10 +417,18 @@
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBRosterReportsManagerAPI&API=ShareSelectedReports` |  | ✓ | new | PostShareRosterCustomReport |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBRosterReportsManagerAPI&API=UnshareSelectedReports` |  | ✓ | new | PostUnshareRosterCustomReport |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=MYSTAccount&ScriptCode=PersonSearch` | ✓ | ✓ | new | postPersonSearch |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=NESAAPI&ScriptCode=DeleteAlumniReportPreference` |  | ✓ | new |  |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=NESAAPI&ScriptCode=GetAlumniReportPreferenceList` | ✓ | ✓ | new |  |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=NESAAPI&ScriptCode=GetColumnDictionary` | ✓ | ✓ | new |  |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=NESAAPI&ScriptCode=GetPreferenceData` | ✓ | ✓ | new |  |
+| my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=NESAAPI&ScriptCode=UpdateAlumniReportColumnList` |  | ✓ | new |  |
+| my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=NESAAPI&ScriptCode=UpdateAlumniReportFilterList` |  | ✓ | new |  |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=SBEagleScoutRankApplication&ScriptCode=ProcessPrintEditablePDF` | ✓ | ✓ | new | (opened as page) |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=SBLAdvancementReport&ScriptCode=ReportPresentation` | ✓ | ✓ | new |  |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=SBLite&ScriptCode=GetPOListByDate` | ✓ | ✓ | new |  |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=SBLUnitRosterReport&ScriptCode=ReportPresentation` | ✓ | ✓ | new |  |
+| payments.scouting.org | POST | `/api/payment/initTransaction` |  | ✓ | new |  |
+| payments.scouting.org | POST | `/api/payment/validateTransaction` |  | ✓ | new |  |
 | payments.scouting.org | POST | `/api/stripe/checkoutCreate` |  | ✓ | new | checkoutCreate |
 | payments.scouting.org | POST | `/api/stripe/createCheckoutIntent` |  | ✓ | new | createCheckoutIntent |
 | payments.scouting.org | GET | `/api/stripe/merchantStatus` | ✓ | ✓ | new | getMerchantStatus |
