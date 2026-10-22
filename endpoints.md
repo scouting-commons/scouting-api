@@ -7,7 +7,7 @@
 | api.scouting.org | POST | `/advancements/{organizationGuid}/sbEducationRecords` | ✓ | ✓ | new | getEducationRecords |
 | api.scouting.org | POST | `/advancements/{organizationGuid}/sbExtendedProfiles` |  | ✓ | new |  |
 | api.scouting.org | GET | `/advancements/{userId}/paymentLogs` | ✓ | ✓ | open #45 | getUserPaymentLogs |
-| api.scouting.org | ? | `/advancements/{userId}/paymentLogs/{logId}` | ? |  | open #68 |  |
+| api.scouting.org | ? | `/advancements/{userId}/paymentLogs/{logId}` | ? |  | new |  |
 | api.scouting.org | POST | `/advancements/{userId}/pictureUpload` |  | ✓ | new | createPictureUpload |
 | api.scouting.org | GET | `/advancements/activities/{activityId}` | ✓ | ✓ | new | getActivityDetails |
 | api.scouting.org | DELETE | `/advancements/activities/{activityId}/collaborativeOrganizations/{collabOrgId}` |  | ✓ | new |  |
@@ -22,7 +22,7 @@
 | api.scouting.org | GET | `/advancements/awards/{awardId}` | ✓ | ✓ | in spec, closed #8 | getGeneralAdvancementDetails, getAdventureDetails, getMeritBadgeDetails, getRankDetails, getSSElectiveDetails, getAwardDetails |
 | api.scouting.org | GET | `/advancements/awards/{awardId}/requirements?versionId` | ✓ | ✓ | in spec, closed #9 | getAwardRequirements |
 | api.scouting.org | POST | `/advancements/events` | ✓ | ✓ | open #37 | getCalendarEvents, getMultipleCalendarEvents |
-| api.scouting.org | GET | `/advancements/events/{eventId}` | ✓ | ✓ | open #59 | getCalendarEvent |
+| api.scouting.org | GET | `/advancements/events/{eventId}` | ✓ | ✓ | new | getCalendarEvent |
 | api.scouting.org | PUT | `/advancements/events/{eventId}` |  | ✓ | new | updateCalendarEvent |
 | api.scouting.org | PUT | `/advancements/events/{eventId}/reminders/{reminderId}` |  | ✓ | new |  |
 | api.scouting.org | POST | `/advancements/events/{eventId}/reminders/add` |  | ✓ | new |  |
@@ -51,10 +51,10 @@
 | api.scouting.org | PUT | `/advancements/v2/{userId}/{advancementType}/{advancementId}/version` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/advancements/v2/{userId}/meritBadges/{meritBadgeId}/version` |  | ✓ | new | updateYouthMeritBadgeVersion |
 | api.scouting.org | PUT | `/advancements/v2/{userId}/ranks/{rankId}/version` |  | ✓ | new | updateYouthRankVersion |
-| api.scouting.org | GET | `/advancements/v2/{userId}/userActivitySummary` | ✓ | ✓ | open #44 | getUserActivitySummary |
+| api.scouting.org | GET | `/advancements/v2/{userId}/userActivitySummary` | ✓ | ✓ | new | getUserActivitySummary |
 | api.scouting.org | POST | `/advancements/v2/activities?page&perPage` | ✓ | ✓ | open #38 | getActivities |
-| api.scouting.org | DELETE | `/advancements/v2/activities/{activityId}` |  | ✓ | open #69 |  |
-| api.scouting.org | PUT | `/advancements/v2/activities/{activityId}` |  | ✓ | open #69 | updateActivity |
+| api.scouting.org | DELETE | `/advancements/v2/activities/{activityId}` |  | ✓ | new |  |
+| api.scouting.org | PUT | `/advancements/v2/activities/{activityId}` |  | ✓ | new | updateActivity |
 | api.scouting.org | POST | `/advancements/v2/activities/{activityId}/registeredParticipants/add` |  | ✓ | new |  |
 | api.scouting.org | POST | `/advancements/v2/activities/add` |  | ✓ | new | addActivity |
 | api.scouting.org | POST | `/advancements/v2/activities/approve` |  | ✓ | new |  |
@@ -65,7 +65,7 @@
 | api.scouting.org | POST | `/advancements/v2/denChief/emailConfirmation` |  | ✓ | new | sendDenChiefEmail |
 | api.scouting.org | POST | `/advancements/v2/denChief/reviewPosition` |  | ✓ | new | reviewDenChiefPosition |
 | api.scouting.org | POST | `/advancements/v2/denChief/search` | ✓ | ✓ | new | searchDenChief |
-| api.scouting.org | DELETE | `/advancements/v2/events/{eventId}` |  | ✓ | open #70 |  |
+| api.scouting.org | DELETE | `/advancements/v2/events/{eventId}` |  | ✓ | new |  |
 | api.scouting.org | GET | `/advancements/v2/events/{eventId}/guests` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/advancements/v2/events/{eventId}/guests` |  | ✓ | new |  |
 | api.scouting.org | DELETE | `/advancements/v2/events/{eventId}/guests/{calendarEventGuestId}` |  | ✓ | new |  |
@@ -92,8 +92,8 @@
 | api.scouting.org | POST | `/advancements/v2/events/recurringEvents/add` |  | ✓ | new |  |
 | api.scouting.org | GET | `/advancements/v2/meritBadges` | ✓ | ✓ | in spec, closed #33 | getDictMeritBadges |
 | api.scouting.org | GET | `/advancements/v2/meritBadges/{meritBadgeId}` | ✓ | ✓ | in spec, closed #34 | getGeneralAdvancementDetails, getAdventureDetails, getMeritBadgeDetails, getRankDetails, getSSElectiveDetails, getAwardDetails |
-| api.scouting.org | GET | `/advancements/v2/meritBadges/counselors/{memberId}/profile` | ✓ | ✓ | open #77 | GetMeritBadgeCounselorProfile |
-| api.scouting.org | GET | `/advancements/v2/meritBadges/counselors/{personGuidOrMID}/dashboard` | ✓ | ✓ | open #76 | getMBCDashboard |
+| api.scouting.org | GET | `/advancements/v2/meritBadges/counselors/{memberId}/profile` | ✓ | ✓ | new | GetMeritBadgeCounselorProfile |
+| api.scouting.org | GET | `/advancements/v2/meritBadges/counselors/{personGuidOrMID}/dashboard` | ✓ | ✓ | new | getMBCDashboard |
 | api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/assignMeritBadges` |  | ✓ | new | assignMeritBadgeCounselorBadges |
 | api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/assignToYouth` |  | ✓ | new | assignMBCToYouth |
 | api.scouting.org | GET | `/advancements/v2/meritBadges/counselors/classes` | ✓ | ✓ | new | GetCounselorClasses |
@@ -104,10 +104,10 @@
 | api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/classes/{counselorClassId}/scouts/removeMembership` |  | ✓ | new | PostRemoveScoutsFromClass |
 | api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/removeFromYouth` |  | ✓ | new | removeCounselorFromYouth |
 | api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/removeMeritBadges` |  | ✓ | new | removeMeritBadgeCounselorBadge |
-| api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/search` | ✓ | ✓ | open #90 | postMBCounselorsSearch |
-| api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/youths/assigned` | ✓ | ✓ | open #78 (says GET) | GetCounselorsAssignedToYouths |
+| api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/search` | ✓ | ✓ | new | postMBCounselorsSearch |
+| api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/youths/assigned` | ✓ | ✓ | new | GetCounselorsAssignedToYouths |
 | api.scouting.org | POST | `/advancements/v2/meritBadges/counselors/youths/removeMeritBadges` |  | ✓ | new | removeMBCYouthMB |
-| api.scouting.org | POST | `/advancements/v2/organization/{organizationGuid}/meritBadges/printBlueCard` |  | ✓ | open #79 (says GET) | postMeritBadgeBlueCards |
+| api.scouting.org | POST | `/advancements/v2/organization/{organizationGuid}/meritBadges/printBlueCard` |  | ✓ | new | postMeritBadgeBlueCards |
 | api.scouting.org | GET | `/advancements/v2/organization/{orgGuid}/adventures/{adventureId}/userRequirements` | ✓ | ✓ | new | getBulkUserAdventureRequirements |
 | api.scouting.org | GET | `/advancements/v2/organization/{orgGuid}/awards/{awardId}/userRequirements` | ✓ | ✓ | new | getBulkUserAwardRequirements |
 | api.scouting.org | GET | `/advancements/v2/organization/{orgGuid}/balanceDetails` | ✓ | ✓ | new | GetMembersPaymentLogsBalance |
@@ -129,7 +129,7 @@
 | api.scouting.org | GET | `/advancements/v2/ranks/{rankId}/requirements?versionId` | ✓ | ✓ | in spec, closed #30 | getRankRequirements |
 | api.scouting.org | GET | `/advancements/v2/ssElectives/{ssElectiveId}` | ✓ | ✓ | in spec, closed #35 | getGeneralAdvancementDetails, getAdventureDetails, getMeritBadgeDetails, getRankDetails, getSSElectiveDetails, getAwardDetails |
 | api.scouting.org | PUT | `/advancements/v2/unit/{unitId}` |  | ✓ | new |  |
-| api.scouting.org | GET | `/advancements/v2/users/{userId}/calendars` | ✓ | ✓ | open #89 |  |
+| api.scouting.org | GET | `/advancements/v2/users/{userId}/calendars` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/advancements/v2/users/{userId}/calendars` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/advancements/v2/users/{userId}/calendars/{userCalendarId}` |  | ✓ | new |  |
 | api.scouting.org | DELETE | `/advancements/v2/users/{userId}/comments/{commentId}` |  | ✓ | new | deleteAdvComment |
@@ -146,18 +146,18 @@
 | api.scouting.org | POST | `/advancements/v2/users/paymentLogs/comments` | ✓ | ✓ | new | getPaymentLogComments |
 | api.scouting.org | POST | `/advancements/v2/users/paymentLogs/comments/add` |  | ✓ | new | addPaymentLogComments |
 | api.scouting.org | POST | `/advancements/v2/youth/{advancementType}/{advancementId}/requirements` |  | ✓ | new |  |
-| api.scouting.org | GET | `/advancements/v2/youth/{userId}/{advancementType}/{advancementId}/requirements` | ✓ | ✓ | open #43 |  |
-| api.scouting.org | GET | `/advancements/v2/youth/{userId}/adventures` | ✓ | ✓ | open #41 | getYouthAdventures |
+| api.scouting.org | GET | `/advancements/v2/youth/{userId}/{advancementType}/{advancementId}/requirements` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/advancements/v2/youth/{userId}/adventures` | ✓ | ✓ | new | getYouthAdventures |
 | api.scouting.org | GET | `/advancements/v2/youth/{userId}/adventures/{adventureId}/requirements` | ✓ | ✓ | new | getYouthAdventureRequirements |
-| api.scouting.org | GET | `/advancements/v2/youth/{userId}/awards` | ✓ | ✓ | open #42 | getYouthAwards |
+| api.scouting.org | GET | `/advancements/v2/youth/{userId}/awards` | ✓ | ✓ | new | getYouthAwards |
 | api.scouting.org | PUT | `/advancements/v2/youth/{userId}/awards/{awardId}` |  | ✓ | new | updateYouthAwardV2 |
 | api.scouting.org | GET | `/advancements/v2/youth/{userId}/awards/{awardId}/requirements` | ✓ | ✓ | new | getYouthAwardRequirements |
-| api.scouting.org | POST | `/advancements/v2/youth/{userId}/leadershipPositionHistory` |  | ✓ | open #71 | createYouthLeadershipPosition |
+| api.scouting.org | POST | `/advancements/v2/youth/{userId}/leadershipPositionHistory` |  | ✓ | new | createYouthLeadershipPosition |
 | api.scouting.org | DELETE | `/advancements/v2/youth/{userId}/leadershipPositionHistory/{id}` |  | ✓ | new | deleteYouthLeadershipPosition, bulkDeleteUnitsLeadershipPositions |
 | api.scouting.org | PUT | `/advancements/v2/youth/{userId}/leadershipPositionHistory/{id}` |  | ✓ | new | updateYouthLeadershipPosition, bulkUpdateYouthLeadershipPositions |
-| api.scouting.org | GET | `/advancements/v2/youth/{userId}/meritBadges` | ✓ | ✓ | open #56 | getYouthMeritBadges |
+| api.scouting.org | GET | `/advancements/v2/youth/{userId}/meritBadges` | ✓ | ✓ | new | getYouthMeritBadges |
 | api.scouting.org | GET | `/advancements/v2/youth/{userId}/meritBadges/{meritBadgeId}` | ✓ | ✓ | new | getYouthMeritBadgeDetails |
-| api.scouting.org | GET | `/advancements/v2/youth/{userId}/ranks` | ✓ | ✓ | open #40 | getYouthRanks |
+| api.scouting.org | GET | `/advancements/v2/youth/{userId}/ranks` | ✓ | ✓ | new | getYouthRanks |
 | api.scouting.org | GET | `/advancements/v2/youth/{userId}/ranks/{rankId}` | ✓ | ✓ | new | getYouthRankDetails |
 | api.scouting.org | GET | `/advancements/v2/youth/{userId}/ranks/{rankId}/requirements` | ✓ | ✓ | new | getYouthRankRequirements |
 | api.scouting.org | GET | `/advancements/v2/youth/{userId}/ssElectives` | ✓ | ✓ | new | getYouthSSElectives |
@@ -170,12 +170,12 @@
 | api.scouting.org | POST | `/advancements/youth/{userId}/{advancementType}` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/advancements/youth/{userId}/{advancementType}/{advancementId}` |  | ✓ | new | updateYouthAdvancement |
 | api.scouting.org | PUT | `/advancements/youth/{userId}/adventures/{adventureId}` |  | ✓ | new |  |
-| api.scouting.org | ? | `/advancements/youth/{userId}/awards` | ? |  | open #66 |  |
+| api.scouting.org | ? | `/advancements/youth/{userId}/awards` | ? |  | new |  |
 | api.scouting.org | PUT | `/advancements/youth/{userId}/awards/{awardId}/{userAwardId}` |  | ✓ | new | updateYouthAward |
 | api.scouting.org | GET | `/advancements/youth/{userId}/leadershipPositionHistory` | ✓ | ✓ | new | getYouthLeadershipPositions |
-| api.scouting.org | POST | `/advancements/youth/{userId}/meritBadges` |  | ✓ | open #67 |  |
+| api.scouting.org | POST | `/advancements/youth/{userId}/meritBadges` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/advancements/youth/{userId}/meritBadges/{meritBadgeId}` |  | ✓ | new |  |
-| api.scouting.org | ? | `/advancements/youth/{userId}/ranks` | ? |  | open #65 |  |
+| api.scouting.org | ? | `/advancements/youth/{userId}/ranks` | ? |  | new |  |
 | api.scouting.org | PUT | `/advancements/youth/{userId}/ranks/{rankId}` |  | ✓ | new |  |
 | api.scouting.org | GET | `/advancements/youth/{userId}/ssElectives` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/advancements/youth/adventures` |  | ✓ | new |  |
@@ -209,7 +209,7 @@
 | api.scouting.org | GET | `/lookups/communications/phoneCountryCodes` | ✓ | ✓ | in spec |  |
 | api.scouting.org | GET | `/lookups/communications/socialMedia` | ✓ |  | in spec, closed #55 |  |
 | api.scouting.org | GET | `/lookups/organizations/positions` | ✓ |  | in spec |  |
-| api.scouting.org | GET | `/lookups/organizations/programs` | ✓ |  | open #27 |  |
+| api.scouting.org | GET | `/lookups/organizations/programs` | ✓ |  | new |  |
 | api.scouting.org | GET | `/lookups/organizations/types` | ✓ |  | in spec |  |
 | api.scouting.org | GET | `/lookups/organizations/unitTypes` | ✓ |  | in spec, closed #15 |  |
 | api.scouting.org | GET | `/lookups/person/employers` | ✓ |  | in spec, closed #23 |  |
@@ -230,37 +230,37 @@
 | api.scouting.org | GET | `/lookups/registrations/statuses` | ✓ |  | in spec, closed #24 |  |
 | api.scouting.org | GET | `/lookups/trainings/courses` | ✓ |  | in spec, closed #26 |  |
 | api.scouting.org | POST | `/organizations/{organizationGuid}/advancementsReadyToBeAwarded` | ✓ | ✓ | new | getAdvancementsReadyAward |
-| api.scouting.org | GET | `/organizations/{organizationGuid}/districtAndSubDistricts` | ✓ | ✓ | open #100 |  |
+| api.scouting.org | GET | `/organizations/{organizationGuid}/districtAndSubDistricts` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/organizations/{organizationGuid}/orgTrainingSummary` | ✓ |  | open #97 |  |
 | api.scouting.org | POST | `/organizations/camps/search` | ✓ | ✓ | new |  |
-| api.scouting.org | GET | `/organizations/councils` | ✓ |  | open #92 |  |
+| api.scouting.org | GET | `/organizations/councils` | ✓ |  | new |  |
 | api.scouting.org | POST | `/organizations/organizationsWithinRadius` | ✓ | ✓ | new |  |
 | api.scouting.org | GET | `/organizations/positions/{organizationGuid}` | ✓ | ✓ | new | getOrgPositions |
 | api.scouting.org | POST | `/organizations/positions/{orgGuid}/reassignPositions` |  | ✓ | new | postReassignPositions |
 | api.scouting.org | POST | `/organizations/units/search?unitStatus` | ✓ | ✓ | new | getCouncilUnits |
-| api.scouting.org | ? | `/organizations/v2/{organizationGuid}/adults` | ? |  | open #72 |  |
-| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/advancementDashboard` | ✓ | ✓ | open #86 | getOrgAdvancementsDashboard |
+| api.scouting.org | ? | `/organizations/v2/{organizationGuid}/adults` | ? |  | new |  |
+| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/advancementDashboard` | ✓ | ✓ | new | getOrgAdvancementsDashboard |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/denChief` | ✓ | ✓ | new | getUnitDenChiefs |
-| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/districts` | ✓ |  | open #63 |  |
-| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/key3` | ✓ |  | open #57 |  |
-| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/members` | ✓ |  | open #62 |  |
+| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/districts` | ✓ |  | new |  |
+| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/key3` | ✓ |  | new |  |
+| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/members` | ✓ |  | new |  |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/orders` | ✓ | ✓ | new | getUnitOrders |
-| api.scouting.org | POST | `/organizations/v2/{organizationGuid}/orgAdults` | ✓ | ✓ | open #84 (says GET) | getOrgAdults, getMultipleOrgAdults |
+| api.scouting.org | POST | `/organizations/v2/{organizationGuid}/orgAdults` | ✓ | ✓ | new | getOrgAdults, getMultipleOrgAdults |
 | api.scouting.org | POST | `/organizations/v2/{organizationGuid}/orgYouths` | ✓ | ✓ | open #85 (says GET) | getOrgYouths, getMultipleOrgYouths |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/profile` | ✓ | ✓ | in spec, closed #36 | getOrganizationProfile |
-| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/recipients` | ✓ | ✓ | open #88 | getRecipients |
-| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/registrations` | ✓ |  | open #61 |  |
+| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/recipients` | ✓ | ✓ | new | getRecipients |
+| api.scouting.org | GET | `/organizations/v2/{organizationGuid}/registrations` | ✓ |  | new |  |
 | api.scouting.org | GET | `/organizations/v2/{organizationGuid}/unitActivitiesDashboard` | ✓ | ✓ | open #87 | getOrgActivityDashboard |
-| api.scouting.org | ? | `/organizations/v2/{organizationGuid}/youths` | ? |  | open #73 |  |
+| api.scouting.org | ? | `/organizations/v2/{organizationGuid}/youths` | ? |  | new |  |
 | api.scouting.org | POST | `/organizations/v2/{orgGuid}/denChief/add` |  | ✓ | new | addDenChief |
 | api.scouting.org | POST | `/organizations/v2/{orgGuid}/denChief/remove` |  | ✓ | new | removeDenChief |
 | api.scouting.org | GET | `/organizations/v2/payment/{orgGuid}/stripe/onboardURL` | ✓ | ✓ | new | getOrganizationOnboardUrl |
 | api.scouting.org | GET | `/organizations/v2/payment/{orgGuid}/stripe/profile` | ✓ | ✓ | new | getOrganizationPaymentProfile |
 | api.scouting.org | POST | `/organizations/v2/payment/{orgGuid}/stripe/profile` |  | ✓ | new | postOrganizationPaymentProfile |
 | api.scouting.org | PUT | `/organizations/v2/payment/{orgGuid}/stripe/profile` |  | ✓ | new | putOrganizationPaymentProfile |
-| api.scouting.org | GET | `/organizations/v2/units/{organizationGuid}/adults` | ✓ | ✓ | open #80 | getUnitRosterAdults |
-| api.scouting.org | GET | `/organizations/v2/units/{organizationGuid}/parents` | ✓ | ✓ | open #82 | getUnitRosterParents |
-| api.scouting.org | GET | `/organizations/v2/units/{organizationGuid}/youths` | ✓ | ✓ | open #81 | getUnitRosterYouths |
+| api.scouting.org | GET | `/organizations/v2/units/{organizationGuid}/adults` | ✓ | ✓ | new | getUnitRosterAdults |
+| api.scouting.org | GET | `/organizations/v2/units/{organizationGuid}/parents` | ✓ | ✓ | new | getUnitRosterParents |
+| api.scouting.org | GET | `/organizations/v2/units/{organizationGuid}/youths` | ✓ | ✓ | new | getUnitRosterYouths |
 | api.scouting.org | DELETE | `/organizations/v2/units/{orgGuid}/{subUnitType}/{subUnitId}` |  | ✓ | new | deleteSubUnit |
 | api.scouting.org | PUT | `/organizations/v2/units/{orgGuid}/{subUnitType}/{subUnitId}` |  | ✓ | new | UpdateSubUnit |
 | api.scouting.org | POST | `/organizations/v2/units/{orgGuid}/{subUnitType}/{subUnitId}/adults` |  | ✓ | new | addAdultsToSubUnit |
@@ -272,48 +272,48 @@
 | api.scouting.org | PUT | `/organizations/v2/units/{orgGuid}/leadershipPositions` |  | ✓ | new | updateUnitLeadershipPositions |
 | api.scouting.org | GET | `/organizations/v2/units/{orgGuid}/pendingLeadershipPositions` | ✓ | ✓ | new | getUnitPendingLeadershipPositions |
 | api.scouting.org | GET | `/organizations/v2/units/{orgGuid}/subUnitAdults` | ✓ | ✓ | new | getSubUnitAdults |
-| api.scouting.org | GET | `/organizations/v2/units/{orgGuid}/subUnits` | ✓ | ✓ | open #83 | getSubUnits, getMultipleSubUnits |
+| api.scouting.org | GET | `/organizations/v2/units/{orgGuid}/subUnits` | ✓ | ✓ | new | getSubUnits, getMultipleSubUnits |
 | api.scouting.org | GET | `/organizations/v2/units/{orgGuid}/subUnitYouths` | ✓ | ✓ | new | getSubUnitYouths |
 | api.scouting.org | GET | `/organizations/v2/units/{unitId}/paymentLogCategories` | ✓ | ✓ | new | getPaymentLogCategories |
 | api.scouting.org | PUT | `/persons/{personGuid}/membershipRegistrations/{registrationId}` |  | ✓ | new | updateMembershipRegistration |
-| api.scouting.org | GET | `/persons/{personGuid}/memberships` | ✓ |  | open #95 |  |
-| api.scouting.org | GET | `/persons/{personGuid}/myScout` | ✓ | ✓ | open #54 |  |
-| api.scouting.org | GET | `/persons/{personGuid}/positions` | ✓ |  | open #94 |  |
-| api.scouting.org | GET | `/persons/{personGuid}/profile` | ✓ | ✓ | open #58 | getUserMystProfile |
+| api.scouting.org | GET | `/persons/{personGuid}/memberships` | ✓ |  | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/myScout` | ✓ | ✓ | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/positions` | ✓ |  | new |  |
+| api.scouting.org | GET | `/persons/{personGuid}/profile` | ✓ | ✓ | new | getUserMystProfile |
 | api.scouting.org | POST | `/persons/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/persons/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
 | api.scouting.org | POST | `/persons/{personGuid}/profilePicture` |  | ✓ | new | createProfilePicture |
 | api.scouting.org | PUT | `/persons/{personGuid}/profilePicture` |  | ✓ | new | updateProfilePicture |
-| api.scouting.org | GET | `/persons/{personGuid}/renewalRelationships` | ✓ | ✓ | open #50 | getPersonRenewalRelationships |
+| api.scouting.org | GET | `/persons/{personGuid}/renewalRelationships` | ✓ | ✓ | new | getPersonRenewalRelationships |
 | api.scouting.org | GET | `/persons/{personGuid}/roleTypes` | ✓ | ✓ | open #48 | getRoleTypes |
-| api.scouting.org | GET | `/persons/{personGuid}/subscriptions` | ✓ | ✓ | open #49 | getUserSubscriptions |
+| api.scouting.org | GET | `/persons/{personGuid}/subscriptions` | ✓ | ✓ | new | getUserSubscriptions |
 | api.scouting.org | POST | `/persons/{personGuid}/subscriptions` |  | ✓ | new | createSubscription |
 | api.scouting.org | PUT | `/persons/{personGuid}/subscriptions/{id}` |  | ✓ | new | updateSubscription |
-| api.scouting.org | ? | `/persons/{personGuid}/trainings` | ? |  | open #74 |  |
+| api.scouting.org | ? | `/persons/{personGuid}/trainings` | ? |  | new |  |
 | api.scouting.org | GET | `/persons/advancementImports?organizationGuid` | ✓ | ✓ | new | getUnitAdvancementImports |
 | api.scouting.org | POST | `/persons/advancementImports?organizationGuid` |  | ✓ | new | uploadAdvancementImport |
 | api.scouting.org | DELETE | `/persons/advancementImports/{id}` |  | ✓ | new | cancelAdvancementImport |
 | api.scouting.org | POST | `/persons/positions/{personGuid}/assignFunctional` |  | ✓ | new | postAssignFunctionalPositions |
 | api.scouting.org | POST | `/persons/positions/{personGuid}/expireFunctional` |  | ✓ | new | postExpireFunctionalPositions |
-| api.scouting.org | GET | `/persons/v2/{memberId}/orders` | ✓ |  | open #64 |  |
+| api.scouting.org | GET | `/persons/v2/{memberId}/orders` | ✓ |  | new |  |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/deleteProfileInfo` |  | ✓ | new | deleteProfileInfo |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/membershipRegistrations` | ✓ | ✓ | open #53 | getMembershipRegistrations |
-| api.scouting.org | GET | `/persons/v2/{personGuid}/parentGuardianInvitation` | ✓ | ✓ | open #52 | getParentGuardianInvitation |
+| api.scouting.org | GET | `/persons/v2/{personGuid}/parentGuardianInvitation` | ✓ | ✓ | new | getParentGuardianInvitation |
 | api.scouting.org | GET | `/persons/v2/{personGuid}/parentGuardianInvitation/{invitationId}` | ✓ | ✓ | new | getParentGuardianInvitationDetails |
 | api.scouting.org | DELETE | `/persons/v2/{personGuid}/parentGuardianInvitation/{parentRequestId}` |  | ✓ | new | deleteParentGuardianInvitation |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/parentGuardianInvitation/{parentRequestId}/accept` |  | ✓ | new | postParentGuardianInvitationAccept |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/parentGuardianInvitation/create` |  | ✓ | new | postParentGuardianInvitation |
-| api.scouting.org | PUT | `/persons/v2/{personGuid}/profile` |  | ✓ | open #75 | updateAkelaProfile |
+| api.scouting.org | PUT | `/persons/v2/{personGuid}/profile` |  | ✓ | new | updateAkelaProfile |
 | api.scouting.org | POST | `/persons/v2/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/persons/v2/{personGuid}/profile/hobbies/{hobbyId}` |  | ✓ | new |  |
 | api.scouting.org | GET | `/persons/v2/{personGuid}/relationships?includeIneligibles` | ✓ | ✓ | open #47 | getRelationships |
 | api.scouting.org | DELETE | `/persons/v2/{personGuid}/relationships/{relationshipId}` |  | ✓ | new | deleteRelationship |
-| api.scouting.org | GET | `/persons/v2/{personGuid}/trainings/positionTrainingRequirements` | ✓ |  | open #93 |  |
-| api.scouting.org | GET | `/persons/v2/{personGuid}/trainings/ypt` | ✓ | ✓ | open #51 | getPersonTrainingsYPT |
+| api.scouting.org | GET | `/persons/v2/{personGuid}/trainings/positionTrainingRequirements` | ✓ |  | new |  |
+| api.scouting.org | GET | `/persons/v2/{personGuid}/trainings/ypt` | ✓ | ✓ | new | getPersonTrainingsYPT |
 | api.scouting.org | GET | `/persons/v2/{userId}/personprofile` | ✓ | ✓ | open #46 | getPersonProfile, getCompletePersonProfile |
-| api.scouting.org | GET | `/persons/v2/masterMemberId` | ✓ |  | open #96 |  |
+| api.scouting.org | GET | `/persons/v2/masterMemberId` | ✓ |  | new |  |
 | api.scouting.org | POST | `/persons/v2/relationshipSearch` | ✓ | ✓ | new | postPersonSearchByMemberId |
-| api.scouting.org | GET | `/registrations/{registrationId}` | ✓ |  | open #60 |  |
+| api.scouting.org | GET | `/registrations/{registrationId}` | ✓ |  | new |  |
 | api.scouting.org | GET | `/registrations/v2/precisely/token` | ✓ | ✓ | new | authenticatePrecisely |
 | auth.scouting.org | GET | `/api/users/{memberId}/sessions/masquerade` | ✓ | ✓ | new | masquerade |
 | auth.scouting.org | POST | `/api/users/{username}/authenticate` |  | ✓ | in spec | authenticate |
@@ -352,6 +352,6 @@
 | scoutbook.scoutshop.org | POST | `/rest/V1/guest-carts/{cartToken}/multiItems` |  | ✓ | new | updateGuestCart$ |
 | scoutconnect-api.scouting.org | GET | `/councils` | ✓ |  | in spec |  |
 | scoutconnect-api.scouting.org | GET | `/organizations/{organizationId}` | ✓ |  | in spec |  |
-| scoutconnect-api.scouting.org | GET | `/organizations/legacy-unit/{legacyUnitId}` | ✓ |  | open #91 |  |
+| scoutconnect-api.scouting.org | GET | `/organizations/legacy-unit/{legacyUnitId}` | ✓ |  | new |  |
 | scoutconnect-api.scouting.org | POST | `/organizations/search` |  |  | in spec |  |
 | scoutconnect-api.scouting.org | GET | `/zip-codes/{zipCode}/coordinates` | ✓ |  | in spec |  |
