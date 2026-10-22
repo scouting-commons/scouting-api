@@ -172,7 +172,7 @@
 | api.scouting.org | PUT | `/advancements/youth/{userId}/adventures/{adventureId}` |  | ✓ | new |  |
 | api.scouting.org | ? | `/advancements/youth/{userId}/awards` | ? |  | new |  |
 | api.scouting.org | PUT | `/advancements/youth/{userId}/awards/{awardId}/{userAwardId}` |  | ✓ | new | updateYouthAward |
-| api.scouting.org | GET | `/advancements/youth/{userId}/leadershipPositionHistory` | ✓ | ✓ | new | getYouthLeadershipPositions |
+| api.scouting.org | GET | `/advancements/youth/{userId}/leadershipPositionHistory?summary` | ✓ | ✓ | new | getYouthLeadershipPositions |
 | api.scouting.org | POST | `/advancements/youth/{userId}/meritBadges` |  | ✓ | new |  |
 | api.scouting.org | PUT | `/advancements/youth/{userId}/meritBadges/{meritBadgeId}` |  | ✓ | new |  |
 | api.scouting.org | ? | `/advancements/youth/{userId}/ranks` | ? |  | new |  |
@@ -321,6 +321,7 @@
 | auth.scouting.org | GET | `/api/users/auth/social` | ✓ | ✓ | new | socialAuthenticate |
 | auth.scouting.org | GET | `/api/users/logout` | ✓ | ✓ | new | logout |
 | auth.scouting.org | GET | `/api/users/self_{guid}/sessions/current` | ✓ | ✓ | new | oldSessionRefresh |
+| my.scouting.org | POST | `/api/users/{username}/authenticate` |  |  | new |  |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBL_MB_Scout_Matrix&API=SavePersonSelection` |  | ✓ | new | generateClassWorksheet |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLReportMenu&API=GetReportListByOrg` | ✓ | ✓ | new | GetReportListByOrg |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLReportMenu&API=GetReportListByPG` | ✓ | ✓ | new | GetReportListByPG |
