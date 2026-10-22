@@ -44,6 +44,16 @@ client.setConfig({ baseUrl: "https://example.com" });
 
 The client already handles the API-wide quirks listed in each spec's `info.description`, so you don't need to.
 
+Every operation checks its parameters and the API's response against the spec with [Zod](https://zod.dev). When a check fails, the operation doesn't send the request or return the data: it returns the `ZodError` as `error`, or throws it when `throwOnError` is set. Unknown fields in a response pass the check and are dropped from `data`.
+
+The Zod schemas are exported too, named after the spec's schemas and operations with a `z` prefix:
+
+```ts
+import { zMeritBadge } from "scouting-api/api.scouting.org";
+
+const meritBadge = zMeritBadge.parse(json);
+```
+
 ## APIs
 
 | API                             | Docs                                                                                   |

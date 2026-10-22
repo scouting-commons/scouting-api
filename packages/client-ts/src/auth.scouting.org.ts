@@ -1,6 +1,7 @@
 import { client } from "./generated/auth.scouting.org/client.gen.js";
 
 export * from "./generated/auth.scouting.org/index.js";
+export * from "./generated/auth.scouting.org/zod.gen.js";
 export { client };
 
 // The API rejects requests without a version in Accept, and each endpoint

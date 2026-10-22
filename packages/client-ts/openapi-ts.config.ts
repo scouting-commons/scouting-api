@@ -18,7 +18,9 @@ export default defineConfig(
 		plugins: [
 			"@hey-api/client-fetch",
 			// One object holds every path, query, header, and body parameter
-			{ name: "@hey-api/sdk", paramsStructure: "flat" },
+			// Each operation checks its request and response against the Zod
+			// schemas, which are also exported for users
+			{ name: "@hey-api/sdk", paramsStructure: "flat", validator: "zod" },
 		],
 	})),
 );

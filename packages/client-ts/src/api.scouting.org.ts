@@ -1,6 +1,7 @@
 import { client } from "./generated/api.scouting.org/client.gen.js";
 
 export * from "./generated/api.scouting.org/index.js";
+export * from "./generated/api.scouting.org/zod.gen.js";
 export { client };
 
 // Some list endpoints ignore query filters without this header. See the
