@@ -39,6 +39,7 @@
 | api.scouting.org | POST | `/advancements/unapprove` |  | ✓ | new | unapproveYouthAward |
 | api.scouting.org | PUT | `/advancements/users/{userId}` |  | ✓ | new | updateSBProfile |
 | api.scouting.org | PUT | `/advancements/users/{userId}/comments/{commentId}` |  | ✓ | new |  |
+| api.scouting.org | GET | `/advancements/v2/{advancementType}/{advancementId}/requirements?versionId` | ✓ | ✓ | new |  |
 | api.scouting.org | POST | `/advancements/v2/{organizationGuid}/email` |  | ✓ | new | postEmail |
 | api.scouting.org | POST | `/advancements/v2/{organizationGuid}/email/attachment` |  | ✓ | new | postEmailAttachment |
 | api.scouting.org | GET | `/advancements/v2/{organizationGuid}/purchaseOrders` | ✓ | ✓ | new | getUnitPurchaseOrders |
@@ -402,6 +403,7 @@
 | my.scouting.org | POST | `/mystrpt/webscript/output11/proxy.aspx?Method=ExecuteContainerAPI&Container=NESAAlumniReport&API=GenerateReport` | ✓ | ✓ | new |  |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=NESAAlumniReport&API=GetColumnNames` | ✓ | ✓ | new |  |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=NESAAlumniReport&API=GetCommunityOrgTypes` | ✓ | ✓ | new |  |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBL_MB_Scout_Matrix&API=GeneratePDF` | ✓ | ✓ | new | generateClassWorksheet |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBL_MB_Scout_Matrix&API=SavePersonSelection` |  | ✓ | new | generateClassWorksheet |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLReportMenu&API=GetReportListByOrg` | ✓ | ✓ | new | GetReportListByOrg |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLReportMenu&API=GetReportListByPG` | ✓ | ✓ | new | GetReportListByPG |
@@ -410,6 +412,7 @@
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLSharedReportsManagerAPI&API=ReportPresentation` | ✓ | ✓ | new | GetReportPresentation |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLSharedReportsManagerAPI&API=ShareSelectedReports` |  | ✓ | new | PostShareCustomReport |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBLSharedReportsManagerAPI&API=UnshareSelectedReports` |  | ✓ | new | PostUnshareCustomReport |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SB_PO_API&API=Get_Pocket_Rank_Cert_PDF` | ✓ | ✓ | new | downloadPocketCertificatePDF$ |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBReportBuilderDesigner&API=ReportPresentation` | ✓ | ✓ | new | (opened as page) |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBRosterBuilderDesigner&API=ReportPresentation` | ✓ | ✓ | new | (opened as page) |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteContainerAPI&Container=SBRosterReportsManagerAPI&API=DeleteSelectedReports` |  | ✓ | new | PostDeleteRosterCustomReport |
@@ -427,6 +430,7 @@
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=SBLAdvancementReport&ScriptCode=ReportPresentation` | ✓ | ✓ | new |  |
 | my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=SBLite&ScriptCode=GetPOListByDate` | ✓ | ✓ | new |  |
 | my.scouting.org | POST | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=SBLUnitRosterReport&ScriptCode=ReportPresentation` | ✓ | ✓ | new |  |
+| my.scouting.org | GET | `/vim2/WebScript/Output/proxy.aspx?Method=ExecuteScriptSet&ScriptSetCode=TrainingCertificate&ScriptCode=TrainingCertificatePDF` | ✓ | ✓ | new | (opened as page) |
 | payments.scouting.org | POST | `/api/payment/initTransaction` |  | ✓ | new |  |
 | payments.scouting.org | POST | `/api/payment/validateTransaction` |  | ✓ | new |  |
 | payments.scouting.org | POST | `/api/stripe/checkoutCreate` |  | ✓ | new | checkoutCreate |
