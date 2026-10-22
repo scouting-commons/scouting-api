@@ -10,8 +10,10 @@ info:
     repository only, not to the API or its data.
 
 
-    Every request must send `Accept: application/json; version=2`. Without a
-    version, the API returns 400. `version=1` returns 410.
+    Every request must send `Accept: application/json; version=N`, where N is
+    1 or 2. Without a version, or with any other, the API returns 400. Each
+    endpoint answers on one version, given in its description. On the other
+    version, sign-in returns 410 and token refresh returns 404.
   contact:
     name: scouting-api on GitHub
     url: https://github.com/scouting-commons/scouting-api/issues
@@ -38,7 +40,8 @@ paths:
         returned `token` as `Authorization: Bearer <token>` to call
         api.scouting.org endpoints that need a signed-in user. The response
         also sets it as the `token` cookie on `.scouting.org`, along with a
-        `SessionToken` cookie holding `sessionToken`.
+        `SessionToken` cookie holding `sessionToken`. Takes `Accept:
+        application/json; version=2`.
       security: []
       parameters:
         - name: username
@@ -122,8 +125,105 @@ paths:
                 code: idp-106
                 errors: [SSOAuthentication]
 
+  /api/users/auth/refresh:
+    get:
+      tags: [Authentication]
+      operationId: refreshToken
+      summary: Refresh the token
+      description: >-
+        Issues a new `token` for the signed-in user, valid for another 8
+        hours, and returns the session as sign-in does, with `grantType`
+        `credentials-bsa-jwt`. The token sent stays valid until it expires,
+        and `sessionToken` stays the same. Like sign-in, the response sets the
+        `token` and `SessionToken` cookies. The `SessionToken` cookie alone
+        isn't accepted. Takes `Accept: application/json; version=1`.
+      security:
+        - bearer: []
+        - tokenCookie: []
+      responses:
+        "200":
+          description: The session, with a new token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+              example:
+                sessionToken: 0F3A9C2E7B5D4418A6E1C3B2D9F07E5A4C8B1D2E3F4A5B6C7D8E9F0A1B2C3D4E
+                personGuid: 5B1E2C3D-4F5A-4B6C-8D7E-9F0A1B2C3D4E
+                userGuid: null
+                membership:
+                  memberId: 123456789
+                  email: pat@example.com
+                  isDelete: null
+                account:
+                  username: PatExample
+                  userId: 1234567
+                profile:
+                  firstName: Pat
+                  middleName: ""
+                  lastName: Example
+                  gender: M
+                  prefix: null
+                  suffix: null
+                  dateOfBirth: "1990-01-01"
+                userProfile: null
+                token: eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiUGF0RXhhbXBsZSJ9.c2lnbmF0dXJl
+                hasMasqueradeRole: false
+                grantType: credentials-bsa-jwt
+                isMfaSignedUp: false
+                mfaDeliveryMethods: []
+        "401":
+          description: The token is missing, invalid, or expired
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthError"
+              example:
+                message: Missing authentication
+                errors:
+                  - strategy: Bearer
+                    message: Bad or expired token
+
 components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      description: The `token` from sign-in or token refresh
+    tokenCookie:
+      type: apiKey
+      in: cookie
+      name: token
+      description: >-
+        The `token` cookie that sign-in and token refresh set on
+        `.scouting.org`
   schemas:
+    AuthError:
+      type: object
+      additionalProperties: false
+      required:
+        - message
+        - errors
+      properties:
+        message:
+          type: string
+          examples: [Missing authentication]
+        errors:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - strategy
+              - message
+            properties:
+              strategy:
+                type: string
+                examples: [Bearer]
+              message:
+                type: string
+                examples: [Bad or expired token]
+
     Session:
       type: object
       additionalProperties: false
@@ -170,7 +270,7 @@ components:
               type: string
               examples: [pat@example.com]
             isDelete:
-              type: boolean
+              type: [boolean, "null"]
         account:
           type: object
           additionalProperties: false
@@ -201,7 +301,7 @@ components:
               type: string
               examples: [Pat]
             middleName:
-              type: "null"
+              type: [string, "null"]
             lastName:
               type: string
               examples: [Example]
@@ -222,11 +322,14 @@ components:
           type: string
           description: >-
             A JWT for api.scouting.org, sent as `Authorization: Bearer
-            <token>`. Expires 8 hours after sign-in.
+            <token>`. Expires 8 hours after it's issued.
         hasMasqueradeRole:
           type: boolean
         grantType:
           type: string
+          description: >-
+            `password-myst` from sign-in, `credentials-bsa-jwt` from token
+            refresh
           examples: [password-myst]
         isMfaSignedUp:
           type: boolean

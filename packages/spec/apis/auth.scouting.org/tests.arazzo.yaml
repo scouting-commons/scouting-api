@@ -34,6 +34,32 @@ workflows:
             password: $inputs.password
         successCriteria:
           - condition: $statusCode == 200
+        outputs:
+          token: $response.body#/token
+      - stepId: refresh-token
+        operationId: $sourceDescriptions.api.refreshToken
+        x-security:
+          - schemeName: bearer
+            values:
+              token: $steps.sign-in.outputs.token
+        parameters:
+          - name: Accept
+            in: header
+            value: application/json; version=1
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: refresh-token-invalid
+        operationId: $sourceDescriptions.api.refreshToken
+        x-security:
+          - schemeName: bearer
+            values:
+              token: not-a-token
+        parameters:
+          - name: Accept
+            in: header
+            value: application/json; version=1
+        successCriteria:
+          - condition: $statusCode == 401
       - stepId: sign-in-short-password
         operationId: $sourceDescriptions.api.authenticate
         parameters:

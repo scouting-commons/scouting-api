@@ -3,6 +3,14 @@ import { client } from "./generated/auth.scouting.org/client.gen.js";
 export * from "./generated/auth.scouting.org/index.js";
 export { client };
 
-// The API rejects requests without a version in Accept. See the quirks in the
-// spec's info.description.
+// The API rejects requests without a version in Accept, and each endpoint
+// answers on only one version. See the quirks in the spec's info.description.
+const versionOneUrls = new Set(["/api/users/auth/refresh"]);
+
 client.setConfig({ headers: { Accept: "application/json; version=2" } });
+client.interceptors.request.use((request, options) => {
+	if (versionOneUrls.has(options.url)) {
+		request.headers.set("Accept", "application/json; version=1");
+	}
+	return request;
+});
