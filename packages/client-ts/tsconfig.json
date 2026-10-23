@@ -5,6 +5,9 @@
 		"lib": ["esnext", "dom", "dom.iterable"],
 		"types": [],
 		"noEmit": true,
+		// tsdown builds into dist. Setting this lets knip map the dist files
+		// in package.json exports back to src, instead of reading old builds
+		"outDir": "dist",
 		// @hey-api/openapi-ts ships declaration files that don't type-check
 		// on their own (missing @types/semver, DOM globals, a broken `log` type)
 		"skipLibCheck": true,

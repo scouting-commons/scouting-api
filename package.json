@@ -29,7 +29,7 @@
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"typecheck": "pnpm -r typecheck",
-		"knip": "knip --treat-config-hints-as-errors",
+		"knip": "knip --no-gitignore --treat-config-hints-as-errors",
 		"check": "pnpm format && pnpm lint && pnpm typecheck && pnpm knip",
 		"test": "pnpm -r test"
 	},

@@ -1,0 +1,16 @@
+{
+	"$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+	// knip runs with --no-gitignore so it reads the generated client, which is
+	// gitignored and is the only code that imports some dependencies (zod).
+	// Run it after generating, as pnpm check does.
+	"ignoreIssues": {
+		// Generated code exports more than the entry files use
+		"packages/client-ts/src/generated/**": ["exports", "types", "duplicates"],
+	},
+	"workspaces": {
+		"packages/client-ts": {
+			// Leave out builds, which may be stale or missing
+			"project": ["**/*.ts", "!dist/**"],
+		},
+	},
+}
