@@ -51,9 +51,11 @@ npm install scouting-api
 ```
 
 ```ts
-import { listMeritBadges } from "scouting-api/api.scouting.org";
+import { Sdk } from "scouting-api/api.scouting.org";
 
-const { data, error } = await listMeritBadges({ id: "3" });
+const { data, error } = await new Sdk().advancement.listMeritBadges({
+	id: "3",
+});
 ```
 
 See its [README](packages/client-ts/README.md) for more.

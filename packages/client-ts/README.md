@@ -17,12 +17,14 @@ npm install scouting-api
 
 ## Usage
 
-Each API has its own import path, named by its host. Every operation is a function that returns the parsed response as `data`, or the API's error response as `error`:
+Each API has its own import path, named by its host, which exports an SDK class. Its operations are grouped by the spec's tags, and each returns the parsed response as `data`, or the API's error response as `error`:
 
 ```ts
-import { listMeritBadges } from "scouting-api/api.scouting.org";
+import { Sdk } from "scouting-api/api.scouting.org";
 
-const { data, error } = await listMeritBadges({ id: "3" });
+const scouting = new Sdk();
+
+const { data, error } = await scouting.advancement.listMeritBadges({ id: "3" });
 if (error) throw new Error(error.message);
 
 console.log(data.meritBadges[0]?.name);
@@ -31,7 +33,10 @@ console.log(data.meritBadges[0]?.name);
 An operation's parameters all go in its first argument, whether the API takes them in the path, query, headers, or body. Per-call settings go in the second:
 
 ```ts
-const { data } = await getRankV2({ rankId: 1 }, { throwOnError: true });
+const { data } = await scouting.advancement.getRank(
+	{ rankId: 1 },
+	{ throwOnError: true },
+);
 ```
 
 Each import path also exports that API's `client`, for changing settings such as headers or the base URL:

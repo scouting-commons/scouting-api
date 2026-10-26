@@ -34,6 +34,7 @@ You may be given some info to start with in the issue/prompt. Treat this info as
 - Type response values exactly as the API returns them, even when that looks odd. Type inputs by how the API validates them: an ID it parses as a number is `type: integer`, and a filter it matches as text stays a string.
 - List a field in `required` only if it appeared in every sampled response.
 - Every object schema sets `additionalProperties: false`, so the contract tests fail when the API adds a field. Give every schema a `type`, including `anyOf` unions, because the lint rule for this treats an untyped schema as an object.
+- Give every operation an `operationId` and a tag. The client groups operations by their first tag and names each method by its `operationId`, and its generation fails without them.
 - Reuse what's in `components` (schemas, parameters, responses) before adding new ones.
 - Give each traced foreign key a named ID schema in `components`, and `$ref` it from both the key and the `id` of the record it points to. When the two sides have different types, describe the link in the key's description instead.
 - Document each error response with a real example captured from the API.
