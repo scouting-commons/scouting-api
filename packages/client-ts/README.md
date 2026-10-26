@@ -17,46 +17,73 @@ npm install scouting-api
 
 ## Usage
 
-Each API has its own import path, named by its host, which exports an SDK class. Its operations are grouped by the spec's tags, and each returns the parsed response as `data`, or the API's error response as `error`:
+`createScoutingClient` returns one SDK per API: `api` for `api.scouting.org`, `auth` for `auth.scouting.org`, and `scoutConnect` for `scoutconnect-api.scouting.org`. Each SDK groups its operations by the spec's tags, and each operation returns the parsed response as `data`, or the API's error response as `error`:
 
 ```ts
-import { Sdk } from "scouting-api/api.scouting.org";
+import { createScoutingClient } from "scouting-api";
 
-const scouting = new Sdk();
+const scouting = createScoutingClient({ auth: "anonymous" });
 
-const { data, error } = await scouting.advancement.listMeritBadges({ id: "3" });
+const { data, error } = await scouting.api.advancement.listMeritBadges({
+	id: "3",
+});
 if (error) throw new Error(error.message);
 
 console.log(data.meritBadges[0]?.name);
 ```
 
-An operation's parameters all go in its first argument, whether the API takes them in the path, query, headers, or body. Per-call settings go in the second:
+An operation's parameters all go in its first argument, whether the API takes them in the path, query, headers, or body:
 
 ```ts
-const { data } = await scouting.advancement.getRank(
-	{ rankId: 1 },
-	{ throwOnError: true },
-);
-```
-
-Each import path also exports that API's `client`, for changing settings such as headers or the base URL:
-
-```ts
-import { client } from "scouting-api/api.scouting.org";
-
-client.setConfig({ baseUrl: "https://example.com" });
+const { data } = await scouting.api.advancement.getRank({ rankId: 1 });
 ```
 
 The client already handles the API-wide quirks listed in each spec's `info.description`, so you don't need to.
 
-Every operation checks its parameters and the API's response against the spec with [Zod](https://zod.dev). When a check fails, the operation doesn't send the request or return the data: it returns the `ZodError` as `error`, or throws it when `throwOnError` is set. Unknown fields in a response pass the check and are dropped from `data`.
+### Auth
 
-The Zod schemas are exported too, named after the spec's schemas and operations with a `z` prefix:
+`auth` is required. Pass `"anonymous"` to call only public endpoints, or a token from signing in at `auth.scouting.org`. The token can be a string, or a function that returns the current one, so you can refresh it yourself:
 
 ```ts
-import { zMeritBadge } from "scouting-api/api.scouting.org";
+const scouting = createScoutingClient({ auth: { token } });
+const scouting = createScoutingClient({
+	auth: { token: () => store.get("token") },
+});
+```
 
-const meritBadge = zMeritBadge.parse(json);
+The token is sent only on operations that require one.
+
+### Base URLs
+
+`baseUrl` replaces an API's host, such as to route requests through a CORS proxy. Set it for each API you call:
+
+```ts
+const scouting = createScoutingClient({
+	auth: "anonymous",
+	baseUrl: { api: "https://proxy.example.com/api.scouting.org" },
+});
+```
+
+### One API
+
+Each API also has its own import path, named by its host, whose `createSdk` builds just that API's SDK. It takes the same options, for that one API:
+
+```ts
+import { createSdk } from "scouting-api/api.scouting.org";
+
+const api = createSdk({ token });
+```
+
+### Validation
+
+Every operation checks its parameters and the API's response against the spec with [Zod](https://zod.dev). When a check fails, the operation doesn't send the request or return the data: it returns the `ZodError` as `error`. Unknown fields in a response pass the check and are dropped from `data`.
+
+The Zod schemas and the TypeScript types are exported too, under each API's namespace, named after the spec's schemas and operations. Schemas have a `z` prefix:
+
+```ts
+import { api } from "scouting-api";
+
+const meritBadge: api.MeritBadge = api.zMeritBadge.parse(json);
 ```
 
 ## APIs

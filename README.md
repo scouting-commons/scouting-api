@@ -51,9 +51,11 @@ npm install scouting-api
 ```
 
 ```ts
-import { Sdk } from "scouting-api/api.scouting.org";
+import { createScoutingClient } from "scouting-api";
 
-const { data, error } = await new Sdk().advancement.listMeritBadges({
+const scouting = createScoutingClient({ auth: "anonymous" });
+
+const { data, error } = await scouting.api.advancement.listMeritBadges({
 	id: "3",
 });
 ```
@@ -129,7 +131,9 @@ packages/spec/
 
 packages/client-ts/
 ├── src/
+│   ├── index.ts                # root entry point, combining every API
 │   ├── <host>.ts               # each API's entry point
+│   ├── lib/                    # shared code that isn't an entry point
 │   └── generated/              # generated from the specs (gitignored)
 ├── openapi-ts.config.ts        # which specs to generate from
 └── tsdown.config.ts            # builds the npm package
