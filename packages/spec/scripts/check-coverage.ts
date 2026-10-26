@@ -1,6 +1,7 @@
 // For every API under apis/, fails if any operation or documented response
 // status in its openapi.yaml has no contract test in its tests.arazzo.yaml, or
 // if either file isn't registered in redocly.yaml, which would leave it unlinted.
+// An operation with `x-untested: <reason>` is skipped.
 import { readFile } from "node:fs/promises";
 import { parse } from "yaml";
 import { listApis, specPath, testsPath } from "./apis.ts";
@@ -17,7 +18,11 @@ const METHODS = [
 ] as const;
 
 // Only the parts of each document this script reads
-type Operation = { operationId?: string; responses?: Record<string, unknown> };
+type Operation = {
+	operationId?: string;
+	responses?: Record<string, unknown>;
+	"x-untested"?: string;
+};
 type Spec = {
 	paths?: Record<string, Partial<Record<(typeof METHODS)[number], Operation>>>;
 };
@@ -62,7 +67,7 @@ for (const host of await listApis()) {
 	for (const [path, item] of Object.entries(spec.paths ?? {})) {
 		for (const method of METHODS) {
 			const operation = item[method];
-			if (!operation) continue;
+			if (!operation || operation["x-untested"]) continue;
 			const name = `${method.toUpperCase()} ${path}`;
 			if (!operation.operationId) {
 				problems.push(`${name}: no operationId, so it can't be tested`);

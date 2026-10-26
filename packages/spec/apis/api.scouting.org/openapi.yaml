@@ -27,6 +27,8 @@ servers:
 tags:
   - name: Advancement
     description: Ranks, merit badges, and other advancement
+  - name: Commissioners
+    description: Commissioner contacts with units, and their assessments
   - name: Lookups
     description: >-
       Reference lists, such as countries, states, positions, and swimming
@@ -1796,6 +1798,719 @@ paths:
                 errorCode: C404
                 message: Not Found
                 errorDesc: Sea Scout Elective not found for the given ssElectiveId - SSElectives
+
+  /commissioners/v2/{contactGuid}/unitContactDetails:
+    get:
+      tags: [Commissioners]
+      operationId: getUnitContactDetails
+      x-untested: Results depend on the signed-in account's positions and units
+      summary: Get a commissioner contact
+      description: >-
+        Returns a commissioner's contact with a unit, with the unit, the
+        commissioner, and the scores and comments recorded. Query parameters
+        are ignored.
+      security:
+        - bearer: []
+      parameters:
+        - $ref: "#/components/parameters/ContactGuid"
+      responses:
+        "200":
+          description: The contact
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnitContactDetails"
+              example:
+                contactDate: "2024-02-20"
+                contactType: UnitContact
+                createdDate: "2024-02-22"
+                completedDate: "2024-02-22"
+                lastUpdatedDate: ""
+                lastUpdatedPersonGuid: ""
+                statusChangeDate: "2024-02-22"
+                isExportedToJTE: false
+                organizationGuid: 3F2A1B4C-5D6E-4F70-8A9B-0C1D2E3F4A5B
+                organizationId: 123456
+                organizationTypeId: 6
+                organizationType: Unit
+                unitFullName: Troop 1234 Example Community Church
+                unitType: Troop
+                unitTypeId: 2
+                unitNumber: "1234"
+                charteredOrganization: Example Community Church
+                personGuid: 5B1E2C3D-4F5A-4B6C-8D7E-9F0A1B2C3D4E
+                memberId: 123456789
+                personWhoMadeContact: "Pat Example "
+                personPositionId: null
+                personPosition: null
+                firstName: Pat
+                middleName: ""
+                lastName: Example
+                nameSuffix: ""
+                status: Complete
+                typeOfContact: UnitMeeting
+                otherTypeOfContact: ""
+                contactAssessmentType: DetailedAssessment
+                overallScore: 3.8
+                simpleScore: 0
+                unitHealthStatus: UnitHealthUnchanged
+                priorityNeeds: >-
+                  The unit has weak leadership. A new unit leader lacks
+                  orientation or training.
+                contactComments: ""
+                healthIndicators:
+                  finance: 4
+                  membership: 3.5
+                  program: 4.2
+                  leadership: 3.3
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: >-
+            `contactGuid` isn't a GUID, or no contact has it. Both return the
+            same code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notFound:
+                  summary: No contact has the GUID
+                  value:
+                    errorCode: WP404
+                    message: Not Found
+                    errorDesc: Contact GUID is not found
+                notGuid:
+                  summary: Not a GUID
+                  value:
+                    errorCode: WP404
+                    message: Not Found
+                    errorDesc: Invalid contact GUID
+
+  /commissioners/v2/{organizationGuid}/units/contacts:
+    get:
+      tags: [Commissioners]
+      operationId: getUnitCommissionerContacts
+      x-untested: Results depend on the signed-in account's positions and units
+      summary: List a unit's commissioner contacts
+      description: >-
+        Returns a unit with its most recent completed commissioner contact
+        and a list of its contacts. The list can leave out older contacts,
+        including the most recent one; a commissioner's contact history
+        still has them. Query parameters are ignored.
+      security:
+        - bearer: []
+      parameters:
+        - name: organizationGuid
+          in: path
+          required: true
+          description: >-
+            The unit's organization GUID, matched case-insensitively. Takes
+            the `id` of a unit from scoutconnect-api.scouting.org.
+          schema:
+            $ref: "#/components/schemas/OrganizationGuid"
+      responses:
+        "200":
+          description: The unit and its contacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnitCommissionerContacts"
+              examples:
+                withContacts:
+                  summary: A unit with listed contacts
+                  value:
+                    unitID: 123456
+                    unitGuid: 3F2A1B4C-5D6E-4F70-8A9B-0C1D2E3F4A5B
+                    unitFullName: Troop 1234 Example Community Church
+                    unitType: Troop
+                    unitNumber: "1234"
+                    charteredOrganization: Example Community Church
+                    lastCompletedContactDetails:
+                      contactGuid: 6A7B8C9D-0E1F-4A2B-9C3D-4E5F6A7B8C9D
+                      contactDate: "2024-03-12"
+                      personWhoMadeContact: Pat Example
+                      firstName: Pat
+                      middleName: ""
+                      lastName: Example
+                      nameSuffix: ""
+                      overallScore: 4
+                      typeOfContact: UnitActivity
+                      otherTypeOfContact: ""
+                      assessmentType: SimpleAssessment
+                      isServicePlanCreated: false
+                      healthIndicators:
+                        finance: 0
+                        membership: 0
+                        program: 0
+                        leadership: 0
+                    contacts:
+                      - recordSourceType: 1
+                        contactGuid: 6A7B8C9D-0E1F-4A2B-9C3D-4E5F6A7B8C9D
+                        contactDate: "2024-03-12"
+                        createdDate: "2024-03-15"
+                        completedDate: "2024-03-15"
+                        lastUpdatedDate: ""
+                        lastUpdatedPersonGuid: ""
+                        statusChangeDate: "2024-03-15"
+                        isExportedToJTE: false
+                        typeOfContact: UnitActivity
+                        otherTypeOfContact: ""
+                        contactStatus: Complete
+                        personWhoMadeContact: Pat Example
+                        personPositionId: null
+                        firstName: Pat
+                        middleName: ""
+                        lastName: Example
+                        nameSuffix: ""
+                        overallScore: 4
+                        assessmentType: SimpleAssessment
+                        isServicePlanCreated: false
+                        healthIndicators:
+                          finance: 0
+                          membership: 0
+                          program: 0
+                          leadership: 0
+                noContacts:
+                  summary: A unit with no completed contact
+                  value:
+                    unitID: 654321
+                    unitGuid: 4C5D6E7F-8A9B-4C0D-9E1F-2A3B4C5D6E7F
+                    unitFullName: Pack 5678 Example Elementary School PTO
+                    unitType: Pack
+                    unitNumber: "5678"
+                    charteredOrganization: Example Elementary School PTO
+                    lastCompletedContactDetails:
+                      contactGuid: ""
+                      contactDate: ""
+                      personWhoMadeContact: ""
+                      firstName: ""
+                      middleName: ""
+                      lastName: ""
+                      nameSuffix: ""
+                      overallScore: 0
+                      typeOfContact: ""
+                      otherTypeOfContact: ""
+                      assessmentType: ""
+                      isServicePlanCreated: false
+                      healthIndicators:
+                        finance: 0
+                        membership: 0
+                        program: 0
+                        leadership: 0
+                    contacts: []
+        "400":
+          description: >-
+            `organizationGuid` isn't a version 4 GUID, such as all zeros or
+            not a GUID at all
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C400
+                message: Bad Request
+                errorDesc: Invalid request - "organizationGuid" must be a valid GUID
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: No organization has that GUID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: C404
+                message: Not Found
+                errorDesc: >-
+                  Organization not found, verify that the organizationGUID
+                  belongs to an existent organization - organizationGuid:
+                  F45624D7-0998-41F5-86F6-26061D93324E
+
+  /commissioners/v2/{personGuid}/contactHistory:
+    get:
+      tags: [Commissioners]
+      operationId: getCommissionerContactHistory
+      x-untested: Results depend on the signed-in account's positions and units
+      summary: List a commissioner's contacts
+      description: >-
+        Returns one page of the contacts a commissioner made with units, in
+        the years given, with counts by status. Without `year`, returns no
+        contacts and leaves out the `totalNumberOf*` counts. A GUID that
+        isn't a commissioner's returns no contacts. A `page` past the last
+        returns the last page. Unknown query parameters are ignored.
+      security:
+        - bearer: []
+      parameters:
+        - name: personGuid
+          in: path
+          required: true
+          description: >-
+            The commissioner's person GUID, matched case-insensitively. Takes
+            the `personGuid` of a contact.
+          schema:
+            $ref: "#/components/schemas/PersonGuid"
+        - name: year
+          in: query
+          description: >-
+            Calendar years of `contactDate` to include, separated by commas
+          schema:
+            type: string
+            pattern: "^([0-9]{4})?((?<=[0-9]{4}),[0-9]{4})*$"
+            examples: ["2024", "2023,2024"]
+        - name: status
+          in: query
+          description: >-
+            Contact status to include, matched case-insensitively. `all`, or
+            leaving it out, includes every status.
+          schema:
+            type: string
+            examples: [Complete, all]
+        - name: sortBy
+          in: query
+          description: >-
+            Sort order. `contactDate`, the default, `unitNumber`, and
+            `overallScore` sort in descending order.
+          schema:
+            type: string
+            enum: [contactDate, overallScore, unitNumber, unitType]
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: perPage
+          in: query
+          description: Contacts per page
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: A page of contacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommissionerContactHistory"
+              examples:
+                withYear:
+                  summary: With `year`
+                  value:
+                    numberOfContacts: 19
+                    totalNumberOfCompletedContacts:
+                      simpleAssessment: 19
+                      detailedAssessment: 0
+                    totalNumberOfInProgressContacts:
+                      simpleAssessment: 0
+                      detailedAssessment: 0
+                    totalNumberOfScheduledContacts:
+                      simpleAssessment: 0
+                      detailedAssessment: 0
+                    numberOfCompletedContacts: 19
+                    numberOfInProgressContacts: 0
+                    numberOfScheduledContacts: 0
+                    numberOfContactsPerPage: 1
+                    numberOfWithdrawnContacts: 0
+                    startRecord: 1
+                    endRecord: 1
+                    contacts:
+                      - contactGuid: 6A7B8C9D-0E1F-4A2B-9C3D-4E5F6A7B8C9D
+                        contactDate: "2024-03-12"
+                        createdDate: "2024-03-15"
+                        completedDate: "2024-03-15"
+                        lastUpdatedDate: ""
+                        lastUpdatedPersonGuid: ""
+                        statusChangeDate: "2024-03-15"
+                        isExportedToJTE: false
+                        organizationGuid: 3F2A1B4C-5D6E-4F70-8A9B-0C1D2E3F4A5B
+                        otherTypeOfContact: ""
+                        priorityNeeds: ""
+                        contactComments: >-
+                          Visited a troop meeting. The patrols were
+                          planning their next campout.
+                        contactType: UnitContact
+                        status: Complete
+                        typeOfContact: UnitActivity
+                        contactAssessmentType: SimpleAssessment
+                        overallScore: 4
+                        simpleScore: 4
+                        healthIndicators:
+                          finance: 0
+                          leadership: 0
+                          program: 0
+                          membership: 0
+                        isServicePlanCreated: false
+                        isUnitAssignedToCommissioner: false
+                        unitHealthStatus: UnitHealthUnchanged
+                        unitType: Troop
+                        unitNumber: "1234"
+                        unitTypeId: 2
+                        unitFullName: Troop 1234 Example Community Church
+                        charteredOrganization: Example Community Church
+                withoutYear:
+                  summary: Without `year`
+                  value:
+                    numberOfContacts: 0
+                    numberOfCompletedContacts: 0
+                    numberOfInProgressContacts: 0
+                    numberOfScheduledContacts: 0
+                    numberOfContactsPerPage: 0
+                    numberOfWithdrawnContacts: 0
+                    startRecord: 0
+                    endRecord: 0
+                    contacts: []
+        "400":
+          description: >-
+            `personGuid` isn't a GUID, or a query parameter has an invalid
+            value, including an empty `status`
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notGuid:
+                  summary: Not a GUID
+                  value:
+                    errorCode: WP400
+                    message: Bad Request
+                    errorDesc: Invalid person GUID
+                invalidYear:
+                  summary: An invalid `year`
+                  value:
+                    errorCode: M400
+                    message: Bad Request
+                    errorDesc: >-
+                      Invalid value 'abc' for query parameter year. string
+                      [abc] does not match pattern
+                      ^([0-9]{4})?((?<=[0-9]{4}),[0-9]{4})*$
+                invalidStatus:
+                  summary: An invalid `status`
+                  value:
+                    errorCode: M400
+                    message: Invalid Request
+                    errorDesc: Invalid value bogus for status parameter
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /commissioners/v2/units/contacts/{contactGuid}/detailedAssessment:
+    get:
+      tags: [Commissioners]
+      operationId: getDetailedAssessment
+      x-untested: Results depend on the signed-in account's positions and units
+      summary: Get a contact's detailed assessment
+      description: >-
+        Returns the detailed assessment form of a contact: area scores, an
+        answer to each question, and the unit service plan. A contact with
+        a simple assessment returns the form empty, with no answers and
+        `null` area scores. Query parameters are ignored.
+      security:
+        - bearer: []
+      parameters:
+        - $ref: "#/components/parameters/ContactGuid"
+      responses:
+        "200":
+          description: The detailed assessment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedAssessment"
+              example:
+                contactGuid: 7B8C9D0E-1F2A-4B3C-8D4E-5F6A7B8C9D0E
+                assessmentDetails:
+                  assessorPersonGuid: 5B1E2C3D-4F5A-4B6C-8D7E-9F0A1B2C3D4E
+                  assessorFirstName: Pat
+                  assessorMiddleName: ""
+                  assessorLastName: Example
+                  isCalculatedFinancialScore: true
+                  financialScore: 4
+                  financialScoreComments: Budget is on track
+                  isCalculatedMembershipScore: true
+                  membershipScore: 3.5
+                  membershipScoreComments: Recruiting could improve
+                  isCalculatedProgramScore: true
+                  programScore: 4.2
+                  programScoreComments: Strong program calendar
+                  isCalculatedLeadershipScore: true
+                  leadershipScore: 3.3
+                  leadershipScoreComments: Several leaders still need position-specific training.
+                  overallScore: 3.8
+                  isSelfAssessment: false
+                  ccAssessorPersonGuid: ""
+                  ccAssessorFirstName: ""
+                  ccAssessorMiddleName: ""
+                  ccAssessorLastName: ""
+                  ccIsCalculatedFinancialScore: null
+                  ccFinancialScore: null
+                  ccFinancialScoreComments: null
+                  ccIsCalculatedMembershipScore: null
+                  ccMembershipScore: null
+                  ccMembershipScoreComments: null
+                  ccIsCalculatedProgramScore: null
+                  ccProgramScore: null
+                  ccProgramScoreComments: null
+                  ccIsCalculatedLeadershipScore: null
+                  ccLeadershipScore: null
+                  ccLeadershipScoreComments: null
+                  ccOverallScore: null
+                  ccIsSelfAssessment: null
+                  crAssessorPersonGuid: ""
+                  crAssessorFirstName: ""
+                  crAssessorMiddleName: ""
+                  crAssessorLastName: ""
+                  crIsCalculatedFinancialScore: null
+                  crFinancialScore: null
+                  crFinancialScoreComments: null
+                  crIsCalculatedMembershipScore: null
+                  crMembershipScore: null
+                  crMembershipScoreComments: null
+                  crIsCalculatedProgramScore: null
+                  crProgramScore: null
+                  crProgramScoreComments: null
+                  crIsCalculatedLeadershipScore: null
+                  crLeadershipScore: null
+                  crLeadershipScoreComments: null
+                  crOverallScore: null
+                  crIsSelfAssessment: null
+                  tlAssessorPersonGuid: ""
+                  tlAssessorFirstName: ""
+                  tlAssessorMiddleName: ""
+                  tlAssessorLastName: ""
+                  tlIsCalculatedFinancialScore: null
+                  tlFinancialScore: null
+                  tlFinancialScoreComments: null
+                  tlIsCalculatedMembershipScore: null
+                  tlMembershipScore: null
+                  tlMembershipScoreComments: null
+                  tlIsCalculatedProgramScore: null
+                  tlProgramScore: null
+                  tlProgramScoreComments: null
+                  tlIsCalculatedLeadershipScore: null
+                  tlLeadershipScore: null
+                  tlLeadershipScoreComments: null
+                  tlOverallScore: null
+                  tlIsSelfAssessment: null
+                  otherAssessorPersonGuid: ""
+                  otherAssessorFirstName: ""
+                  otherAssessorMiddleName: ""
+                  otherAssessorLastName: ""
+                  otherIsCalculatedFinancialScore: null
+                  otherFinancialScore: null
+                  otherFinancialScoreComments: null
+                  otherIsCalculatedMembershipScore: null
+                  otherMembershipScore: null
+                  otherMembershipScoreComments: null
+                  otherIsCalculatedProgramScore: null
+                  otherProgramScore: null
+                  otherProgramScoreComments: null
+                  otherIsCalculatedLeadershipScore: null
+                  otherLeadershipScore: null
+                  otherLeadershipScoreComments: null
+                  otherOverallScore: null
+                  otherIsSelfAssessment: null
+                  assessmentQuestionAnswers:
+                    - questionItemId: 32
+                      questionCode: ServiceProjectsTroop
+                      questionLabel: Service Projects
+                      questionContent: Participate in service projects, with at least one benefitting the chartered organization.
+                      questionReportingText: ""
+                      positionNumber: 4
+                      effectiveDate: ""
+                      expiryDate: ""
+                      isActive: true
+                      isScoreItem: true
+                      isRequired: true
+                      questionCategoryId: 3
+                      questionCategoryCode: Program
+                      questionCategoryName: Program
+                      answerDataType: 2
+                      answerScore: 3
+                      answer: null
+                      answerYesNo: false
+                      answerDt: null
+                      answerComments: ""
+                      answerDate: 2024-02-22
+                      ccSelfAnswerScore: null
+                      ccSelfAnswer: null
+                      ccSelfAnswerYesNo: null
+                      ccSelfAnswerDt: null
+                      ccSelfAnswerComments: ""
+                      ccSelfAnswerDate: ""
+                      crSelfAnswerScore: null
+                      crSelfAnswer: null
+                      crSelfAnswerYesNo: null
+                      crSelfAnswerDt: null
+                      crSelfAnswerComments: ""
+                      crSelfAnswerDate: ""
+                      tlSelfAnswerScore: null
+                      tlSelfAnswer: null
+                      tlSelfAnswerYesNo: null
+                      tlSelfAnswerDt: null
+                      tlSelfAnswerComments: ""
+                      tlSelfAnswerDate: ""
+                      otherSelfAnswerScore: null
+                      otherSelfAnswer: null
+                      otherSelfAnswerYesNo: null
+                      otherSelfAnswerDT: null
+                      otherSelfAnswerComments: ""
+                      otherSelfAnswerDate: ""
+                    - questionItemId: 13
+                      questionCode: UnitWeakLeadership
+                      questionLabel: ""
+                      questionContent: Unit with weak leadership
+                      questionReportingText: The unit has weak leadership
+                      positionNumber: 13
+                      effectiveDate: ""
+                      expiryDate: ""
+                      isActive: true
+                      isScoreItem: false
+                      isRequired: false
+                      questionCategoryId: 5
+                      questionCategoryCode: UnitPriorities
+                      questionCategoryName: Unit Priorities and Other Details
+                      answerDataType: 4
+                      answerScore: null
+                      answer: null
+                      answerYesNo: true
+                      answerDt: null
+                      answerComments: ""
+                      answerDate: 2024-02-22
+                      ccSelfAnswerScore: null
+                      ccSelfAnswer: null
+                      ccSelfAnswerYesNo: false
+                      ccSelfAnswerDt: null
+                      ccSelfAnswerComments: ""
+                      ccSelfAnswerDate: ""
+                      crSelfAnswerScore: null
+                      crSelfAnswer: null
+                      crSelfAnswerYesNo: false
+                      crSelfAnswerDt: null
+                      crSelfAnswerComments: ""
+                      crSelfAnswerDate: ""
+                      tlSelfAnswerScore: null
+                      tlSelfAnswer: null
+                      tlSelfAnswerYesNo: false
+                      tlSelfAnswerDt: null
+                      tlSelfAnswerComments: ""
+                      tlSelfAnswerDate: ""
+                      otherSelfAnswerScore: null
+                      otherSelfAnswer: null
+                      otherSelfAnswerYesNo: false
+                      otherSelfAnswerDT: null
+                      otherSelfAnswerComments: ""
+                      otherSelfAnswerDate: ""
+                servicePlans:
+                  - servicePlanItemID: 101
+                    contactGuid: 7B8C9D0E-1F2A-4B3C-8D4E-5F6A7B8C9D0E
+                    servicePlanItemTypeId: 4
+                    servicePlanItemType: Volunteer Leadership
+                    action: Get the new Scoutmaster to position-specific training
+                    responsiblePerson: Pat Example
+                    targetCompletionDate: 2024/04/30
+                    actualCompletionDate: ""
+                    status: InProgress
+        "400":
+          description: "`contactGuid` isn't a GUID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: WP400
+                message: Bad Request
+                errorDesc: Invalid contact GUID
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: >-
+            No contact has that GUID, or the commissioner who made the
+            contact no longer has a profile, which leaves the contact's
+            `personGuid` empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notFound:
+                  summary: No contact has the GUID
+                  value:
+                    errorCode: WP404
+                    message: Not Found
+                    errorDesc: Detailed assessment not found
+                noProfile:
+                  summary: The commissioner has no profile
+                  value:
+                    errorCode: M404
+                    message: Not Found
+                    errorDesc: >-
+                      HTTP GET on resource
+                      'https://coreapipd.netbsa.org:443/api/profiles/9C0D1E2F-3A4B-4C5D-8E6F-7A8B9C0D1E2F'
+                      failed: not found (404).
+
+  /commissioners/v2/units/contacts/{contactGuid}/simpleAssessment:
+    get:
+      tags: [Commissioners]
+      operationId: getSimpleAssessment
+      x-untested: Results depend on the signed-in account's positions and units
+      summary: Get a contact's simple assessment
+      description: >-
+        Returns the simple assessment of a contact: one score and the
+        commissioner's comments. Query parameters are ignored.
+      security:
+        - bearer: []
+      parameters:
+        - $ref: "#/components/parameters/ContactGuid"
+      responses:
+        "200":
+          description: The simple assessment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleAssessment"
+              example:
+                unitGuid: 3F2A1B4C-5D6E-4F70-8A9B-0C1D2E3F4A5B
+                memberId: 123456789
+                recordSourceType: 1
+                contactDate: "2024-03-12"
+                createdDate: "2024-03-15"
+                completedDate: "2024-03-15"
+                lastUpdatedPersonGuid: ""
+                lastUpdatedDate: ""
+                statusChangeDate: "2024-03-15"
+                status: Complete
+                typeOfContact: UnitActivity
+                otherTypeOfContact: ""
+                unitHealthStatus: UnitHealthUnchanged
+                assessmentDetails:
+                  simpleScore: 4
+                  comments: >-
+                    Visited a troop meeting. The patrols were
+                    planning their next campout.
+        "400":
+          description: >-
+            `contactGuid` isn't a GUID, or no contact with a simple
+            assessment has it. A contact with a detailed assessment, or no
+            contact at all, returns `M400`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notSimple:
+                  summary: No simple assessment
+                  value:
+                    errorCode: M400
+                    message: Invalid Request
+                    errorDesc: Contact does not have simple assessment.
+                notGuid:
+                  summary: Not a GUID
+                  value:
+                    errorCode: WP400
+                    message: Bad Request
+                    errorDesc: Invalid contact GUID
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
   /lookups/address/addressTypes:
     get:
@@ -8201,6 +8916,1145 @@ components:
       pattern: "^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})?$"
       examples: ["2018-09-28T14:27:27"]
 
+    ContactGuid:
+      type: string
+      description: >-
+        A version 4 GUID identifying a commissioner contact, in upper case
+      pattern: "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$"
+      examples: [6A7B8C9D-0E1F-4A2B-9C3D-4E5F6A7B8C9D]
+
+    ContactGuidOrEmpty:
+      type: string
+      description: A contact GUID, or empty
+      anyOf:
+        - $ref: "#/components/schemas/ContactGuid"
+        - type: string
+          const: ""
+
+    PersonGuid:
+      type: string
+      description: A version 4 GUID identifying a person, in upper case
+      pattern: "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$"
+      examples: [5B1E2C3D-4F5A-4B6C-8D7E-9F0A1B2C3D4E]
+
+    PersonGuidOrEmpty:
+      type: string
+      description: A person GUID, or empty
+      anyOf:
+        - $ref: "#/components/schemas/PersonGuid"
+        - type: string
+          const: ""
+
+    ContactAssessmentType:
+      type: string
+      description: >-
+        Which assessment the commissioner filled in, or empty when not set
+      enum: [SimpleAssessment, DetailedAssessment, ""]
+
+    ContactStatus:
+      type: string
+      description: Empty on some older contacts
+      enum: [Complete, Withdrawn, ""]
+
+    TypeOfContact:
+      type: string
+      description: >-
+        Where the contact took place. `Other` has a description in
+        `otherTypeOfContact`. Empty on some older contacts and when there's
+        no contact.
+      enum:
+        - DistrictEvent
+        - Other
+        - SummerCamp
+        - UnitActivity
+        - UnitCommitteeOrLeaderMeeting
+        - UnitKey3Meeting
+        - UnitMeeting
+        - UnitParentMeeting
+        - ""
+
+    UnitHealthStatus:
+      type: string
+      description: >-
+        How the unit's health changed since the last contact, or empty on
+        some older contacts
+      enum: [UnitHealthImproved, UnitHealthUnchanged, UnitHealthDeclined, ""]
+
+    HealthIndicators:
+      type: object
+      additionalProperties: false
+      description: >-
+        Area scores out of 5 from a detailed assessment. All `0` for a simple
+        assessment.
+      required: [finance, membership, program, leadership]
+      properties:
+        finance:
+          type: number
+          examples: [4]
+        membership:
+          type: number
+          examples: [3.5]
+        program:
+          type: number
+          examples: [4.2]
+        leadership:
+          type: number
+          examples: [3.3]
+
+    AssessmentTypeCounts:
+      type: object
+      additionalProperties: false
+      required: [simpleAssessment, detailedAssessment]
+      properties:
+        simpleAssessment:
+          type: integer
+        detailedAssessment:
+          type: integer
+
+    UnitCommissionerContacts:
+      type: object
+      additionalProperties: false
+      required:
+        - unitID
+        - unitGuid
+        - unitFullName
+        - unitType
+        - unitNumber
+        - charteredOrganization
+        - lastCompletedContactDetails
+        - contacts
+      properties:
+        unitID:
+          type: integer
+          description: The unit's `id` in its organization profile
+          examples: [123456]
+        unitGuid:
+          $ref: "#/components/schemas/OrganizationGuid"
+        unitFullName:
+          type: string
+          examples: [Troop 1234 Example Community Church]
+        unitType:
+          type: string
+          description: The `short` name of the unit's type
+          examples: [Troop]
+        unitNumber:
+          type: string
+          examples: ["1234"]
+        charteredOrganization:
+          type: string
+          examples: [Example Community Church]
+        lastCompletedContactDetails:
+          $ref: "#/components/schemas/LastCompletedContact"
+        contacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnitCommissionerContact"
+
+    LastCompletedContact:
+      type: object
+      additionalProperties: false
+      description: >-
+        The unit's most recent completed contact. With none, every string is
+        empty and every score `0`.
+      required:
+        - contactGuid
+        - contactDate
+        - personWhoMadeContact
+        - firstName
+        - middleName
+        - lastName
+        - nameSuffix
+        - overallScore
+        - typeOfContact
+        - otherTypeOfContact
+        - assessmentType
+        - isServicePlanCreated
+        - healthIndicators
+      properties:
+        contactGuid:
+          $ref: "#/components/schemas/ContactGuidOrEmpty"
+        contactDate:
+          $ref: "#/components/schemas/StringDate"
+        personWhoMadeContact:
+          type: string
+          description: The commissioner's full name
+          examples: [Pat Example]
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        nameSuffix:
+          type: string
+          examples: ["", III]
+        overallScore:
+          type: number
+          description: Out of 5
+          examples: [4]
+        typeOfContact:
+          $ref: "#/components/schemas/TypeOfContact"
+        otherTypeOfContact:
+          type: string
+        assessmentType:
+          $ref: "#/components/schemas/ContactAssessmentType"
+        isServicePlanCreated:
+          type: boolean
+        healthIndicators:
+          $ref: "#/components/schemas/HealthIndicators"
+
+    UnitCommissionerContact:
+      type: object
+      additionalProperties: false
+      required:
+        - recordSourceType
+        - contactGuid
+        - contactDate
+        - createdDate
+        - completedDate
+        - lastUpdatedDate
+        - lastUpdatedPersonGuid
+        - statusChangeDate
+        - isExportedToJTE
+        - typeOfContact
+        - otherTypeOfContact
+        - contactStatus
+        - personWhoMadeContact
+        - personPositionId
+        - firstName
+        - middleName
+        - lastName
+        - nameSuffix
+        - overallScore
+        - assessmentType
+        - isServicePlanCreated
+        - healthIndicators
+      properties:
+        recordSourceType:
+          type: integer
+          examples: [1]
+        contactGuid:
+          $ref: "#/components/schemas/ContactGuid"
+        contactDate:
+          type: string
+          format: date
+        createdDate:
+          type: string
+          format: date
+        completedDate:
+          $ref: "#/components/schemas/StringDate"
+        lastUpdatedDate:
+          $ref: "#/components/schemas/StringDate"
+        lastUpdatedPersonGuid:
+          $ref: "#/components/schemas/PersonGuidOrEmpty"
+        statusChangeDate:
+          $ref: "#/components/schemas/StringDate"
+        isExportedToJTE:
+          type: boolean
+        typeOfContact:
+          $ref: "#/components/schemas/TypeOfContact"
+        otherTypeOfContact:
+          type: string
+        contactStatus:
+          $ref: "#/components/schemas/ContactStatus"
+        personWhoMadeContact:
+          type: string
+          description: The commissioner's full name
+        personPositionId:
+          type: "null"
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        nameSuffix:
+          type: string
+        overallScore:
+          type: number
+          description: Out of 5
+        assessmentType:
+          $ref: "#/components/schemas/ContactAssessmentType"
+        isServicePlanCreated:
+          type: boolean
+        healthIndicators:
+          $ref: "#/components/schemas/HealthIndicators"
+
+    CommissionerContactHistory:
+      type: object
+      additionalProperties: false
+      description: >-
+        Counts cover every contact that matches `year` and `status`, across
+        all pages
+      required:
+        - numberOfContacts
+        - numberOfCompletedContacts
+        - numberOfInProgressContacts
+        - numberOfScheduledContacts
+        - numberOfContactsPerPage
+        - numberOfWithdrawnContacts
+        - startRecord
+        - endRecord
+        - contacts
+      properties:
+        numberOfContacts:
+          type: integer
+        totalNumberOfCompletedContacts:
+          $ref: "#/components/schemas/AssessmentTypeCounts"
+        totalNumberOfInProgressContacts:
+          $ref: "#/components/schemas/AssessmentTypeCounts"
+        totalNumberOfScheduledContacts:
+          $ref: "#/components/schemas/AssessmentTypeCounts"
+        numberOfCompletedContacts:
+          type: integer
+        numberOfInProgressContacts:
+          type: integer
+        numberOfScheduledContacts:
+          type: integer
+        numberOfContactsPerPage:
+          type: integer
+        numberOfWithdrawnContacts:
+          type: integer
+        startRecord:
+          type: integer
+          description: Position of the page's first contact, counting from 1
+        endRecord:
+          type: integer
+          description: Position of the page's last contact
+        contacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommissionerContactHistoryEntry"
+
+    CommissionerContactHistoryEntry:
+      type: object
+      additionalProperties: false
+      required:
+        - contactGuid
+        - contactDate
+        - createdDate
+        - completedDate
+        - lastUpdatedDate
+        - lastUpdatedPersonGuid
+        - statusChangeDate
+        - isExportedToJTE
+        - organizationGuid
+        - otherTypeOfContact
+        - priorityNeeds
+        - contactComments
+        - contactType
+        - status
+        - typeOfContact
+        - contactAssessmentType
+        - overallScore
+        - simpleScore
+        - healthIndicators
+        - isServicePlanCreated
+        - isUnitAssignedToCommissioner
+        - unitHealthStatus
+        - unitType
+        - unitNumber
+        - unitTypeId
+        - unitFullName
+        - charteredOrganization
+      properties:
+        contactGuid:
+          $ref: "#/components/schemas/ContactGuid"
+        contactDate:
+          $ref: "#/components/schemas/StringDate"
+        createdDate:
+          $ref: "#/components/schemas/StringDate"
+        completedDate:
+          $ref: "#/components/schemas/StringDate"
+        lastUpdatedDate:
+          $ref: "#/components/schemas/StringDate"
+        lastUpdatedPersonGuid:
+          $ref: "#/components/schemas/PersonGuidOrEmpty"
+        statusChangeDate:
+          $ref: "#/components/schemas/StringDate"
+        isExportedToJTE:
+          type: boolean
+        organizationGuid:
+          $ref: "#/components/schemas/OrganizationGuid"
+        otherTypeOfContact:
+          type: string
+        priorityNeeds:
+          type: string
+        contactComments:
+          type: string
+        contactType:
+          type: string
+          enum: [UnitContact]
+        status:
+          $ref: "#/components/schemas/ContactStatus"
+        typeOfContact:
+          $ref: "#/components/schemas/TypeOfContact"
+        contactAssessmentType:
+          $ref: "#/components/schemas/ContactAssessmentType"
+        overallScore:
+          type: number
+          description: Out of 5
+        simpleScore:
+          type: number
+          description: Out of 5 for a simple assessment, and `0` otherwise
+        healthIndicators:
+          $ref: "#/components/schemas/HealthIndicators"
+        isServicePlanCreated:
+          type: boolean
+        isUnitAssignedToCommissioner:
+          type: boolean
+        unitHealthStatus:
+          $ref: "#/components/schemas/UnitHealthStatus"
+        unitType:
+          type: string
+          description: The `short` name of the unit's type
+        unitNumber:
+          type: string
+          description: Not always zero-padded
+          examples: ["1234", "57"]
+        unitTypeId:
+          type: integer
+          description: An `id` from the unit type list, as an integer
+          examples: [2]
+        unitFullName:
+          type: string
+        charteredOrganization:
+          type: string
+
+    UnitContactDetails:
+      type: object
+      additionalProperties: false
+      required:
+        - contactDate
+        - contactType
+        - createdDate
+        - completedDate
+        - lastUpdatedDate
+        - lastUpdatedPersonGuid
+        - statusChangeDate
+        - isExportedToJTE
+        - organizationGuid
+        - organizationId
+        - organizationTypeId
+        - organizationType
+        - unitFullName
+        - unitType
+        - unitTypeId
+        - unitNumber
+        - charteredOrganization
+        - personGuid
+        - memberId
+        - personWhoMadeContact
+        - personPositionId
+        - personPosition
+        - firstName
+        - middleName
+        - lastName
+        - nameSuffix
+        - status
+        - typeOfContact
+        - otherTypeOfContact
+        - contactAssessmentType
+        - overallScore
+        - simpleScore
+        - unitHealthStatus
+        - priorityNeeds
+        - contactComments
+        - healthIndicators
+      properties:
+        contactDate:
+          type: string
+          format: date
+        contactType:
+          type: string
+          enum: [UnitContact]
+        createdDate:
+          type: string
+          format: date
+        completedDate:
+          $ref: "#/components/schemas/StringDate"
+        lastUpdatedDate:
+          $ref: "#/components/schemas/StringDate"
+        lastUpdatedPersonGuid:
+          $ref: "#/components/schemas/PersonGuidOrEmpty"
+        statusChangeDate:
+          $ref: "#/components/schemas/StringDate"
+        isExportedToJTE:
+          type: boolean
+        organizationGuid:
+          $ref: "#/components/schemas/OrganizationGuid"
+        organizationId:
+          type: integer
+          description: The unit's `id` in its organization profile
+        organizationTypeId:
+          type: integer
+          description: An `id` from the organization type list, as an integer
+          examples: [6]
+        organizationType:
+          type: string
+          description: The organization type's `name`
+          examples: [Unit]
+        unitFullName:
+          type: string
+        unitType:
+          type: string
+          description: The `short` name of the unit's type
+        unitTypeId:
+          type: integer
+          description: An `id` from the unit type list, as an integer
+          examples: [2]
+        unitNumber:
+          type: string
+        charteredOrganization:
+          type: string
+        personGuid:
+          description: >-
+            The commissioner, or empty when the commissioner no longer has a
+            profile
+          $ref: "#/components/schemas/PersonGuidOrEmpty"
+        memberId:
+          type: [integer, "null"]
+          description: >-
+            The commissioner's member ID, or `null` when `personGuid` is
+            empty
+        personWhoMadeContact:
+          type: string
+          description: >-
+            The commissioner's full name, often with a trailing space, or
+            only spaces when `personGuid` is empty
+        personPositionId:
+          type: "null"
+        personPosition:
+          type: "null"
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        nameSuffix:
+          type: string
+        status:
+          $ref: "#/components/schemas/ContactStatus"
+        typeOfContact:
+          $ref: "#/components/schemas/TypeOfContact"
+        otherTypeOfContact:
+          type: string
+        contactAssessmentType:
+          $ref: "#/components/schemas/ContactAssessmentType"
+        overallScore:
+          type: number
+          description: Out of 5
+        simpleScore:
+          type: number
+          description: Out of 5 for a simple assessment, and `0` otherwise
+        unitHealthStatus:
+          $ref: "#/components/schemas/UnitHealthStatus"
+        priorityNeeds:
+          type: string
+          description: >-
+            The priority needs checked on a detailed assessment, as
+            sentences, or empty
+          examples: ["The unit has weak leadership. "]
+        contactComments:
+          type: string
+        healthIndicators:
+          $ref: "#/components/schemas/HealthIndicators"
+
+    SimpleAssessment:
+      type: object
+      additionalProperties: false
+      required:
+        - unitGuid
+        - memberId
+        - recordSourceType
+        - contactDate
+        - createdDate
+        - completedDate
+        - lastUpdatedPersonGuid
+        - lastUpdatedDate
+        - statusChangeDate
+        - status
+        - typeOfContact
+        - otherTypeOfContact
+        - unitHealthStatus
+        - assessmentDetails
+      properties:
+        unitGuid:
+          $ref: "#/components/schemas/OrganizationGuid"
+        memberId:
+          type: [integer, "null"]
+          description: >-
+            The commissioner's member ID, or `null` when the commissioner no
+            longer has a profile
+        recordSourceType:
+          type: [integer, "null"]
+          examples: [1]
+        contactDate:
+          type: string
+          format: date
+        createdDate:
+          type: string
+          format: date
+        completedDate:
+          $ref: "#/components/schemas/StringDate"
+        lastUpdatedPersonGuid:
+          $ref: "#/components/schemas/PersonGuidOrEmpty"
+        lastUpdatedDate:
+          $ref: "#/components/schemas/StringDate"
+        statusChangeDate:
+          $ref: "#/components/schemas/StringDate"
+        status:
+          $ref: "#/components/schemas/ContactStatus"
+        typeOfContact:
+          $ref: "#/components/schemas/TypeOfContact"
+        otherTypeOfContact:
+          type: string
+        unitHealthStatus:
+          $ref: "#/components/schemas/UnitHealthStatus"
+        assessmentDetails:
+          type: object
+          additionalProperties: false
+          required: [simpleScore, comments]
+          properties:
+            simpleScore:
+              type: number
+              description: Out of 5
+              examples: [4]
+            comments:
+              type: string
+
+    DetailedAssessment:
+      type: object
+      additionalProperties: false
+      required: [contactGuid, assessmentDetails, servicePlans]
+      properties:
+        contactGuid:
+          $ref: "#/components/schemas/ContactGuid"
+        assessmentDetails:
+          $ref: "#/components/schemas/DetailedAssessmentDetails"
+        servicePlans:
+          type: array
+          description: The unit service plan
+          items:
+            $ref: "#/components/schemas/ServicePlanItem"
+
+    ServicePlanItem:
+      type: object
+      additionalProperties: false
+      required:
+        - contactGuid
+        - servicePlanItemID
+        - servicePlanItemTypeId
+        - servicePlanItemType
+        - action
+        - responsiblePerson
+        - targetCompletionDate
+        - actualCompletionDate
+        - status
+      properties:
+        contactGuid:
+          $ref: "#/components/schemas/ContactGuid"
+        servicePlanItemID:
+          type: integer
+          examples: [1001]
+        servicePlanItemTypeId:
+          type: integer
+          description: >-
+            Matches `questionCategoryId` of assessment questions in the same
+            category
+          examples: [4]
+        servicePlanItemType:
+          type: string
+          description: The category's name
+          examples: [Volunteer Leadership]
+        action:
+          type: string
+        responsiblePerson:
+          type: string
+        targetCompletionDate:
+          type: string
+          description: Date as `YYYY/MM/DD`
+          pattern: "^[0-9]{4}/[0-9]{2}/[0-9]{2}$"
+          examples: [2024/04/30]
+        actualCompletionDate:
+          type: string
+          examples: [""]
+        status:
+          type: string
+          examples: [InProgress]
+
+    DetailedAssessmentDetails:
+      type: object
+      additionalProperties: false
+      required:
+        - assessorPersonGuid
+        - assessorFirstName
+        - assessorMiddleName
+        - assessorLastName
+        - isCalculatedFinancialScore
+        - financialScore
+        - financialScoreComments
+        - isCalculatedMembershipScore
+        - membershipScore
+        - membershipScoreComments
+        - isCalculatedProgramScore
+        - programScore
+        - programScoreComments
+        - isCalculatedLeadershipScore
+        - leadershipScore
+        - leadershipScoreComments
+        - overallScore
+        - isSelfAssessment
+        - ccAssessorPersonGuid
+        - ccAssessorFirstName
+        - ccAssessorMiddleName
+        - ccAssessorLastName
+        - ccIsCalculatedFinancialScore
+        - ccFinancialScore
+        - ccFinancialScoreComments
+        - ccIsCalculatedMembershipScore
+        - ccMembershipScore
+        - ccMembershipScoreComments
+        - ccIsCalculatedProgramScore
+        - ccProgramScore
+        - ccProgramScoreComments
+        - ccIsCalculatedLeadershipScore
+        - ccLeadershipScore
+        - ccLeadershipScoreComments
+        - ccOverallScore
+        - ccIsSelfAssessment
+        - crAssessorPersonGuid
+        - crAssessorFirstName
+        - crAssessorMiddleName
+        - crAssessorLastName
+        - crIsCalculatedFinancialScore
+        - crFinancialScore
+        - crFinancialScoreComments
+        - crIsCalculatedMembershipScore
+        - crMembershipScore
+        - crMembershipScoreComments
+        - crIsCalculatedProgramScore
+        - crProgramScore
+        - crProgramScoreComments
+        - crIsCalculatedLeadershipScore
+        - crLeadershipScore
+        - crLeadershipScoreComments
+        - crOverallScore
+        - crIsSelfAssessment
+        - tlAssessorPersonGuid
+        - tlAssessorFirstName
+        - tlAssessorMiddleName
+        - tlAssessorLastName
+        - tlIsCalculatedFinancialScore
+        - tlFinancialScore
+        - tlFinancialScoreComments
+        - tlIsCalculatedMembershipScore
+        - tlMembershipScore
+        - tlMembershipScoreComments
+        - tlIsCalculatedProgramScore
+        - tlProgramScore
+        - tlProgramScoreComments
+        - tlIsCalculatedLeadershipScore
+        - tlLeadershipScore
+        - tlLeadershipScoreComments
+        - tlOverallScore
+        - tlIsSelfAssessment
+        - otherAssessorPersonGuid
+        - otherAssessorFirstName
+        - otherAssessorMiddleName
+        - otherAssessorLastName
+        - otherIsCalculatedFinancialScore
+        - otherFinancialScore
+        - otherFinancialScoreComments
+        - otherIsCalculatedMembershipScore
+        - otherMembershipScore
+        - otherMembershipScoreComments
+        - otherIsCalculatedProgramScore
+        - otherProgramScore
+        - otherProgramScoreComments
+        - otherIsCalculatedLeadershipScore
+        - otherLeadershipScore
+        - otherLeadershipScoreComments
+        - otherOverallScore
+        - otherIsSelfAssessment
+        - assessmentQuestionAnswers
+      properties:
+        assessorPersonGuid:
+          description: The commissioner who made the assessment, or empty
+          $ref: "#/components/schemas/PersonGuidOrEmpty"
+        assessorFirstName:
+          type: string
+        assessorMiddleName:
+          type: string
+        assessorLastName:
+          type: string
+        isCalculatedFinancialScore:
+          type: boolean
+        financialScore:
+          type:
+            - number
+            - "null"
+          description: Out of 5, or `null` on a simple assessment
+        financialScoreComments:
+          type: string
+        isCalculatedMembershipScore:
+          type: boolean
+        membershipScore:
+          type:
+            - number
+            - "null"
+          description: Out of 5, or `null` on a simple assessment
+        membershipScoreComments:
+          type: string
+        isCalculatedProgramScore:
+          type: boolean
+        programScore:
+          type:
+            - number
+            - "null"
+          description: Out of 5, or `null` on a simple assessment
+        programScoreComments:
+          type: string
+        isCalculatedLeadershipScore:
+          type: boolean
+        leadershipScore:
+          type:
+            - number
+            - "null"
+          description: Out of 5, or `null` on a simple assessment
+        leadershipScoreComments:
+          type: string
+        overallScore:
+          type: number
+          description: Out of 5
+        isSelfAssessment:
+          type: boolean
+        ccAssessorPersonGuid:
+          type: string
+        ccAssessorFirstName:
+          type: string
+        ccAssessorMiddleName:
+          type: string
+        ccAssessorLastName:
+          type: string
+        ccIsCalculatedFinancialScore:
+          type: "null"
+        ccFinancialScore:
+          type: "null"
+        ccFinancialScoreComments:
+          type: "null"
+        ccIsCalculatedMembershipScore:
+          type: "null"
+        ccMembershipScore:
+          type: "null"
+        ccMembershipScoreComments:
+          type: "null"
+        ccIsCalculatedProgramScore:
+          type: "null"
+        ccProgramScore:
+          type: "null"
+        ccProgramScoreComments:
+          type: "null"
+        ccIsCalculatedLeadershipScore:
+          type: "null"
+        ccLeadershipScore:
+          type: "null"
+        ccLeadershipScoreComments:
+          type: "null"
+        ccOverallScore:
+          type: "null"
+        ccIsSelfAssessment:
+          type: "null"
+        crAssessorPersonGuid:
+          type: string
+        crAssessorFirstName:
+          type: string
+        crAssessorMiddleName:
+          type: string
+        crAssessorLastName:
+          type: string
+        crIsCalculatedFinancialScore:
+          type: "null"
+        crFinancialScore:
+          type: "null"
+        crFinancialScoreComments:
+          type: "null"
+        crIsCalculatedMembershipScore:
+          type: "null"
+        crMembershipScore:
+          type: "null"
+        crMembershipScoreComments:
+          type: "null"
+        crIsCalculatedProgramScore:
+          type: "null"
+        crProgramScore:
+          type: "null"
+        crProgramScoreComments:
+          type: "null"
+        crIsCalculatedLeadershipScore:
+          type: "null"
+        crLeadershipScore:
+          type: "null"
+        crLeadershipScoreComments:
+          type: "null"
+        crOverallScore:
+          type: "null"
+        crIsSelfAssessment:
+          type: "null"
+        tlAssessorPersonGuid:
+          type: string
+        tlAssessorFirstName:
+          type: string
+        tlAssessorMiddleName:
+          type: string
+        tlAssessorLastName:
+          type: string
+        tlIsCalculatedFinancialScore:
+          type: "null"
+        tlFinancialScore:
+          type: "null"
+        tlFinancialScoreComments:
+          type: "null"
+        tlIsCalculatedMembershipScore:
+          type: "null"
+        tlMembershipScore:
+          type: "null"
+        tlMembershipScoreComments:
+          type: "null"
+        tlIsCalculatedProgramScore:
+          type: "null"
+        tlProgramScore:
+          type: "null"
+        tlProgramScoreComments:
+          type: "null"
+        tlIsCalculatedLeadershipScore:
+          type: "null"
+        tlLeadershipScore:
+          type: "null"
+        tlLeadershipScoreComments:
+          type: "null"
+        tlOverallScore:
+          type: "null"
+        tlIsSelfAssessment:
+          type: "null"
+        otherAssessorPersonGuid:
+          type: string
+        otherAssessorFirstName:
+          type: string
+        otherAssessorMiddleName:
+          type: string
+        otherAssessorLastName:
+          type: string
+        otherIsCalculatedFinancialScore:
+          type: "null"
+        otherFinancialScore:
+          type: "null"
+        otherFinancialScoreComments:
+          type: "null"
+        otherIsCalculatedMembershipScore:
+          type: "null"
+        otherMembershipScore:
+          type: "null"
+        otherMembershipScoreComments:
+          type: "null"
+        otherIsCalculatedProgramScore:
+          type: "null"
+        otherProgramScore:
+          type: "null"
+        otherProgramScoreComments:
+          type: "null"
+        otherIsCalculatedLeadershipScore:
+          type: "null"
+        otherLeadershipScore:
+          type: "null"
+        otherLeadershipScoreComments:
+          type: "null"
+        otherOverallScore:
+          type: "null"
+        otherIsSelfAssessment:
+          type: "null"
+        assessmentQuestionAnswers:
+          type: array
+          description: Empty on a simple assessment
+          items:
+            $ref: "#/components/schemas/AssessmentQuestionAnswer"
+
+    AssessmentQuestionAnswer:
+      type: object
+      additionalProperties: false
+      required:
+        - questionItemId
+        - questionCode
+        - questionLabel
+        - questionContent
+        - questionReportingText
+        - positionNumber
+        - effectiveDate
+        - expiryDate
+        - isActive
+        - isScoreItem
+        - isRequired
+        - questionCategoryId
+        - questionCategoryCode
+        - questionCategoryName
+        - answerDataType
+        - answerScore
+        - answer
+        - answerYesNo
+        - answerDt
+        - answerComments
+        - answerDate
+        - ccSelfAnswerScore
+        - ccSelfAnswer
+        - ccSelfAnswerYesNo
+        - ccSelfAnswerDt
+        - ccSelfAnswerComments
+        - ccSelfAnswerDate
+        - crSelfAnswerScore
+        - crSelfAnswer
+        - crSelfAnswerYesNo
+        - crSelfAnswerDt
+        - crSelfAnswerComments
+        - crSelfAnswerDate
+        - tlSelfAnswerScore
+        - tlSelfAnswer
+        - tlSelfAnswerYesNo
+        - tlSelfAnswerDt
+        - tlSelfAnswerComments
+        - tlSelfAnswerDate
+        - otherSelfAnswerScore
+        - otherSelfAnswer
+        - otherSelfAnswerYesNo
+        - otherSelfAnswerDT
+        - otherSelfAnswerComments
+        - otherSelfAnswerDate
+      properties:
+        questionItemId:
+          type: integer
+        questionCode:
+          type: string
+        questionLabel:
+          type: string
+        questionContent:
+          type: string
+        questionReportingText:
+          type: string
+        positionNumber:
+          type: integer
+          description: Position within the question's category
+        effectiveDate:
+          $ref: "#/components/schemas/StringDate"
+        expiryDate:
+          $ref: "#/components/schemas/StringDate"
+        isActive:
+          type: boolean
+        isScoreItem:
+          type: boolean
+        isRequired:
+          type: boolean
+        questionCategoryId:
+          type: integer
+          description: Matches `servicePlanItemTypeId` of service plan items in the same category
+        questionCategoryCode:
+          type: string
+          enum:
+            - Budget
+            - Leadership
+            - Membership
+            - Program
+            - UnitPriorities
+        questionCategoryName:
+          type: string
+        answerDataType:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 4
+          description: "Where the answer is: `1` text in `answer`, `2` a score in `answerScore`, `4` a yes or no in `answerYesNo`"
+        answerScore:
+          type:
+            - integer
+            - "null"
+          description: Out of 5, or `null` if not answered or not a score
+        answer:
+          type:
+            - "null"
+            - string
+        answerYesNo:
+          type: boolean
+        answerDt:
+          type: "null"
+        answerComments:
+          type: string
+        answerDate:
+          $ref: "#/components/schemas/StringDate"
+        ccSelfAnswerScore:
+          type: "null"
+        ccSelfAnswer:
+          type:
+            - "null"
+            - string
+        ccSelfAnswerYesNo:
+          type:
+            - "null"
+            - boolean
+        ccSelfAnswerDt:
+          type: "null"
+        ccSelfAnswerComments:
+          type: string
+        ccSelfAnswerDate:
+          $ref: "#/components/schemas/StringDate"
+        crSelfAnswerScore:
+          type: "null"
+        crSelfAnswer:
+          type:
+            - "null"
+            - string
+        crSelfAnswerYesNo:
+          type:
+            - "null"
+            - boolean
+        crSelfAnswerDt:
+          type: "null"
+        crSelfAnswerComments:
+          type: string
+        crSelfAnswerDate:
+          $ref: "#/components/schemas/StringDate"
+        tlSelfAnswerScore:
+          type: "null"
+        tlSelfAnswer:
+          type:
+            - "null"
+            - string
+        tlSelfAnswerYesNo:
+          type:
+            - "null"
+            - boolean
+        tlSelfAnswerDt:
+          type: "null"
+        tlSelfAnswerComments:
+          type: string
+        tlSelfAnswerDate:
+          $ref: "#/components/schemas/StringDate"
+        otherSelfAnswerScore:
+          type: "null"
+        otherSelfAnswer:
+          type:
+            - "null"
+            - string
+        otherSelfAnswerYesNo:
+          type:
+            - "null"
+            - boolean
+        otherSelfAnswerDT:
+          type: "null"
+        otherSelfAnswerComments:
+          type: string
+        otherSelfAnswerDate:
+          $ref: "#/components/schemas/StringDate"
+
     Error:
       type: object
       additionalProperties: false
@@ -8251,6 +10105,16 @@ components:
         type: string
         examples: [no-cache]
 
+    ContactGuid:
+      name: contactGuid
+      in: path
+      required: true
+      description: >-
+        A contact's GUID, matched case-insensitively. Takes the `contactGuid`
+        of a contact.
+      schema:
+        $ref: "#/components/schemas/ContactGuid"
+
     MeritBadgeId:
       name: meritBadgeId
       in: path
@@ -8286,10 +10150,31 @@ components:
       type: http
       scheme: bearer
       description: >-
-        The `token` from signing in at auth.scouting.org. Endpoints that
-        accept it also work without it.
+        The `token` from signing in at auth.scouting.org. Commissioner
+        endpoints require it. Other endpoints that accept it also work
+        without it.
 
   responses:
+    Unauthorized:
+      description: The token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            missing:
+              summary: No token
+              value:
+                errorCode: M401
+                message: Unauthorized
+                errorDesc: Missing JWT Token
+            invalid:
+              summary: An invalid token
+              value:
+                errorCode: M401
+                message: Unauthorized
+                errorDesc: Invalid JWT Authorization
+
     InvalidQuery:
       description: >-
         A query parameter has an invalid value, is repeated, or (on some

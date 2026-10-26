@@ -17,7 +17,7 @@ You may be given some info to start with in the issue/prompt. Treat this info as
 3. Probe for undocumented query parameters. Try likely names, and read the error messages, which can name the valid parameters.
 4. Trace every foreign key: a field holding another record's ID, such as `actTypeId`. Find the endpoint that lists those records, in any spec here or by trying paths guessed from the field name, and confirm its IDs cover the values you sampled. Report any key you couldn't trace, and any new endpoint you found, to the user.
 5. Describe it in `openapi.yaml` following the spec rules below. A new API-wide quirk goes in `info.description`, and the client applies it too (see TypeScript client below).
-6. Add a contract test in the API's `tests.arazzo.yaml` for every status code you documented.
+6. Add a contract test in the API's `tests.arazzo.yaml` for every status code you documented. When the results depend on the signed-in account (its positions, units, or council), skip the tests and set `x-untested` on the operation to say why.
 7. Done when `pnpm check` and `pnpm test` both pass.
 
 ## Adding an API
