@@ -22,9 +22,6 @@
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": "./dist/index.js",
-		"./api.scouting.org": "./dist/api.scouting.org.js",
-		"./auth.scouting.org": "./dist/auth.scouting.org.js",
-		"./scoutconnect-api.scouting.org": "./dist/scoutconnect-api.scouting.org.js",
 		"./package.json": "./package.json"
 	},
 	"files": [

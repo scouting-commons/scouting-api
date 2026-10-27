@@ -23,7 +23,7 @@ You may be given some info to start with in the issue/prompt. Treat this info as
 ## Adding an API
 
 1. Create `apis/<host>/openapi.yaml` and `apis/<host>/tests.arazzo.yaml`, and register both as `apis` entries in `redocly.yaml`, or they won't be linted.
-2. Add the API to the client: its spec path in `specs` in `packages/client-ts/openapi-ts.config.ts`, an entry file `packages/client-ts/src/<host>.ts`, that file in `entry` in `packages/client-ts/tsdown.config.ts`, and its SDK in `createScoutingClient` and its namespace export in `packages/client-ts/src/index.ts`.
+2. Add the API to the client: its spec path in `specs` in `packages/client-ts/openapi-ts.config.ts`, a file `packages/client-ts/src/lib/apis/<host>.ts`, and its SDK in `createScoutingClient` and its namespace export in `packages/client-ts/src/index.ts`.
 3. Add a row for it to the API tables in `README.md` and `packages/client-ts/README.md`.
 4. Done when `pnpm check` and `pnpm build` pass, and the `exports` that `pnpm build` writes into `packages/client-ts/package.json` are committed. CI fails when they're stale.
 
@@ -51,6 +51,6 @@ When a test fails on an operation you didn't change, call that endpoint directly
 
 ## TypeScript client
 
-`@hey-api/openapi-ts` regenerates each API's client into `packages/client-ts/src/generated/<host>/` on every `build` and `typecheck`, so a spec change reaches the client with no client edits. The hand-written layer is one entry file per API, `packages/client-ts/src/<host>.ts`: it re-exports the generated code and exports `createSdk`, which builds a client that applies every API-wide quirk in that spec's `info.description`, so users of the package never need to know them. The root entry, `packages/client-ts/src/index.ts`, combines every API's `createSdk` into `createScoutingClient`. Code that isn't an entry file goes in `packages/client-ts/src/lib/`.
+`@hey-api/openapi-ts` regenerates each API's client into `packages/client-ts/src/generated/<host>/` on every `build` and `typecheck`, so a spec change reaches the client with no client edits. The hand-written layer is one file per API, `packages/client-ts/src/lib/apis/<host>.ts`: it re-exports the generated code and exports `createSdk`, which builds a client that applies every API-wide quirk in that spec's `info.description`, so users of the package never need to know them. The package's only entry, `packages/client-ts/src/index.ts`, combines every API's `createSdk` into `createScoutingClient` and exports each API's file as a namespace. Everything else goes in `packages/client-ts/src/lib/`.
 
 The client stays on TypeScript 6, because `@hey-api/openapi-ts` uses the compiler API that TypeScript 7 removed.

@@ -1,11 +1,11 @@
-import type { SdkConfig } from "./lib/types.js";
+import type { SdkConfig } from "../types.js";
 import {
 	createClient,
 	createConfig,
-} from "./generated/api.scouting.org/client/index.js";
-import { Sdk } from "./generated/api.scouting.org/index.js";
+} from "../../generated/api.scouting.org/client/index.js";
+import { Sdk } from "../../generated/api.scouting.org/index.js";
 
-export * from "./generated/api.scouting.org/index.js";
+export * from "../../generated/api.scouting.org/index.js";
 export type { SdkConfig };
 
 export const createSdk = (config: SdkConfig = {}) =>

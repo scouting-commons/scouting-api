@@ -74,14 +74,14 @@ const scouting = createScoutingClient({
 });
 ```
 
-### One API
+### Using a single API
 
-Each API also has its own import path, named by its host, whose `createSdk` builds just that API's SDK. It takes the same options, for that one API:
+Each API's namespace has a `createSdk` that builds just that API's SDK. It takes a `token` and a `baseUrl` for that one API:
 
 ```ts
-import { createSdk } from "scouting-api/api.scouting.org";
+import { api } from "scouting-api";
 
-const api = createSdk({ token });
+const scoutingApi = api.createSdk({ token });
 ```
 
 ### Validation

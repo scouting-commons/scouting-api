@@ -1,4 +1,4 @@
-import type { Sdk } from "../auth.scouting.org.js";
+import type { Sdk } from "./apis/auth.scouting.org.js";
 
 // Tokens last 8 hours. Refreshing in the last hour leaves room for clock drift
 // and slow requests.

@@ -1,11 +1,11 @@
-import type { SdkConfig } from "./lib/types.js";
+import type { SdkConfig } from "../types.js";
 import {
 	createClient,
 	createConfig,
-} from "./generated/auth.scouting.org/client/index.js";
-import { Sdk } from "./generated/auth.scouting.org/index.js";
+} from "../../generated/auth.scouting.org/client/index.js";
+import { Sdk } from "../../generated/auth.scouting.org/index.js";
 
-export * from "./generated/auth.scouting.org/index.js";
+export * from "../../generated/auth.scouting.org/index.js";
 export type { SdkConfig };
 
 // The API rejects requests without a version in Accept, and each endpoint

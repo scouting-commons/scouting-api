@@ -1,11 +1,11 @@
-import type { SdkConfig } from "./lib/types.js";
+import type { SdkConfig } from "../types.js";
 import {
 	createClient,
 	createConfig,
-} from "./generated/scoutconnect-api.scouting.org/client/index.js";
-import { Sdk } from "./generated/scoutconnect-api.scouting.org/index.js";
+} from "../../generated/scoutconnect-api.scouting.org/client/index.js";
+import { Sdk } from "../../generated/scoutconnect-api.scouting.org/index.js";
 
-export * from "./generated/scoutconnect-api.scouting.org/index.js";
+export * from "../../generated/scoutconnect-api.scouting.org/index.js";
 export type { SdkConfig };
 
 export const createSdk = (config: SdkConfig = {}) =>
