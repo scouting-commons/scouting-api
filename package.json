@@ -35,7 +35,7 @@
 	},
 	"packageManager": "pnpm@10.24.0",
 	"devDependencies": {
-		"knip": "^6.39.0",
-		"prettier": "^3.9.9"
+		"knip": "^6.43.0",
+		"prettier": "^3.9.10"
 	}
 }
