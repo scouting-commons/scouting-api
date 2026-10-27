@@ -14,6 +14,7 @@ export const createSdk = (config: SdkConfig = {}) =>
 			createConfig({
 				baseUrl: config.baseUrl ?? "https://api.scouting.org",
 				auth: config.token,
+				fetch: config.fetch,
 				// Some list endpoints ignore query filters without this header. See
 				// the quirks in the spec's info.description.
 				headers: { "Cache-Control": "no-cache" },

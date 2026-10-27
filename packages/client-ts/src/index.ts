@@ -14,7 +14,7 @@ export type ScoutingClient = ReturnType<typeof createScoutingClient>;
 
 /** initialize an api client */
 export const createScoutingClient = (config: ScoutingClientConfig) => {
-	const { auth, baseUrl } = config;
+	const { auth, baseUrl, fetch } = config;
 	const token =
 		auth === "none"
 			? undefined
@@ -22,14 +22,15 @@ export const createScoutingClient = (config: ScoutingClientConfig) => {
 				? auth.token
 				: // A separate SDK without a token signs in, so signing in never
 					// waits on itself
-					createSession(createAuthSdk({ baseUrl: baseUrl?.auth }), auth);
+					createSession(createAuthSdk({ baseUrl: baseUrl?.auth, fetch }), auth);
 
 	return {
-		api: createApiSdk({ baseUrl: baseUrl?.api, token }),
-		auth: createAuthSdk({ baseUrl: baseUrl?.auth, token }),
+		api: createApiSdk({ baseUrl: baseUrl?.api, token, fetch }),
+		auth: createAuthSdk({ baseUrl: baseUrl?.auth, token, fetch }),
 		scoutConnect: createScoutConnectSdk({
 			baseUrl: baseUrl?.scoutConnect,
 			token,
+			fetch,
 		}),
 	};
 };

@@ -14,6 +14,7 @@ export const createSdk = (config: SdkConfig = {}) =>
 			createConfig({
 				baseUrl: config.baseUrl ?? "https://scoutconnect-api.scouting.org",
 				auth: config.token,
+				fetch: config.fetch,
 				// The API rejects the default User-Agent of Node's fetch. See the
 				// quirks in the spec's info.description.
 				headers: { "User-Agent": "scouting-api" },

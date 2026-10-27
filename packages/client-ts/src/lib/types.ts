@@ -7,6 +7,8 @@ export type SdkConfig = {
 	baseUrl?: string;
 	/** api auth token */
 	token?: Token;
+	/** sends every request through your own implementation of `fetch` */
+	fetch?: typeof fetch;
 };
 
 /** options for initializing the scouting client */
@@ -18,4 +20,6 @@ export type ScoutingClientConfig = {
 	auth: "none" | { token: Token } | { username: string; password: string };
 	/** replaces each API's default host, such as to route requests through a proxy */
 	baseUrl?: { api?: string; auth?: string; scoutConnect?: string };
+	/** sends every request through your own implementation of `fetch` */
+	fetch?: typeof fetch;
 };

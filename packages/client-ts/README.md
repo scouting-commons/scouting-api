@@ -74,9 +74,23 @@ const scouting = createScoutingClient({
 });
 ```
 
+### Overriding Fetch
+
+You can provide your own implementation of `fetch` for the client to send requests with. Wrap it to add logging, retries, headers, etc, or pass in an implementation provided by your framework.
+
+```ts
+const scouting = createScoutingClient({
+	auth: "none",
+	fetch: async (request) => {
+		console.log(request.method, request.url);
+		return fetch(request);
+	},
+});
+```
+
 ### Using a single API
 
-Each API's namespace has a `createSdk` that builds just that API's SDK. It takes a `token` and a `baseUrl` for that one API:
+Each API's namespace has a `createSdk` that builds a client instance for just that API. It takes a `token`, a `baseUrl`, and a `fetch` for that one API:
 
 ```ts
 import { api } from "scouting-api";

@@ -17,6 +17,7 @@ export const createSdk = (config: SdkConfig = {}) => {
 		createConfig({
 			baseUrl: config.baseUrl ?? "https://auth.scouting.org",
 			auth: config.token,
+			fetch: config.fetch,
 			headers: { Accept: "application/json; version=2" },
 		}),
 	);
