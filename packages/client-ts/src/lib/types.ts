@@ -11,8 +11,11 @@ export type SdkConfig = {
 
 /** options for initializing the scouting client */
 export type ScoutingClientConfig = {
-	/** authentication config */
-	auth: "anonymous" | { token: Token };
+	/**
+	 * `"none"` for public endpoints only, a token you manage, or a
+	 * my.scouting.org username and password to sign in with on first use
+	 */
+	auth: "none" | { token: Token } | { username: string; password: string };
 	/** replaces each API's default host, such as to route requests through a proxy */
 	baseUrl?: { api?: string; auth?: string; scoutConnect?: string };
 };

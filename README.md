@@ -53,7 +53,7 @@ npm install scouting-api
 ```ts
 import { createScoutingClient } from "scouting-api";
 
-const scouting = createScoutingClient({ auth: "anonymous" });
+const scouting = createScoutingClient({ auth: "none" });
 
 const { data, error } = await scouting.api.advancement.listMeritBadges({
 	id: "3",

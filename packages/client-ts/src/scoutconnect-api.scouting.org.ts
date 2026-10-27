@@ -1,4 +1,4 @@
-import type { SdkConfig } from "./lib/config.js";
+import type { SdkConfig } from "./lib/types.js";
 import {
 	createClient,
 	createConfig,

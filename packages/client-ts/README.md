@@ -22,7 +22,7 @@ npm install scouting-api
 ```ts
 import { createScoutingClient } from "scouting-api";
 
-const scouting = createScoutingClient({ auth: "anonymous" });
+const scouting = createScoutingClient({ auth: "none" });
 
 const { data, error } = await scouting.api.advancement.listMeritBadges({
 	id: "3",
@@ -42,7 +42,15 @@ The client already handles the API-wide quirks listed in each spec's `info.descr
 
 ### Auth
 
-`auth` is required. Pass `"anonymous"` to call only public endpoints, or a token from signing in at `auth.scouting.org`. The token can be a string, or a function that returns the current one, so you can refresh it yourself:
+`auth` is required. Pass `"none"` to call public endpoints only, or a my.scouting.org username and password:
+
+```ts
+const scouting = createScoutingClient({ auth: { username, password } });
+```
+
+Sign-in is done lazily (on the first API request that requires a token). When signing in fails, the request returns an `Error` as `error`, with the API's response as its `cause`.
+
+To manage the token yourself, pass it instead, as a string or a function that returns the current one:
 
 ```ts
 const scouting = createScoutingClient({ auth: { token } });
@@ -51,7 +59,7 @@ const scouting = createScoutingClient({
 });
 ```
 
-The token is sent only on operations that require one.
+The token is sent only on operations that require one, so public endpoints never trigger a sign-in.
 
 ### Base URLs
 
@@ -59,7 +67,7 @@ The token is sent only on operations that require one.
 
 ```ts
 const scouting = createScoutingClient({
-	auth: "anonymous",
+	auth: "none",
 	baseUrl: { api: "https://proxy.example.com/api.scouting.org" },
 });
 ```
