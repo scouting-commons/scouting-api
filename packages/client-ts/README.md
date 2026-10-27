@@ -3,11 +3,13 @@
 **Unofficial TypeScript client for Scouting America APIs, generated from the [scouting-api](https://github.com/scouting-commons/scouting-api) specs.**
 
 > [!NOTE]
-> This project is not affiliated with or endorsed by Scouting America. The client is generated from specs that describe what the APIs actually do, observed by calling them, and may lag behind changes to the APIs.
+> This project is not affiliated with or endorsed by Scouting America.
 >
-> Calling these APIs is subject to Scouting America's terms of service, whether you call them through this client or any other way.
+> Calling these APIs is subject to Scouting America's terms of service, whether you call them using this tool or any other way. Use this tool responsibly and at your own risk.
 >
-> The client and specs grant no access beyond what Scouting America already gives you. Every endpoint is either public or unlocked by your own Scouting America credentials, which you must supply for any logged-in operations.
+> This tool grants no access beyond what Scouting America already gives you. Every endpoint is either public or unlocked by your own Scouting America credentials, which you must supply for any logged-in operations.
+>
+> This is not a hosted service. Your requests go straight from your machine to Scouting America- there is no telemetry and we (Scouting Commons) cannot see your data or credentials.
 
 ## Install
 
