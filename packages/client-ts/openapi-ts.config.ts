@@ -22,6 +22,8 @@ export default defineConfig(
 				name: "zod",
 				// include the zod schemas in the generated index file
 				includeInEntry: true,
+				// include z.describe() annotations in the output
+				metadata: true,
 			},
 
 			{
