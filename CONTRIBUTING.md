@@ -50,6 +50,8 @@ packages/client-ts/
 │   └── generated/              # generated from the specs (gitignored)
 ├── openapi-ts.config.ts        # which specs to generate from
 └── tsdown.config.ts            # builds the npm package
+
+packages/mcp/                   # the MCP server (work in progress)
 ```
 
 Deliberate exceptions to Redocly's lint rules are listed in `.redocly.lint-ignore.yaml`. Regenerate it with:

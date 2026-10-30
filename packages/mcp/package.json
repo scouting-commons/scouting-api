@@ -1,0 +1,22 @@
+{
+	"name": "scouting-mcp",
+	"version": "0.0.1",
+	"type": "module",
+	"description": "MCP server for Scouting America APIs",
+	"keywords": [
+		"scouting",
+		"scouting america",
+		"api",
+		"mcp"
+	],
+	"homepage": "https://github.com/scouting-commons/scouting-api/tree/main/packages/mcp#readme",
+	"bugs": {
+		"url": "https://github.com/scouting-commons/scouting-api/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/scouting-commons/scouting-api.git",
+		"directory": "packages/mcp"
+	},
+	"license": "MIT"
+}
