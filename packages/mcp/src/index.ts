@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/server";
-import { serveStdio } from "@modelcontextprotocol/server/stdio"
+import { serveStdio } from "@modelcontextprotocol/server/stdio";
 
 function createServer(): McpServer {
 	const server = new McpServer({
@@ -11,4 +11,4 @@ function createServer(): McpServer {
 }
 
 void serveStdio(createServer);
-console.error("mcp server running on stdio")
+console.error("mcp server running on stdio");
