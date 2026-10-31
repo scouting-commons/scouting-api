@@ -1,0 +1,12 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		// Runs on Node only, since the stdio transport needs it
+		"lib": ["esnext"],
+		"types": ["node"],
+		"noEmit": true,
+		// Lets knip map built files back to src
+		"outDir": "dist"
+	},
+	"include": ["src"]
+}
