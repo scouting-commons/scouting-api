@@ -24,8 +24,9 @@ You may be given some info to start with in the issue/prompt. Treat this info as
 
 1. Create `apis/<host>/openapi.yaml` and `apis/<host>/tests.arazzo.yaml`, and register both as `apis` entries in `redocly.yaml`, or they won't be linted.
 2. Add the API to the client: its spec path in `specs` in `packages/client-ts/openapi-ts.config.ts`, a file `packages/client-ts/src/lib/apis/<host>.ts`, and its SDK in `createScoutingClient` and its namespace export in `packages/client-ts/src/index.ts`.
-3. Add a row for it to the API tables in `README.md` and `packages/client-ts/README.md`.
-4. Done when `pnpm check` and `pnpm build` pass, and the `exports` that `pnpm build` writes into `packages/client-ts/package.json` are committed. CI fails when they're stale.
+3. Add the API to the MCP server: an entry in `specs` in `packages/mcp/openapi-ts.config.ts`, with `api` set to its property on the client from `createScoutingClient`, and its `operations` in the list in `packages/mcp/src/tools/register.ts`.
+4. Add a row for it to the API tables in `README.md` and `packages/client-ts/README.md`.
+5. Done when `pnpm check` and `pnpm build` pass, and the `exports` that `pnpm build` writes into `packages/client-ts/package.json` are committed. CI fails when they're stale.
 
 ## Spec rules
 
