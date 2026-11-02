@@ -1,0 +1,48 @@
+{
+	"manifest_version": "0.3",
+	"name": "scouting-mcp",
+	"display_name": "Scouting America APIs",
+	"version": "0.0.1",
+	"description": "MCP server for Scouting America APIs. Unofficial; not affiliated with or endorsed by Scouting America.",
+	"author": {
+		"name": "Scouting Commons"
+	},
+	"homepage": "https://github.com/scouting-commons/scouting-api/tree/main/packages/mcp#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/scouting-commons/scouting-api"
+	},
+	"license": "MIT",
+	"server": {
+		"type": "node",
+		"entry_point": "server/index.mjs",
+		"mcp_config": {
+			"command": "node",
+			"args": ["${__dirname}/server/index.mjs"],
+			"env": {
+				"SCOUTING_USERNAME": "${user_config.username}",
+				"SCOUTING_PASSWORD": "${user_config.password}"
+			}
+		}
+	},
+	"user_config": {
+		"username": {
+			"type": "string",
+			"title": "my.scouting.org username",
+			"description": "Your my.scouting.org username. Leave both fields blank to use public data only.",
+			"required": false
+		},
+		"password": {
+			"type": "string",
+			"title": "my.scouting.org password",
+			"description": "Your my.scouting.org password, stored in your system's keychain.",
+			"sensitive": true,
+			"required": false
+		}
+	},
+	"compatibility": {
+		"runtimes": {
+			"node": ">=20"
+		}
+	}
+}
