@@ -34,13 +34,7 @@ claude mcp add scouting -- npx -y scouting-mcp
 
 ### Claude Desktop
 
-The server is also packaged as a desktop extension (`.mcpb`), which asks for your sign-in when you install it. Build it from the repo root:
-
-```sh
-pnpm --filter scouting-mcp build:mcpb
-```
-
-Then open `packages/mcp/scouting-mcp.mcpb` with Claude Desktop.
+The server is also packaged as a desktop extension, which asks for your sign-in when you install it. Download the latest [`scouting-mcp.mcpb`](https://cdn.jsdelivr.net/npm/scouting-mcp/scouting-mcp.mcpb) and open it with Claude Desktop.
 
 ## Sign-in
 

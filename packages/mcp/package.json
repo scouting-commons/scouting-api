@@ -1,6 +1,6 @@
 {
 	"name": "scouting-mcp",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"description": "MCP server for Scouting America APIs",
 	"keywords": [
@@ -23,7 +23,8 @@
 		"scouting-mcp": "./dist/index.mjs"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"scouting-mcp.mcpb"
 	],
 	"scripts": {
 		"build:client": "pnpm --filter scouting-api build",
@@ -31,7 +32,7 @@
 		"dev": "pnpm build:client && openapi-ts && mcp-inspector node src/index.ts",
 		"typecheck": "pnpm build:client && openapi-ts && tsc",
 		"build": "pnpm build:client && openapi-ts && tsdown",
-		"prepack": "pnpm build",
+		"prepack": "pnpm build:mcpb",
 		"build:mcpb": "pnpm build && mcpb pack mcpb scouting-mcp.mcpb"
 	},
 	"dependencies": {

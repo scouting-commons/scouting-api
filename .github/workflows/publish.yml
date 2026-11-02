@@ -56,9 +56,9 @@ jobs:
             pnpm --filter "$name" pack --pack-destination "$RUNNER_TEMP/$name"
             npm publish "$RUNNER_TEMP/$name"/*.tgz --access public
 
+            # Packing scouting-mcp also builds its .mcpb
             assets=()
             if [ "$name" = scouting-mcp ]; then
-              pnpm --filter scouting-mcp build:mcpb
               assets=(packages/mcp/scouting-mcp.mcpb)
             fi
 
