@@ -1,14 +1,21 @@
 name: Publish
 
-# Publishes the client to npm when a GitHub release is published. Trusted
-# publishing (OIDC) authenticates the upload, so there's no npm token.
+# Publishes each public package whose package.json version isn't on npm yet,
+# so bumping a version on main releases it. Each release gets a GitHub release
+# tagged <name>@<version>, such as scouting-api@0.5.0. Trusted publishing (OIDC)
+# authenticates the upload, so there's no npm token.
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
 
 permissions:
-  contents: read
+  # To create GitHub releases
+  contents: write
   id-token: write
+
+# A second push waits for the first to finish publishing
+concurrency:
+  group: publish
 
 jobs:
   publish:
@@ -31,13 +38,33 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Release tags are v<version>, matching the client's package.json
-      - name: Check the tag matches the version
+      # The client goes first: packing scouting-mcp sets its scouting-api
+      # dependency to ^ the client's current version, which must be on npm.
+      # Packing builds each package and replaces its workspace: versions.
+      - name: Publish new versions
         env:
-          TAG: ${{ github.event.release.tag_name }}
-        run: test "$TAG" = "v$(jq -r .version packages/client-ts/package.json)"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for dir in packages/client-ts packages/mcp; do
+            name=$(jq -r .name "$dir/package.json")
+            tag="$name@$(jq -r .version "$dir/package.json")"
+            if [ -n "$(npm view "$tag" version 2>/dev/null)" ]; then
+              echo "$tag is already on npm"
+              continue
+            fi
 
-      # Packing builds the client and replaces its workspace:* versions
-      - run: pnpm --filter scouting-api pack --pack-destination "$RUNNER_TEMP"
+            pnpm --filter "$name" pack --pack-destination "$RUNNER_TEMP/$name"
+            npm publish "$RUNNER_TEMP/$name"/*.tgz --access public
 
-      - run: npm publish "$RUNNER_TEMP"/*.tgz --access public
+            assets=()
+            if [ "$name" = scouting-mcp ]; then
+              pnpm --filter scouting-mcp build:mcpb
+              assets=(packages/mcp/scouting-mcp.mcpb)
+            fi
+
+            # Release notes list the PRs since this package's last release
+            previous=$(gh release list --json tagName | jq -r --arg prefix "$name@" '[.[].tagName | select(startswith($prefix))][0] // empty')
+            gh release create "$tag" "${assets[@]}" \
+              --target "$GITHUB_SHA" --title "$tag" --generate-notes \
+              ${previous:+--notes-start-tag "$previous"}
+          done

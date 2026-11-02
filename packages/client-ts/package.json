@@ -1,6 +1,6 @@
 {
 	"name": "scouting-api",
-	"version": "0.4.0",
+	"version": "0.5.0",
 	"type": "module",
 	"description": "TypeScript client for Scouting America APIs, generated from the specs.",
 	"keywords": [
