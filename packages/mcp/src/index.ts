@@ -8,11 +8,12 @@ import {
 	type ScoutingClient,
 	type ScoutingClientConfig,
 } from "scouting-api";
+import pkg from "../package.json" with { type: "json" };
 
 function createServer(scouting: ScoutingClient): McpServer {
 	const server = new McpServer({
-		name: "Scouting API",
-		version: "0",
+		name: pkg.name,
+		version: pkg.version,
 	});
 
 	return registerTools(server, scouting);

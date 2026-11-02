@@ -11,5 +11,5 @@ packages/client-ts/src/generated/
 packages/mcp/src/tools/generated/
 
 # built by the mcp package's build:mcpb
-packages/mcp/mcpb/server/
+packages/mcp/mcpb/
 packages/mcp/*.mcpb

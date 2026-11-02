@@ -2,7 +2,6 @@
 	"manifest_version": "0.3",
 	"name": "scouting-mcp",
 	"display_name": "Scouting America APIs",
-	"version": "0.0.1",
 	"description": "MCP server for Scouting America APIs. Unofficial; not affiliated with or endorsed by Scouting America.",
 	"author": {
 		"name": "Scouting Commons"
