@@ -20,9 +20,10 @@
 	},
 	"license": "MIT",
 	"scripts": {
+		"build:client": "pnpm --filter scouting-api build",
 		"generate": "openapi-ts",
-		"dev": "openapi-ts && mcp-inspector node src/index.ts",
-		"typecheck": "openapi-ts && tsc"
+		"dev": "pnpm build:client && openapi-ts && mcp-inspector node src/index.ts",
+		"typecheck": "pnpm build:client && openapi-ts && tsc"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/server": "^2.4.0",
