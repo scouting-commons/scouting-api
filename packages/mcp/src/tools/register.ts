@@ -1,20 +1,31 @@
 import type { McpServer } from "@modelcontextprotocol/server";
+import type { ScoutingClient } from "scouting-api";
 import { operations } from "./generated/index.ts";
 
-export function registerTools(server: McpServer) {
+export function registerTools(server: McpServer, scouting: ScoutingClient) {
 	for (const operation of operations) {
 		server.registerTool(
 			operation.name,
 			{
 				title: operation.title,
 				description: operation.description,
+				inputSchema: operation.input,
+				outputSchema: operation.output,
 				annotations: {
 					readOnlyHint: operation.readOnly,
 				},
 			},
-			() => {
+			async (args) => {
+				const { data, error, response } = await operation.call(scouting, args);
+				// The SDK turns a thrown error into an isError result. There's no
+				// response when the request never reached the API.
+				if (error) {
+					throw new Error(JSON.stringify({ status: response?.status, error }));
+				}
+
 				return {
-					content: [],
+					content: [{ type: "text", text: JSON.stringify(data) }],
+					structuredContent: data,
 				};
 			},
 		);

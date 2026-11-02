@@ -48,6 +48,9 @@ importers:
       scouting-api:
         specifier: workspace:*
         version: link:../client-ts
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       '@hey-api/openapi-ts':
         specifier: 0.99.0

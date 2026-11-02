@@ -10,5 +10,9 @@ export default defineConfig({
 		// Node runs src directly and doesn't map `.js` imports to `.ts` files
 		importFileExtension: ".ts",
 	},
-	plugins: [defineMcpToolsPlugin()],
+	plugins: [
+		// Writes each operation's request schemas, which become tool inputs
+		{ name: "zod", metadata: true },
+		defineMcpToolsPlugin(),
+	],
 });
