@@ -20,14 +20,18 @@
 	},
 	"license": "MIT",
 	"scripts": {
+		"generate": "openapi-ts",
 		"dev": "mcp-inspector node src/index.ts",
-		"typecheck": "tsc"
+		"typecheck": "openapi-ts && tsc"
 	},
 	"dependencies": {
-		"@modelcontextprotocol/server": "^2.4.0"
+		"@modelcontextprotocol/server": "^2.4.0",
+		"scouting-api": "workspace:*"
 	},
 	"devDependencies": {
+		"@hey-api/openapi-ts": "0.99.0",
 		"@modelcontextprotocol/inspector": "^2.13.0",
+		"@scouting-commons/scouting-api-spec": "workspace:*",
 		"@types/node": "^24.19.0",
 		"typescript": "^6.0.3"
 	}

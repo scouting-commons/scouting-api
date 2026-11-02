@@ -45,10 +45,19 @@ importers:
       '@modelcontextprotocol/server':
         specifier: ^2.4.0
         version: 2.4.0
+      scouting-api:
+        specifier: workspace:*
+        version: link:../client-ts
     devDependencies:
+      '@hey-api/openapi-ts':
+        specifier: 0.99.0
+        version: 0.99.0(typescript@6.0.3)
       '@modelcontextprotocol/inspector':
         specifier: ^2.13.0
         version: 2.13.0(@types/node@24.19.0)(jiti@2.7.0)
+      '@scouting-commons/scouting-api-spec':
+        specifier: workspace:*
+        version: link:../spec
       '@types/node':
         specifier: ^24.19.0
         version: 24.19.0

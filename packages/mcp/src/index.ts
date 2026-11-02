@@ -1,4 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/server";
+import { registerTools } from "./tools/register.ts";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 
 function createServer(): McpServer {
@@ -7,8 +8,8 @@ function createServer(): McpServer {
 		version: "0",
 	});
 
-	return server;
+	return registerTools(server);
 }
 
-void serveStdio(createServer);
+void serveStdio(() => createServer());
 console.error("mcp server running on stdio");

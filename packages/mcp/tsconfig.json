@@ -5,8 +5,16 @@
 		"lib": ["esnext"],
 		"types": ["node"],
 		"noEmit": true,
+		// Node runs src directly, which needs real `.ts` import paths
+		"allowImportingTsExtensions": true,
 		// Lets knip map built files back to src
-		"outDir": "dist"
+		"outDir": "dist",
+		// @hey-api/openapi-ts ships declaration files that don't type-check
+		// on their own (missing @types/semver, DOM globals, a broken `log` type)
+		"skipLibCheck": true,
+		// The client's Zod schemas type optional inputs as `T | undefined`,
+		// which its SDK methods reject under this setting
+		"exactOptionalPropertyTypes": false
 	},
-	"include": ["src"]
+	"include": ["src", "openapi-ts", "openapi-ts.config.ts"]
 }
