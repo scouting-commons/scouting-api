@@ -14,10 +14,10 @@
 	"license": "MIT",
 	"server": {
 		"type": "node",
-		"entry_point": "server/index.mjs",
+		"entry_point": "server/stdio.mjs",
 		"mcp_config": {
 			"command": "node",
-			"args": ["${__dirname}/server/index.mjs"],
+			"args": ["${__dirname}/server/stdio.mjs"],
 			"env": {
 				"SCOUTING_USERNAME": "${user_config.username}",
 				"SCOUTING_PASSWORD": "${user_config.password}"

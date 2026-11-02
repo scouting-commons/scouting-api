@@ -53,7 +53,8 @@ packages/client-ts/
 
 packages/mcp/
 ├── src/
-│   ├── index.ts                # the stdio server
+│   ├── server.ts               # the MCP server every entry shares
+│   ├── stdio.ts                # the stdio entry, which npx and the .mcpb run
 │   └── tools/                  # tool registration, and the plugin that generates tools
 │       └── generated/          # generated from the specs (gitignored)
 ├── manifest.json               # the .mcpb manifest, minus its version

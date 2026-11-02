@@ -20,7 +20,7 @@
 	},
 	"license": "MIT",
 	"bin": {
-		"scouting-mcp": "./dist/index.mjs"
+		"scouting-mcp": "./dist/stdio.mjs"
 	},
 	"files": [
 		"dist",
@@ -29,7 +29,7 @@
 	"scripts": {
 		"build:client": "pnpm --filter scouting-api build",
 		"generate": "openapi-ts",
-		"dev": "pnpm build:client && openapi-ts && mcp-inspector node src/index.ts",
+		"dev": "pnpm build:client && openapi-ts && mcp-inspector node src/stdio.ts",
 		"typecheck": "pnpm build:client && openapi-ts && tsc",
 		"build": "pnpm build:client && openapi-ts && tsdown",
 		"prepack": "pnpm build:mcpb",

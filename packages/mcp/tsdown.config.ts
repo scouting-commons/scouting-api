@@ -8,14 +8,14 @@ import pkg from "./package.json" with { type: "json" };
 export default defineConfig([
 	// What `npx scouting-mcp` runs. npm installs its dependencies.
 	{
-		entry: ["src/index.ts"],
+		entry: ["src/stdio.ts"],
 		platform: "node",
 		publint: true,
 	},
 	// The .mcpb bundle's contents. Its server has no node_modules, so every
 	// dependency is bundled in, and its manifest gets the package's version.
 	{
-		entry: ["src/index.ts"],
+		entry: ["src/stdio.ts"],
 		platform: "node",
 		outDir: "mcpb/server",
 		deps: { alwaysBundle: [/.*/], onlyBundle: false },
