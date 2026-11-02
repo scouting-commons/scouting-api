@@ -13,5 +13,8 @@
 			// Leave out builds, which may be stale or missing
 			"project": ["**/*.ts", "!dist/**"],
 		},
+		"packages/mcp": {
+			"project": ["**/*.ts", "!dist/**"],
+		},
 	},
 }

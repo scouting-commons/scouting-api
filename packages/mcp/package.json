@@ -19,11 +19,19 @@
 		"directory": "packages/mcp"
 	},
 	"license": "MIT",
+	"bin": {
+		"scouting-mcp": "./dist/index.mjs"
+	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build:client": "pnpm --filter scouting-api build",
 		"generate": "openapi-ts",
 		"dev": "pnpm build:client && openapi-ts && mcp-inspector node src/index.ts",
-		"typecheck": "pnpm build:client && openapi-ts && tsc"
+		"typecheck": "pnpm build:client && openapi-ts && tsc",
+		"build": "pnpm build:client && openapi-ts && tsdown",
+		"prepack": "pnpm build"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/server": "^2.4.0",
@@ -35,6 +43,7 @@
 		"@modelcontextprotocol/inspector": "^2.13.0",
 		"@scouting-commons/scouting-api-spec": "workspace:*",
 		"@types/node": "^24.19.0",
+		"tsdown": "^0.23.0",
 		"typescript": "^6.0.3"
 	}
 }

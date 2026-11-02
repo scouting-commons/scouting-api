@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { McpServer } from "@modelcontextprotocol/server";
 import { registerTools } from "./tools/register.ts";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
