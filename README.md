@@ -38,7 +38,7 @@ curl -H 'Cache-Control: no-cache' 'https://api.scouting.org/advancements/meritBa
 | ---------------------------------------------- | -------------------------------------------------------------- | -------------------------- |
 | [Specs](packages/spec/README.md)               | OpenAPI descriptions of each API, with docs and contract tests | Raw URL per spec           |
 | [`scouting-api`](packages/client-ts/README.md) | TypeScript client generated from the specs                     | `npm install scouting-api` |
-| [`scouting-mcp`](packages/mcp/README.md)       | MCP server for Scouting America APIs                           | Work in progress           |
+| [`scouting-mcp`](packages/mcp/README.md)       | MCP server for Scouting America APIs                           | `npx scouting-mcp`         |
 
 ## Contributing
 
