@@ -1,50 +1,59 @@
-import type ts from "typescript";
-
 import {
 	$,
 	type DefinePlugin,
 	definePluginConfig,
 	type Plugin,
 	toCase,
-	type TsDsl,
 } from "@hey-api/openapi-ts";
 
 // Plugin.Name only accepts built-in plugin names, so set `name` directly
-type Config = { name: "mcp-tools" } & Plugin.Hooks &
-	Plugin.Exports & {
-		/** The client property for this spec's API, such as `scouting.api` */
-		api: string;
-	};
-type McpToolsPlugin = DefinePlugin<Config, Config>;
-
-// The request parts the zod plugin writes a schema for, merged into one input
-const inputLayers = ["path", "query", "body"] as const;
+type Options = {
+	/** The client property for this spec's API, such as `scouting.api` */
+	api: string;
+};
+type UserConfig = { name: "mcp-tools" } & Plugin.Hooks &
+	Plugin.UserExports &
+	Partial<Options>;
+type Config = { name: "mcp-tools" } & Plugin.Hooks & Plugin.Exports & Options;
+type McpToolsPlugin = DefinePlugin<UserConfig, Config>;
 
 // Writes a table of every operation, which the server turns into tools
 const handler: McpToolsPlugin["Handler"] = ({ plugin }) => {
-	const defineTool = plugin.symbol("defineTool", { external: "../define.ts" });
+	const defineTool = plugin.symbol("defineTool", {
+		external: "../../define.ts",
+	});
+	const z = plugin.symbol("z", { external: "zod", importKind: "namespace" });
 	const operations = $.array();
 
 	plugin.forEach("operation", ({ operation }) => {
-		const [first, ...rest] = inputLayers.flatMap((layer) => {
-			const symbol = plugin.querySymbol({
+		const zodSchema = (layer: "path" | "query" | "body") =>
+			plugin.querySymbol({
 				artifact: "zod",
 				category: "schema",
 				resource: "operation",
 				resourceId: operation.id,
 				role: `request-${layer}`,
 			});
-			return symbol ? [symbol] : [];
-		});
 
-		// first.extend(rest[0].shape).extend(rest[1].shape)...
-		const input =
-			first &&
-			rest.reduce<TsDsl<ts.Expression>>(
-				(schema, symbol) =>
-					$(schema).attr("extend").call($(symbol).attr("shape")),
-				$(first),
-			);
+		// The tool's input matches the client's flat parameters: path and query
+		// fields as they are, and a body under its schema's name unless it's an
+		// inline object, whose fields are spread too.
+		// z.object({ ...zPath.shape, ...zQuery.shape, organizationSearch: zBody })
+		const fields = $.object();
+		for (const layer of ["path", "query", "body"] as const) {
+			const symbol = zodSchema(layer);
+			if (!symbol) continue;
+			const body = operation.body?.schema;
+			if (layer !== "body" || (!body?.$ref && body?.properties)) {
+				fields.spread($(symbol).attr("shape"));
+			} else {
+				const name = body?.$ref ? body.$ref.split("/").at(-1) : undefined;
+				fields.prop(name ? toCase(name, "camelCase") : "body", $(symbol));
+			}
+		}
+		const input = fields.hasProps()
+			? $(z).attr("object").call(fields)
+			: undefined;
 
 		const output = plugin.querySymbol({
 			artifact: "zod",
@@ -77,7 +86,13 @@ const handler: McpToolsPlugin["Handler"] = ({ plugin }) => {
 					.prop("name", $.literal(operation.id))
 					.prop("title", $.fromValue(operation.summary))
 					.prop("description", $.fromValue(operation.description))
-					.prop("readOnly", $.literal(operation.method === "get"))
+					// null (unknown) for POST, which this API uses for searches too
+					.prop(
+						"readOnly",
+						operation.method === "post"
+							? $.fromValue(null)
+							: $.literal(operation.method === "get"),
+					)
 					.prop("input", input ?? null)
 					.prop("output", output ? $(output) : null)
 					.prop("call", call),

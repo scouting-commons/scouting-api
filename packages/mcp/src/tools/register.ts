@@ -1,6 +1,9 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 import type { ScoutingClient } from "scouting-api";
-import { operations } from "./generated/index.ts";
+import { operations as apiOperations } from "./generated/api.scouting.org/index.ts";
+import { operations as scoutConnectOperations } from "./generated/scoutconnect-api.scouting.org/index.ts";
+
+const operations = [...apiOperations, ...scoutConnectOperations];
 
 export function registerTools(server: McpServer, scouting: ScoutingClient) {
 	for (const operation of operations) {
@@ -12,7 +15,7 @@ export function registerTools(server: McpServer, scouting: ScoutingClient) {
 				inputSchema: operation.input,
 				outputSchema: operation.output,
 				annotations: {
-					readOnlyHint: operation.readOnly,
+					readOnlyHint: operation.readOnly ?? undefined,
 				},
 			},
 			async (args) => {

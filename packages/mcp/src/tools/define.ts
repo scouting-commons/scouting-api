@@ -7,7 +7,8 @@ type ToolInfo = {
 	name: string;
 	title?: string | undefined;
 	description?: string | undefined;
-	readOnly: boolean;
+	/** null when it's unknown whether the tool changes data */
+	readOnly: boolean | null;
 	output?: z.ZodType | undefined;
 };
 
