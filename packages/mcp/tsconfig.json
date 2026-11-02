@@ -16,5 +16,5 @@
 		// which its SDK methods reject under this setting
 		"exactOptionalPropertyTypes": false
 	},
-	"include": ["src", "openapi-ts", "openapi-ts.config.ts"]
+	"include": ["src", "openapi-ts.config.ts"]
 }

@@ -21,7 +21,7 @@
 	"license": "MIT",
 	"scripts": {
 		"generate": "openapi-ts",
-		"dev": "mcp-inspector node src/index.ts",
+		"dev": "openapi-ts && mcp-inspector node src/index.ts",
 		"typecheck": "openapi-ts && tsc"
 	},
 	"dependencies": {
