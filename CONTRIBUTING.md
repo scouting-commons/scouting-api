@@ -51,7 +51,14 @@ packages/client-ts/
 ├── openapi-ts.config.ts        # which specs to generate from
 └── tsdown.config.ts            # builds the npm package
 
-packages/mcp/                   # the MCP server (work in progress)
+packages/mcp/
+├── src/
+│   ├── index.ts                # the stdio server
+│   └── tools/                  # tool registration, and the plugin that generates tools
+│       └── generated/          # generated from the specs (gitignored)
+├── manifest.json               # the .mcpb manifest, minus its version
+├── openapi-ts.config.ts        # which specs to generate tools from
+└── tsdown.config.ts            # builds the npm package and the .mcpb's server
 ```
 
 Deliberate exceptions to Redocly's lint rules are listed in `.redocly.lint-ignore.yaml`. Regenerate it with:
@@ -59,3 +66,9 @@ Deliberate exceptions to Redocly's lint rules are listed in `.redocly.lint-ignor
 ```sh
 pnpm --filter @scouting-commons/scouting-api-spec exec redocly lint --generate-ignore-file
 ```
+
+## Releasing
+
+To release a package, bump its `version` in its `package.json` and merge to `main`. The publish workflow publishes every public package whose version isn't on npm yet, and creates a GitHub release tagged `<name>@<version>`, such as `scouting-api@0.5.0`. A `scouting-mcp` release also ships its `.mcpb`, in the npm package and on the GitHub release.
+
+`scouting-mcp` depends on the `scouting-api` version in the repo, so when it needs unreleased client changes, bump both in the same push. The client publishes first.
