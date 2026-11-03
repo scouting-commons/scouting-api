@@ -7,7 +7,12 @@ import { registerTools } from "./tools/register.ts";
 // passes in the client.
 export function createServer(scouting: ScoutingClient): McpServer {
 	return registerTools(
-		new McpServer({ name: pkg.name, version: pkg.version }),
+		new McpServer(
+			{ name: pkg.name, version: pkg.version },
+			{
+				// instructions: "todo"
+			},
+		),
 		scouting,
 	);
 }

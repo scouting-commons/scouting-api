@@ -3952,6 +3952,179 @@ paths:
                 message: Not Found
                 errorDesc: Program not found, verify the programId
 
+  /organizations/v2/{organizationGuid}/orgYouths:
+    post:
+      tags: [Organizations]
+      operationId: listOrganizationYouths
+      x-untested: Results depend on the signed-in account's positions and units
+      summary: List an organization's youth members
+      description: >-
+        Returns the youth registered in a unit, district, or council, such as
+        a troop's scouts or a council's youth camp staff. GET returns 405.
+        Query parameters are ignored.
+      security:
+        - bearer: []
+      parameters:
+        - name: organizationGuid
+          in: path
+          required: true
+          description: >-
+            Organization GUID, matched case-insensitively. Takes the `id` of
+            a unit or council from scoutconnect-api.scouting.org, and the
+            `councilGuid` and `districtGuid` of a profile.
+          schema:
+            $ref: "#/components/schemas/OrganizationGuid"
+      requestBody:
+        required: true
+        description: Unknown fields are ignored.
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                includeRegistrationDetails:
+                  type: boolean
+                  default: false
+                  description: Adds `registrarInfo` to each member
+                includeExpired:
+                  type: boolean
+                  default: false
+                  description: >-
+                    Adds members with expired registrations. A youth then
+                    appears once per registration, so `personGuid` can
+                    repeat.
+            example:
+              includeRegistrationDetails: true
+              includeExpired: true
+      responses:
+        "200":
+          description: The organization and its youth members
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationYouths"
+              example:
+                organizationInfo:
+                  organizationFullName: Troop 1234 Example Community Church
+                  organizationGuid: 3F2A1B4C-5D6E-4F70-8A9B-0C1D2E3F4A5B
+                  organizationName: Troop 1234
+                  organizationTypeId: "6"
+                  organizationType: unit
+                  organizationNumber: "1234"
+                  unitType: Troop
+                  unitTypeId: "2"
+                  charterOrgName: Example Community Church
+                  acceptGender: null
+                  isComingSoonUnit: false
+                members:
+                  - personGuid: 5B1E2C3D-4F5A-4B6C-8D7E-9F0A1B2C3D4E
+                    memberId: "123456789"
+                    sbUserId: 12345678
+                    personFullName: Pat Lee Example
+                    firstName: Pat
+                    middleName: Lee
+                    lastName: Example
+                    nickName: null
+                    gender: M
+                    nameSuffix: ""
+                    pictureUrl: null
+                    ethnicity: Caucasian/White
+                    grade: 9
+                    gradeId: 9
+                    position: Youth Member
+                    positionId: 303
+                    skPositionCd: M
+                    isFunctional: false
+                    programId: 3
+                    program: Scouts BSA
+                    registrarInfo:
+                      dateOfBirth: "2012-06-10"
+                      isAdvancePayRecharter: false
+                      registrationId: 171020040
+                      personPositionId: 172064975
+                      registrationStatusId: 1756
+                      registrationStatus: Re-Registered
+                      registrationEffectiveDt: "2026-11-01"
+                      registrationExpireDt: "2027-10-31"
+                      boysLifeSubscription: true
+                      isYearlyMembership: true
+                      isYearlyMembershipRenewalPaid: false
+                      isManuallyEnded: false
+                      isAutoRenewalOptedOut: false
+                      renewalOptOutReasonsId: null
+                      renewalOptOutReasonsName: null
+                      renewalStatus: Current
+                      isUnitLess: false
+                      bsaOrderId: null
+                      isLapsed: false
+                      isExpired: false
+        "400":
+          description: >-
+            `organizationGuid` isn't a version 4 GUID, or the body isn't a
+            JSON object or has a field of the wrong type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                invalidGuid:
+                  summary: An invalid organization GUID
+                  value:
+                    errorCode: C400
+                    message: Bad Request
+                    errorDesc: Invalid request - "organizationGuid" must be a valid GUID
+                wrongType:
+                  summary: A field of the wrong type
+                  value:
+                    errorCode: M400
+                    message: Bad Request
+                    errorDesc: "/includeExpired expected type: Boolean, found: String"
+                notObject:
+                  summary: A body that isn't an object
+                  value:
+                    errorCode: M400
+                    message: Bad Request
+                    errorDesc: "expected type: JSONObject, found: JSONArray"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: >-
+            The signed-in account can't see the organization, including when
+            no organization has that GUID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: M403
+                message: Forbidden
+                errorDesc: Logged-in user does not have access to this API.
+        "404":
+          description: >-
+            The body isn't valid JSON, or isn't empty and has a
+            `Content-Type` other than `application/json`. The response is an
+            HTML error page.
+          content:
+            text/html:
+              schema:
+                type: string
+              example: >-
+                <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+                <html> <head> <title>Requested URL cannot be found</title>
+        "415":
+          description: >-
+            The body is empty and `Content-Type` is missing or isn't
+            `application/json`
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: M415
+                message: Unsupported media type
+                errorDesc: Unsupported mediaType
+
   /organizations/v2/{organizationGuid}/profile:
     get:
       tags: [Organizations]
@@ -7712,14 +7885,18 @@ components:
       required: [id, gradeName, displayOrder]
       properties:
         id:
-          type: integer
-          examples: [1]
+          $ref: "#/components/schemas/GradeId"
         gradeName:
           type: string
           examples: [First Grade]
         displayOrder:
           type: integer
           examples: [2]
+
+    GradeId:
+      type: integer
+      description: An `id` from the grade list
+      examples: [1]
 
     NameSuffix:
       type: object
@@ -8860,6 +9037,245 @@ components:
           type: string
         suffix:
           type: string
+
+    OrganizationYouths:
+      type: object
+      additionalProperties: false
+      required: [organizationInfo, members]
+      properties:
+        organizationInfo:
+          $ref: "#/components/schemas/OrganizationYouthsInfo"
+        members:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrganizationYouth"
+
+    OrganizationYouthsInfo:
+      type: object
+      additionalProperties: false
+      required:
+        - organizationFullName
+        - organizationGuid
+        - organizationName
+        - organizationTypeId
+        - organizationType
+        - organizationNumber
+        - unitType
+        - unitTypeId
+        - charterOrgName
+        - acceptGender
+        - isComingSoonUnit
+      properties:
+        organizationFullName:
+          type: string
+          examples: [Troop 1607 George Newton Post 1607 VFW]
+        organizationGuid:
+          description: The `organizationGuid` from the path, in the same case
+          $ref: "#/components/schemas/OrganizationGuid"
+        organizationName:
+          type: string
+          examples: [Troop 1607]
+        organizationTypeId:
+          $ref: "#/components/schemas/OrganizationTypeId"
+        organizationType:
+          type: string
+          examples: [unit, council, council-entity]
+        organizationNumber:
+          type: string
+          examples: ["1607"]
+        unitType:
+          type: [string, "null"]
+          description: The `short` name of the unit's type, or `null` for other organizations
+          examples: [Troop, null]
+        unitTypeId:
+          type: [string, "null"]
+          description: The unit's type, or `null` for other organizations
+          anyOf:
+            - $ref: "#/components/schemas/UnitTypeId"
+            - type: "null"
+        charterOrgName:
+          type: [string, "null"]
+          description: The unit's chartered organization, or `null` for other organizations
+        acceptGender:
+          type: "null"
+        isComingSoonUnit:
+          type: [boolean, "null"]
+          description: "`null` for organizations other than units"
+
+    OrganizationYouth:
+      type: object
+      additionalProperties: false
+      required:
+        - personGuid
+        - memberId
+        - sbUserId
+        - personFullName
+        - firstName
+        - middleName
+        - lastName
+        - nickName
+        - gender
+        - nameSuffix
+        - pictureUrl
+        - ethnicity
+        - grade
+        - gradeId
+        - position
+        - positionId
+        - skPositionCd
+        - isFunctional
+        - programId
+        - program
+      properties:
+        personGuid:
+          $ref: "#/components/schemas/PersonGuid"
+        memberId:
+          type: string
+          pattern: "^[0-9]+$"
+          examples: ["123456789"]
+        sbUserId:
+          type: integer
+          examples: [12345678]
+        personFullName:
+          type: string
+          description: First, middle, and last names joined by spaces
+          examples: [Pat Lee Example]
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        nickName:
+          type: [string, "null"]
+        gender:
+          type: string
+          description: A gender's `short`
+          examples: [M, F]
+        nameSuffix:
+          type: string
+        pictureUrl:
+          type: [string, "null"]
+          format: uri
+        ethnicity:
+          type: string
+          description: An ethnicity's `name`
+          examples: [Caucasian/White]
+        grade:
+          type: [integer, "null"]
+          description: Same as `gradeId`
+        gradeId:
+          type: [integer, "null"]
+          description: The youth's school grade, or `null` if not set
+          anyOf:
+            - $ref: "#/components/schemas/GradeId"
+            - type: "null"
+        position:
+          type: string
+          description: The position's `name`
+          examples: [Youth Member, Council Camp Staff (Youth)]
+        positionId:
+          type: integer
+          description: An `id` from the person position list, as an integer
+          examples: [303]
+        skPositionCd:
+          type: string
+          description: The position's `code`
+          examples: [M, "68"]
+        isFunctional:
+          type: boolean
+        programId:
+          type: [integer, "null"]
+          examples: [3, null]
+        program:
+          type: [string, "null"]
+          examples: [Scouts BSA, null]
+        registrarInfo:
+          $ref: "#/components/schemas/OrganizationYouthRegistration"
+
+    OrganizationYouthRegistration:
+      type: object
+      description: The registration that put the youth in the organization
+      additionalProperties: false
+      required:
+        - dateOfBirth
+        - isAdvancePayRecharter
+        - registrationId
+        - personPositionId
+        - registrationStatusId
+        - registrationStatus
+        - registrationEffectiveDt
+        - registrationExpireDt
+        - boysLifeSubscription
+        - isYearlyMembership
+        - isYearlyMembershipRenewalPaid
+        - isManuallyEnded
+        - isAutoRenewalOptedOut
+        - renewalOptOutReasonsId
+        - renewalOptOutReasonsName
+        - renewalStatus
+        - isUnitLess
+        - bsaOrderId
+        - isLapsed
+        - isExpired
+      properties:
+        dateOfBirth:
+          type: string
+          format: date
+        isAdvancePayRecharter:
+          type: boolean
+        registrationId:
+          type: integer
+          examples: [171020040]
+        personPositionId:
+          type: integer
+          description: Not an `id` from the person position list
+          examples: [172064975]
+        registrationStatusId:
+          type: integer
+          description: An `id` from the registration status list, as an integer
+          examples: [1756]
+        registrationStatus:
+          type: string
+          description: The registration status's `name`
+          examples: [Re-Registered]
+        registrationEffectiveDt:
+          type: string
+          format: date
+        registrationExpireDt:
+          type: string
+          format: date
+        boysLifeSubscription:
+          type: boolean
+        isYearlyMembership:
+          type: boolean
+        isYearlyMembershipRenewalPaid:
+          type: boolean
+        isManuallyEnded:
+          type: boolean
+        isAutoRenewalOptedOut:
+          type: boolean
+        renewalOptOutReasonsId:
+          type: "null"
+        renewalOptOutReasonsName:
+          type: "null"
+        renewalStatus:
+          type: string
+          examples:
+            - Current
+            - Renewed
+            - Eligible to Renew
+            - Eligible to Renew (unit only)
+            - Opted Out
+            - Expired
+        isUnitLess:
+          type: boolean
+        bsaOrderId:
+          type: [integer, "null"]
+        isLapsed:
+          type: boolean
+        isExpired:
+          type: boolean
 
     Masked:
       type: string
