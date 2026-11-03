@@ -4,8 +4,11 @@ import pkg from "../package.json" with { type: "json" };
 import { registerTools } from "./tools/register.ts";
 
 // The MCP server every entry shares. Each entry signs in its own way and
-// passes in the client.
-export function createServer(scouting: ScoutingClient): McpServer {
+// passes in the client, and whether it signed in.
+export function createServer(
+	scouting: ScoutingClient,
+	signedIn: boolean,
+): McpServer {
 	return registerTools(
 		new McpServer(
 			{ name: pkg.name, version: pkg.version },
@@ -14,5 +17,6 @@ export function createServer(scouting: ScoutingClient): McpServer {
 			},
 		),
 		scouting,
+		signedIn,
 	);
 }

@@ -18,7 +18,8 @@ function authFromEnv(): ScoutingClientConfig["auth"] {
 	return { username, password };
 }
 
-const scouting = createScoutingClient({ auth: authFromEnv() });
+const auth = authFromEnv();
+const scouting = createScoutingClient({ auth });
 
-void serveStdio(() => createServer(scouting));
+void serveStdio(() => createServer(scouting, auth !== "none"));
 console.error("mcp server running on stdio");

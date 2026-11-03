@@ -9,6 +9,8 @@ type ToolInfo = {
 	description?: string | undefined;
 	/** null when it's unknown whether the tool changes data */
 	readOnly: boolean | null;
+	/** Whether the API rejects calls without signing in */
+	requiresAuth: boolean;
 	output?: z.ZodType | undefined;
 };
 

@@ -80,6 +80,17 @@ const handler: McpToolsPlugin["Handler"] = ({ plugin }) => {
 				: f.param("scouting").do($.return(method.call())),
 		);
 
+		// The IR drops the `{}` that marks sign-in as optional, so read the raw
+		// spec. Sign-in is required when every security option names a scheme.
+		const { spec } = plugin.context;
+		const security: Array<object> =
+			spec.paths[operation.path][operation.method].security ??
+			spec.security ??
+			[];
+		const requiresAuth =
+			security.length > 0 &&
+			security.every((option) => Object.keys(option).length > 0);
+
 		operations.element(
 			$(defineTool).call(
 				$.object()
@@ -93,6 +104,7 @@ const handler: McpToolsPlugin["Handler"] = ({ plugin }) => {
 							? $.fromValue(null)
 							: $.literal(operation.method === "get"),
 					)
+					.prop("requiresAuth", $.literal(requiresAuth))
 					.prop("input", input ?? null)
 					.prop("output", output ? $(output) : null)
 					.prop("call", call),

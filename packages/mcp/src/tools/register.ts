@@ -5,8 +5,14 @@ import { operations as scoutConnectOperations } from "./generated/scoutconnect-a
 
 const operations = [...apiOperations, ...scoutConnectOperations];
 
-export function registerTools(server: McpServer, scouting: ScoutingClient) {
+// Without a sign-in, leaves out the tools that need one
+export function registerTools(
+	server: McpServer,
+	scouting: ScoutingClient,
+	signedIn: boolean,
+) {
 	for (const operation of operations) {
+		if (operation.requiresAuth && !signedIn) continue;
 		server.registerTool(
 			operation.name,
 			{
