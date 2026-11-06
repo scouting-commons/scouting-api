@@ -456,8 +456,8 @@ components:
           type: [integer, "null"]
           examples: [56]
         unitFee:
-          type: [integer, "null"]
-          examples: [80]
+          type: [number, "null"]
+          examples: [80, 53.75]
         unitSize:
           type: [integer, "null"]
           examples: [33]
@@ -478,9 +478,11 @@ components:
           examples: [210]
         zip:
           type: string
-          description: A 5-digit ZIP code, or ZIP+4
-          pattern: "^[0-9]{5}(-[0-9]{4})?$"
-          examples: ["55345", 90057-2204]
+          description: >-
+            A 5-digit ZIP code, or ZIP+4. A leading zero may be missing, as in
+            `6611` for `06611`.
+          pattern: "^([0-9]{4}|[0-9]{5}(-[0-9]{4})?)$"
+          examples: ["55345", 90057-2204, "6611"]
 
     OrganizationCouncil:
       type: object
