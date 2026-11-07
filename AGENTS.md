@@ -8,6 +8,8 @@ This is a pnpm workspace with three packages: the specs in `packages/spec/`, the
 
 Each API lives in `apis/<host>/`, named by its full host (such as `apis/api.scouting.org/`), with its spec in `openapi.yaml` and its contract tests in `tests.arazzo.yaml`.
 
+`endpoints.md` at the repo root lists every known endpoint, documented or not. Keep it current: add a row when you discover an endpoint, and update its status when an endpoint gets documented.
+
 ## Adding or changing an endpoint
 
 You may be given some info to start with in the issue/prompt. Treat this info as a hint, but verify everything yourself.
