@@ -1384,6 +1384,170 @@ paths:
                 message: Invalid Request
                 errorDesc: Merit Badge is not found. meritBadgeId=99999
 
+  /advancements/v2/organization/{organizationGuid}/meritBadges/{meritBadgeId}/userRequirements:
+    get:
+      tags: [Advancement]
+      operationId: listMemberMeritBadgeRequirements
+      x-untested: Results depend on the signed-in account's positions and units
+      summary: List members' progress on a merit badge
+      description: >-
+        Returns each requested member's progress on one merit badge, one item
+        per member in the order requested. A member with no record of the
+        badge, or a `memberId` that matches no one, still gets an item, with
+        `null` IDs and `status` and an empty `requirements`. POST returns 405.
+        Other query parameters are ignored.
+      security:
+        - bearer: []
+      parameters:
+        - name: organizationGuid
+          in: path
+          required: true
+          description: >-
+            Unit GUID, matched case-insensitively. Takes the `id` of a unit
+            from scoutconnect-api.scouting.org.
+          schema:
+            $ref: "#/components/schemas/OrganizationGuid"
+        - $ref: "#/components/parameters/MeritBadgeId"
+        - name: memberId
+          in: query
+          required: true
+          description: >-
+            Member IDs, the `memberId` of the organization member listings.
+            Sent comma-separated, or as a repeated parameter. Duplicates are
+            rejected.
+          style: form
+          explode: false
+          schema:
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items:
+              type: integer
+              minimum: 1
+            examples: [[123456789, 123456790]]
+      responses:
+        "200":
+          description: Each member's progress on the merit badge
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MemberMeritBadgeRequirements"
+              example:
+                - userId: 12345678
+                  memberId: 123456789
+                  meritBadgeId: 51
+                  meritBadge: First Aid
+                  versionId: 340
+                  version: 2022
+                  dateEarned: null
+                  leaderApprovedDate: "2024-09-23"
+                  status: Awarded
+                  requirements:
+                    - id: 10160
+                      dateStarted: null
+                      dateCompleted: "2024-08-14"
+                      leaderApprovedDate: "2024-09-23"
+                      markedCompletedDate: "2024-08-14"
+                      status: Leader Approved
+                - userId: 12345679
+                  memberId: 123456790
+                  meritBadgeId: null
+                  meritBadge: First Aid
+                  versionId: null
+                  version: null
+                  dateEarned: null
+                  leaderApprovedDate: null
+                  status: null
+                  requirements: []
+        "400":
+          description: >-
+            `organizationGuid` isn't a version 4 GUID, such as all zeros,
+            `meritBadgeId` isn't a positive integer, or `memberId` is
+            missing, malformed, zero, or repeats an ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                organizationGuid:
+                  summary: "`organizationGuid` isn't a version 4 GUID"
+                  value:
+                    errorCode: C400
+                    message: Bad Request
+                    errorDesc: Invalid request - "organizationGuid" must be a valid GUID
+                meritBadgeId:
+                  summary: "`meritBadgeId` isn't a number"
+                  value:
+                    errorCode: C400
+                    message: Bad Request
+                    errorDesc: Invalid request - "meritBadgeId" must be a number
+                missingMemberId:
+                  summary: No `memberId`
+                  value:
+                    errorCode: M400
+                    message: Bad Request
+                    errorDesc: Required query parameter memberId not specified
+                malformedMemberId:
+                  summary: "`memberId` isn't a comma-separated list of numbers"
+                  value:
+                    errorCode: M400
+                    message: Bad Request
+                    errorDesc: >-
+                      Invalid value 'abc' for query parameter memberId. /0
+                      string [abc] does not match pattern ^\d+(,\d+)*$
+                duplicateMemberId:
+                  summary: "`memberId` is zero or repeats an ID"
+                  value:
+                    errorCode: C400
+                    message: Bad Request
+                    errorDesc: >-
+                      Invalid request - "memberId" There is an issue with the
+                      URI. Either the list of URI parameters contains
+                      non-numeric values or there is some other typo in the
+                      URI
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: >-
+            The signed-in account can't see the unit, no organization has
+            that GUID, or `organizationGuid` isn't a GUID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                errorCode: M403
+                message: Forbidden
+                errorDesc: You are not authorized to use this API.
+        "404":
+          description: >-
+            No merit badge has that ID, or the organization is a district the
+            signed-in account can see
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                meritBadge:
+                  summary: No merit badge has that ID
+                  value:
+                    errorCode: C404
+                    message: Not Found
+                    errorDesc: >-
+                      Merit Badge not found, verify that the meritBadgeId
+                      belongs to an existent merit badge - meritBadgeId:
+                      999999
+                notUnit:
+                  summary: A district
+                  value:
+                    errorCode: C404
+                    message: Not Found
+                    errorDesc: >-
+                      Unable to find the Unit for the given organizationGuid -
+                      organizationGuid: A5B61D1B-04E2-4AF7-AADE-410494C76148
+
   /advancements/v2/ranks:
     get:
       tags: [Advancement]
@@ -5860,6 +6024,111 @@ components:
           $ref: "#/components/schemas/StringDate"
         expiredDate:
           $ref: "#/components/schemas/StringDate"
+
+    MemberMeritBadgeRequirements:
+      type: object
+      description: A member's progress on a merit badge
+      additionalProperties: false
+      required:
+        - userId
+        - memberId
+        - meritBadgeId
+        - meritBadge
+        - versionId
+        - version
+        - dateEarned
+        - leaderApprovedDate
+        - status
+        - requirements
+      properties:
+        userId:
+          type: [integer, "null"]
+          description: "`null` when no member has the `memberId`"
+          anyOf:
+            - $ref: "#/components/schemas/UserId"
+            - type: "null"
+        memberId:
+          type: integer
+          description: >-
+            The requested member ID, the `memberId` of the organization member
+            listings
+          examples: [123456789]
+        meritBadgeId:
+          type: [integer, "null"]
+          description: >-
+            The merit badge's `id` from the merit badge list, or `null` when
+            the member has no record of the badge
+          examples: [51]
+        meritBadge:
+          type: string
+          description: The merit badge's name, also set when the member has no record of it
+          examples: [First Aid]
+        versionId:
+          type: [integer, "null"]
+          description: >-
+            The member's requirements version, a `versionId` of the merit
+            badge's versions, or `null` when the member has no record of the
+            badge
+          examples: [340]
+        version:
+          type: [integer, "null"]
+          description: Requirements version year
+          examples: [2022]
+        dateEarned:
+          type: "null"
+        leaderApprovedDate:
+          $ref: "#/components/schemas/NullableDate"
+        status:
+          type: [string, "null"]
+          description: >-
+            `Leader Signed` when a unit leader has approved the member to start
+            the badge with a counselor, and `null` when the member has no
+            record of the badge
+          examples:
+            [
+              Started,
+              Counselor Approved,
+              Leader Approved,
+              Leader Signed,
+              Awarded,
+            ]
+        requirements:
+          type: array
+          description: >-
+            The member's records of the version's requirements. Requirements
+            with no record are left out, and some awarded badges have none.
+          items:
+            $ref: "#/components/schemas/MemberMeritBadgeRequirement"
+
+    MemberMeritBadgeRequirement:
+      type: object
+      description: A member's record of one merit badge requirement
+      additionalProperties: false
+      required:
+        - id
+        - dateStarted
+        - dateCompleted
+        - leaderApprovedDate
+        - markedCompletedDate
+        - status
+      properties:
+        id:
+          type: integer
+          description: >-
+            The requirement's `id` in the merit badge's requirements for the
+            member's `versionId`
+          examples: [10160]
+        dateStarted:
+          type: "null"
+        dateCompleted:
+          $ref: "#/components/schemas/NullableDate"
+        leaderApprovedDate:
+          $ref: "#/components/schemas/NullableDate"
+        markedCompletedDate:
+          $ref: "#/components/schemas/NullableDate"
+        status:
+          type: [string, "null"]
+          examples: [Started, Completed, Counselor Approved, Leader Approved]
 
     Rank:
       type: object
